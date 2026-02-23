@@ -142,7 +142,7 @@
                             <div class="sticky-md-top" style="top: 20px; z-index: 1; justify-items:center; ">
                                 <div class="mb-3 text-center align-center">
                                     <img id="previa" src="${context}/IMG/avatares/default.png" 
-                                         class="rounded-circle border shadow-sm" 
+                                         class="rounded-circle border shadow-sm ratio-1x1" 
                                          width="180" height="180" style="object-fit: cover;">
                                 </div>
                                 <div class="text-center">

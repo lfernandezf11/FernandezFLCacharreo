@@ -547,6 +547,10 @@ label.form-label {
     border-radius: 10px;
 }
 
+#btn-save-profile{
+    opacity: 1 !important;
+    visibility: visible !important;
+}
 
 /* CESTA */
 /* Contenedor principal */

@@ -265,6 +265,30 @@ editProfileForm.addEventListener('submit', async (e) => {
     }
 });
 
+// ESCUCHADOR DEL MODAL DE CONTRASEÑA PARA LIMPIEZA AUTOMÁTICA
+// Este evento se dispara cuando el modal ha terminado de ocultarse (animación de bootstrap incluida)
+const btnAbrirModal = document.querySelector('[data-bs-target="#changePasswordModal"]');
+const modalEl = document.getElementById('changePasswordModal');
+
+// 2. Evento que se dispara cuando el modal termina de cerrarse
+modalEl.addEventListener('hidden.bs.modal', function () {
+    // Quitamos el foco del botón de cerrar (que hacía que el botón trigger del modal desapareciera) y lo devolvemos al botón original.
+    if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+    }
+
+    if (btnAbrirModal) {
+        btnAbrirModal.focus();
+    }
+
+    // Limpieza de clases de Bootstrap por si acaso hay restos que impidan recargar bien la página
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(b => b.remove());
+});
+
 
 // EVENTO SUBMIT DEL FORMULARIO DE CONTRASEÑA
 const editPassForm = document.querySelector('.changePasswordForm');
@@ -300,21 +324,12 @@ editPassForm.addEventListener('submit', async (e) => {
                 let resultado = await response.json();
 
                 if (resultado.success) {
-                    const modalEl = document.getElementById('changePasswordModal');
                     const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                    if (modalInstance)
-                        modalInstance.hide();
-                    
-                    // Al cerrar el modal manualmente, bootstrap no tiene tiempo de limpiar la clase y el fondo blur permanece.
-                    // Necesario forzar el cierre.
-                    document.body.classList.remove('modal-open');
-                    const backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) {
-                        backdrop.remove();
+                    if (modalInstance) {
+                        modalInstance.hide(); // dispara el evento del listener
                     }
-
                     lanzarToast(resultado.message, "exito");
-                    editPassForm.reset(); // Limpiamos campos
+
                 } else {
                     lanzarToast(resultado.message || "La contraseña actual es incorrecta", "error");
                     showErrorPerfil(passActual, "Contraseña incorrecta");
