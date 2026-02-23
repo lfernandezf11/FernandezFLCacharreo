@@ -17,134 +17,147 @@
         <c:import url="/INC/header.jsp"/>
         <main class="page">
             <section id="signUpSection">
-                <div class="signUpWrapper col-12 col-md-10 col-lg-7">
+                <div class="signUpWrapper col-12 col-lg-10">
                     <div class="section-header">
                         <h4>Date de alta</h4>
                     </div>  
                     <form class="row g-3 signUpForm" enctype="multipart/form-data">
-                        <div class="col-md-6">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre">
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="apellidos" class="form-label">Apellidos</label>
-                            <input type="text" class="form-control" id="apellidos" name="apellidos">
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-12">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email">
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-12">
-                            <label for="direccion" class="form-label">Direcci&oacute;n</label>
-                            <input type="text" class="form-control" id="direccion" placeholder="1234 Main St" name="direccion">
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-12">
-                            <label for="localidad" class="form-label">Localidad</label>
-                            <input type="text" class="form-control" id="localidad" name="localidad">
-                            <small class="invalid"></small>
-                        </div>
                         <div class="col-md-8">
-                            <label for="provincia" class="form-label">Provincia</label>
-                            <select id="provincia" class="form-select" name="provincia">
-                                <option value="" selected disabled>Selecciona tu provincia...</option>
-                                <option value="Alava">Araba/&Aacute;lava</option>
-                                <option value="Albacete">Albacete</option>
-                                <option value="Alicante">Alicante/Alacant</option>
-                                <option value="Almeria">Almer&iacute;a</option>
-                                <option value="Asturias">Asturias</option>
-                                <option value="Avila">&Aacute;vila</option>
-                                <option value="Badajoz">Badajoz</option>
-                                <option value="Baleares">Balears, Illes</option>
-                                <option value="Barcelona">Barcelona</option>
-                                <option value="Bizkaia">Bizkaia</option>
-                                <option value="Burgos">Burgos</option>
-                                <option value="Caceres">C&aacute;ceres</option>
-                                <option value="Cadiz">C&aacute;diz</option>
-                                <option value="Cantabria">Cantabria</option>
-                                <option value="Castellon">Castell&oacute;n/Castell&oacute;</option>
-                                <option value="Ceuta">Ceuta</option>
-                                <option value="Ciudad Real">Ciudad Real</option>
-                                <option value="Cordoba">C&oacute;rdoba</option>
-                                <option value="Coruña">Coru&ntilde;a, A</option>
-                                <option value="Cuenca">Cuenca</option>
-                                <option value="Gipuzkoa">Gipuzkoa</option>
-                                <option value="Girona">Girona</option>
-                                <option value="Granada">Granada</option>
-                                <option value="Guadalajara">Guadalajara</option>
-                                <option value="Huelva">Huelva</option>
-                                <option value="Huesca">Huesca</option>
-                                <option value="Jaen">Ja&eacute;n</option>
-                                <option value="Leon">Le&oacute;n</option>
-                                <option value="Lleida">Lleida</option>
-                                <option value="Lugo">Lugo</option>
-                                <option value="Madrid">Madrid</option>
-                                <option value="Malaga">M&aacute;laga</option>
-                                <option value="Melilla">Melilla</option>
-                                <option value="Murcia">Murcia</option>
-                                <option value="Navarra">Navarra</option>
-                                <option value="Ourense">Ourense</option>
-                                <option value="Palencia">Palencia</option>
-                                <option value="Palmas">Palmas, Las</option>
-                                <option value="Pontevedra">Pontevedra</option>
-                                <option value="Rioja">Rioja, La</option>
-                                <option value="Salamanca">Salamanca</option>
-                                <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
-                                <option value="Segovia">Segovia</option>
-                                <option value="Sevilla">Sevilla</option>
-                                <option value="Soria">Soria</option>
-                                <option value="Tarragona">Tarragona</option>
-                                <option value="Teruel">Teruel</option>
-                                <option value="Toledo">Toledo</option>
-                                <option value="Valencia">Valencia/Val&egrave;ncia</option>
-                                <option value="Valladolid">Valladolid</option>
-                                <option value="Zamora">Zamora</option>
-                                <option value="Zaragoza">Zaragoza</option>
-                            </select>
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="codigoPostal" class="form-label cp">C&oacute;digo postal</label>
-                            <input type="text" class="form-control" id="codigoPostal" name="codigoPostal">
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-md-8">
-                            <label for="nif" class="form-label">NIF</label>
-                            <input type="text" class="form-control" id="nif" name="nif">
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="telefono" class="form-label">Tel&eacute;fono</label>
-                            <input type="tlf" class="form-control" id="telefono" name="telefono">
-                            <small class="invalid"></small>
-                        </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="apellidos" class="form-label">Apellidos</label>
+                                    <input type="text" class="form-control" id="apellidos" name="apellidos">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-12">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-12">
+                                    <label for="direccion" class="form-label">Direcci&oacute;n</label>
+                                    <input type="text" class="form-control" id="direccion" placeholder="1234 Main St" name="direccion">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-12">
+                                    <label for="localidad" class="form-label">Localidad</label>
+                                    <input type="text" class="form-control" id="localidad" name="localidad">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="provincia" class="form-label">Provincia</label>
+                                    <select id="provincia" class="form-select" name="provincia">
+                                        <option value="" selected disabled>Selecciona tu provincia...</option>
+                                        <option value="Alava">Araba/&Aacute;lava</option>
+                                        <option value="Albacete">Albacete</option>
+                                        <option value="Alicante">Alicante/Alacant</option>
+                                        <option value="Almeria">Almer&iacute;a</option>
+                                        <option value="Asturias">Asturias</option>
+                                        <option value="Avila">&Aacute;vila</option>
+                                        <option value="Badajoz">Badajoz</option>
+                                        <option value="Baleares">Balears, Illes</option>
+                                        <option value="Barcelona">Barcelona</option>
+                                        <option value="Bizkaia">Bizkaia</option>
+                                        <option value="Burgos">Burgos</option>
+                                        <option value="Caceres">C&aacute;ceres</option>
+                                        <option value="Cadiz">C&aacute;diz</option>
+                                        <option value="Cantabria">Cantabria</option>
+                                        <option value="Castellon">Castell&oacute;n/Castell&oacute;</option>
+                                        <option value="Ceuta">Ceuta</option>
+                                        <option value="Ciudad Real">Ciudad Real</option>
+                                        <option value="Cordoba">C&oacute;rdoba</option>
+                                        <option value="Coruña">Coru&ntilde;a, A</option>
+                                        <option value="Cuenca">Cuenca</option>
+                                        <option value="Gipuzkoa">Gipuzkoa</option>
+                                        <option value="Girona">Girona</option>
+                                        <option value="Granada">Granada</option>
+                                        <option value="Guadalajara">Guadalajara</option>
+                                        <option value="Huelva">Huelva</option>
+                                        <option value="Huesca">Huesca</option>
+                                        <option value="Jaen">Ja&eacute;n</option>
+                                        <option value="Leon">Le&oacute;n</option>
+                                        <option value="Lleida">Lleida</option>
+                                        <option value="Lugo">Lugo</option>
+                                        <option value="Madrid">Madrid</option>
+                                        <option value="Malaga">M&aacute;laga</option>
+                                        <option value="Melilla">Melilla</option>
+                                        <option value="Murcia">Murcia</option>
+                                        <option value="Navarra">Navarra</option>
+                                        <option value="Ourense">Ourense</option>
+                                        <option value="Palencia">Palencia</option>
+                                        <option value="Palmas">Palmas, Las</option>
+                                        <option value="Pontevedra">Pontevedra</option>
+                                        <option value="Rioja">Rioja, La</option>
+                                        <option value="Salamanca">Salamanca</option>
+                                        <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
+                                        <option value="Segovia">Segovia</option>
+                                        <option value="Sevilla">Sevilla</option>
+                                        <option value="Soria">Soria</option>
+                                        <option value="Tarragona">Tarragona</option>
+                                        <option value="Teruel">Teruel</option>
+                                        <option value="Toledo">Toledo</option>
+                                        <option value="Valencia">Valencia/Val&egrave;ncia</option>
+                                        <option value="Valladolid">Valladolid</option>
+                                        <option value="Zamora">Zamora</option>
+                                        <option value="Zaragoza">Zaragoza</option>
+                                    </select>
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="codigoPostal" class="form-label cp">C&oacute;digo postal</label>
+                                    <input type="text" class="form-control" id="codigoPostal" name="codigoPostal">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="nif" class="form-label">NIF</label>
+                                    <input type="text" class="form-control" id="nif" name="nif">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="telefono" class="form-label">Tel&eacute;fono</label>
+                                    <input type="tlf" class="form-control" id="telefono" name="telefono">
+                                    <small class="invalid"></small>
+                                </div>
 
-                        <div class="col-12">
-                            <label for="password1" class="form-label">Contrase&ntilde;a</label>
-                            <input type="password" class="form-control" id="password1" name="password">
-                            <small class="invalid"></small>
-                        </div>
-                        <div class="col-12">
-                            <label for="password2" class="form-label">Repite la contrase&ntilde;a</label>
-                            <input type="password" class="form-control" id="password2">
-                            <small class="invalid"></small>
+                                <div class="col-12">
+                                    <label for="password1" class="form-label">Contrase&ntilde;a</label>
+                                    <input type="password" class="form-control" id="password1" name="password">
+                                    <small class="invalid"></small>
+                                </div>
+                                <div class="col-12">
+                                    <label for="password2" class="form-label">Repite la contrase&ntilde;a</label>
+                                    <input type="password" class="form-control" id="password2">
+                                    <small class="invalid"></small>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Campo imagen -->
-                        <div class="col-12 text-center">
-                            <img id="previa" src="${context}/IMG/avatares/default.png" 
-                                 class="rounded-circle border" width="120" height="120" style="object-fit: cover;">
+                        <div class="col-md-4 d-flex flex-column align-items-center justify-content-start pt-4">
+                            <div class="sticky-md-top" style="top: 20px; z-index: 1; justify-items:center; ">
+                                <div class="mb-3 text-center align-center">
+                                    <img id="previa" src="${context}/IMG/avatares/default.png" 
+                                         class="rounded-circle border shadow-sm" 
+                                         width="180" height="180" style="object-fit: cover;">
+                                </div>
+                                <div class="text-center">
+                                    <label for="avatar" class="form-label">Foto de perfil</label>
+                                    <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
+                                    <div class="mt-2">
+                                        <small class="text-muted d-block">JPG, PNG (Máx. 100KB)</small>
+                                        <small class="invalid" id="avatarError"></small>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-danger mt-3" type="button" id="btnEliminarFoto">
+                                        <i class="bi bi-trash"></i> Eliminar foto
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-12">
-                            <label for="avatar" class="form-label">Foto de perfil (Máx. 100KB)</label>
-                            <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
-                            <small class="text-muted">Formatos permitidos: JPG, PNG. Tamaño máximo: 100KB.</small>
-                            <small class="invalid" id="avatarError"></small>
-                        </div>
-                        
 
                         <div class="col-12">
                             <div class="form-check">
