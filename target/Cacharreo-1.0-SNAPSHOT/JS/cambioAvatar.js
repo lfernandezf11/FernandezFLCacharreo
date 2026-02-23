@@ -1,40 +1,37 @@
-/**
- * Lógica exclusiva para la gestión del Avatar en Mi Perfil
- */
-const AVATAR_URL = '/Cacharreo/UsuarioAjax'; // Endpoint centralizado
+//const URL = '/Cacharreo/UsuarioAjax'; // ruta ya declarada en perfilForm, el script ya está en la jsp
 
-// Selectores específicos del modal de perfil
+// Selectores
 const avatarInput = document.getElementById('avatar');
 const imgPrevia = document.getElementById('previa');
 const avatarError = document.getElementById('avatarError');
 const changeAvatarForm = document.getElementById('changeAvatarForm');
-const btnDeleteAvatar = document.getElementById('btn-delete-avatar');
-const modalAvatarEl = document.getElementById('changeAvatarModal');
+const btnDelete = document.getElementById('btn-delete-avatar');
+const btnSubmit = document.getElementById('btn-save-avatar'); // Aquí lo tienes
 
-// 1. VISTA PREVIA Y VALIDACIÓN EN TIEMPO REAL
+// PREVISUALIZACIÓN Y VALIDACIÓN del formulario ---
 if (avatarInput) {
-    avatarInput.addEventListener('change', function () {
+    avatarInput.addEventListener('change', function() {
         const file = this.files[0];
-
+        
         if (file) {
-            // Validación de tipo: debe ser imagen
+            // Validar que sea imagen
             if (!file.type.startsWith('image/')) {
-                marcarErrorAvatar("El archivo debe ser una imagen válida.");
-                this.value = '';
+                marcarErrorAvatar("El archivo seleccionado no es una imagen válida.");
+                this.value = ''; // Reseteamos el input
                 return;
             }
 
-            // Validación de tamaño: Máximo 100KB
+            // Validar tamaño (100KB)
             if (file.size > 102400) {
                 marcarErrorAvatar("La imagen es demasiado grande (Máx. 100KB).");
                 this.value = '';
                 return;
             }
 
-            // Si es válida, generamos la previa
-            marcarErrorAvatar("");
+            // Si todo está bien, leemos el archivo para mostrar la previa
+            marcarErrorAvatar(""); // Limpiar errores
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = function(e) {
                 if (imgPrevia) imgPrevia.src = e.target.result;
             };
             reader.readAsDataURL(file);
@@ -42,47 +39,48 @@ if (avatarInput) {
     });
 }
 
-// 2. ENVIAR NUEVA FOTO (SUBIDA)
+// MANEJO DE LA SUBIDA(Evento submit del formulario)
 if (changeAvatarForm) {
     changeAvatarForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
 
         if (!avatarInput.files[0]) {
-            lanzarToast("Por favor, selecciona una imagen.", "warning");
+            marcarErrorAvatar("Por favor, selecciona una foto primero.");
             return;
         }
 
+        // Desactivamos el botón mientras se actualiza la imagen
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Subiendo...";
+
         const formData = new FormData();
         formData.append('accion', 'actualizarAvatar');
-        formData.append('avatar', avatarInput.files[0]); // El archivo binario
+        formData.append('avatar', avatarInput.files[0]);
 
         try {
-            let response = await fetch(AVATAR_URL, {
-                method: 'POST',
-                body: formData // El navegador configura el Content-Type automáticamente
-            });
+            let response = await fetch(URL, { method: 'POST', body: formData });
+            let resultado = await response.json();
 
-            if (response.ok) {
-                let resultado = await response.json();
-                if (resultado.success) {
-                    lanzarToast("Foto de perfil actualizada con éxito.", "exito");
-                    cerrarModalAvatar();
-                    // Recargamos para refrescar la imagen en todo el sitio
-                    setTimeout(() => window.location.reload(), 1200);
-                } else {
-                    lanzarToast(resultado.message, "error");
-                }
+            if (resultado.success) {
+                lanzarToast((resultado.message || "¡Imagen actualizada!"), "exito");
+                cerrarModalAvatar();
+                setTimeout(() => window.location.reload(), 1200);
+            } else {
+                lanzarToast(resultado.message, "error");
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "Guardar cambios";
             }
         } catch (error) {
-            lanzarToast("Error al conectar con el servidor.", "error");
+            lanzarToast("Error crítico de conexión.", "error");
+            btnSubmit.disabled = false;
         }
     });
 }
 
-// 3. BORRAR FOTO (VOLVER A DEFAULT)
-if (btnDeleteAvatar) {
-    btnDeleteAvatar.addEventListener('click', async () => {
-        if (!confirm("¿Seguro que quieres eliminar tu foto actual?")) return;
+// MANEJO DEL BORRADO (Evento click del botón)
+if (btnDelete) {
+    btnDelete.addEventListener('click', async () => {
+        if (!confirm("¿Estás seguro de que quieres eliminar tu foto?")) return;
 
         const data = new URLSearchParams();
         data.append('accion', 'eliminarAvatar');
@@ -94,41 +92,29 @@ if (btnDeleteAvatar) {
                 body: data.toString()
             });
 
-            if (response.ok) {
-                let resultado = await response.json();
-                if (resultado.success) {
-                    lanzarToast("Foto eliminada.", "exito");
-                    cerrarModalAvatar();
-                    setTimeout(() => window.location.reload(), 1200);
-                }
+            let resultado = await response.json();
+            if (resultado.success) {
+                lanzarToast("Foto eliminada.", "exito");
+                cerrarModalAvatar();
+                setTimeout(() => window.location.reload(), 1200);
             }
         } catch (error) {
-            lanzarToast("Error al procesar la solicitud.", "error");
+            lanzarToast("Error al borrar la foto.", "error");
         }
     });
 }
 
-// FUNCIONES DE APOYO
+// --- FUNCIONES DE APOYO ---
 function marcarErrorAvatar(texto) {
     if (avatarError) avatarError.textContent = texto;
-    if (avatarInput) {
-        if (texto !== "") {
-            avatarInput.classList.add('is-invalid');
-            avatarInput.classList.remove('is-valid');
-        } else {
-            avatarInput.classList.remove('is-invalid');
-            avatarInput.classList.add('is-valid');
-        }
-    }
+    avatarInput.classList.toggle('is-invalid', texto !== "");
 }
 
 function cerrarModalAvatar() {
-    const modalInstance = bootstrap.Modal.getInstance(modalAvatarEl);
+    const modalEl = document.getElementById('changeAvatarModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
     if (modalInstance) modalInstance.hide();
-    
-    // Limpieza manual para evitar el error de "botón bloqueado"
     document.body.classList.remove('modal-open');
-    document.body.style.overflow = '';
     const backdrop = document.querySelector('.modal-backdrop');
     if (backdrop) backdrop.remove();
 }

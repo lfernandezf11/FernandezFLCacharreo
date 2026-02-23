@@ -169,9 +169,11 @@
                         <div class="modal-body m-3">
                             <div class="col-12 d-flex flex-column pt-1 gap-4">
                                 <div class="w-100 text-center" style="justify-items:center;">
+                                    <div class="ratio ratio-1x1" style="width: 60%;">
                                     <img id="previa" src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
                                          class="rounded-circle border shadow-sm ratio-1x1" 
-                                         style="object-fit: cover;  width: 60%;">
+                                         style="object-fit: cover;">
+                                    </div>
                                 </div>
                                 <div class="w-100 text-start mt-2">
                                     <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
@@ -182,7 +184,7 @@
 
                             <div class="col-12 mt-4 d-flex align-items-center gap-3 mt-2">
                                 <button type="submit" class="btn btn-primary" id="btn-save-avatar">Guardar cambios</button>
-                                <button type="submit" class="btn btn-secondary" id="btn-delete-avatar">Borrar</button>
+                                <button type="button" class="btn btn-secondary" id="btn-delete-avatar">Borrar</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             </div>
                         </div>
@@ -194,6 +196,6 @@
 
         <c:import url="/INC/footer.jsp"/>
         <script src="${pageContext.request.contextPath}/JS/perfilForm.js"></script>
-        <script src="${pageContext.request.contextPath}/JS/cambiarAvatar.js"></script>
+        <script src="${pageContext.request.contextPath}/JS/cambioAvatar.js"></script>
     </body>
 </html>

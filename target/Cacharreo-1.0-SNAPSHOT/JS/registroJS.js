@@ -285,9 +285,6 @@ nifEl.addEventListener('blur', validateNif);
 avatarEl.addEventListener('change', function() {
     const file = this.files[0];
     if (file) {
-        console.log("Nombre:", file.name);
-        console.log("Tamaño real en bytes:", file.size);
-        console.log("¿Supera los 102400?:", file.size > 102400);
         // Validación de formato
         if (!file.type.startsWith('image/')) {
             showError(this, "El archivo seleccionado no es una imagen válida.");

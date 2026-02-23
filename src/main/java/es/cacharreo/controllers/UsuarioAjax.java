@@ -107,12 +107,12 @@ public class UsuarioAjax extends HttpServlet {
                         Short idUsuario = usuario.getIdUsuario();
 
                         Part filePart = request.getPart("avatar");
-                        
+
                         if (filePart != null && filePart.getSize() > 0) {
                             String contentType = filePart.getContentType(); // Devuelve "image/png", "image/jpg"...
                             String extension = "." + contentType.split("/")[1];
                             String nombreFichero = "avatar-" + idUsuario + extension;
-                            
+
                             String ruta = request.getServletContext().getRealPath("/IMG/avatares/");
 
                             try {
@@ -127,8 +127,8 @@ public class UsuarioAjax extends HttpServlet {
                         }
                         session.setAttribute("usuarioLogueado", usuario);
                         objeto.put("success", true);
-                        objeto.put("mensaje", "¡Bienvenido a Cacharreo, " + usuario.getNombre() + "!");
-                        
+                        objeto.put("message", "¡Bienvenido a Cacharreo, " + usuario.getNombre() + "!");
+
                     } else {
                         objeto.put("success", false);
                         objeto.put("message", resultado);
@@ -231,6 +231,66 @@ public class UsuarioAjax extends HttpServlet {
                     e.printStackTrace();
                     objeto.put("success", false);
                     objeto.put("message", "Error crítico en el servidor.");
+                }
+                break;
+
+            case "actualizarAvatar":
+                objeto = new JSONObject();
+                
+                try {
+                    usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+                    Part filePart = request.getPart("avatar");
+
+                    if (filePart != null && filePart.getSize() > 0) {
+                        String contentType = filePart.getContentType();
+                        String extension = "." + contentType.split("/")[1];
+                        String nombreFichero = "avatar-" + usuario.getIdUsuario() + extension;
+
+                        String ruta = request.getServletContext().getRealPath("/IMG/avatares/");
+
+                        
+                        filePart.write(ruta + nombreFichero); // Escribimos el archivo en el servidor (sobrescribe si ya existe)
+                        usuario.setAvatar(nombreFichero);
+                        boolean ok = uDAO.updateAvatar(usuario);
+
+                        if (ok) {
+                            session.setAttribute("usuarioLogueado", usuario); // Refrescamos sesión
+                            objeto.put("success", true);
+                            objeto.put("message", "¡Foto de perfil actualizada!");
+                        } else {
+                            objeto.put("success", false);
+                            objeto.put("message", "Error al guardar en la base de datos.");
+                        }
+                    } else {
+                        objeto.put("success", false);
+                        objeto.put("message", "No se ha seleccionado ningún archivo válido.");
+                    }
+                } catch (Exception e) {
+                    objeto.put("success", false);
+                    objeto.put("message", "Error interno: " + e.getMessage());
+                }
+                break;
+
+            case "eliminarAvatar":
+                objeto = new JSONObject();
+                try {
+                    usuario = (Usuario) session.getAttribute("usuarioLogueado");
+                    
+                    usuario.setAvatar(null); //el JSP mostrará default.png automáticamente
+                    boolean ok = uDAO.updateAvatar(usuario);
+
+                    if (ok) {
+                        session.setAttribute("usuarioLogueado", usuario); 
+                        objeto.put("success", true);
+                        objeto.put("message", "Imagen de perfil eliminada.");
+                    } else {
+                        objeto.put("success", false);
+                        objeto.put("message", "No se pudo eliminar la imagen.");
+                    }
+                } catch (Exception e) {
+                    objeto.put("success", false);
+                    objeto.put("message", "Error al procesar la solicitud.");
                 }
                 break;
         }
