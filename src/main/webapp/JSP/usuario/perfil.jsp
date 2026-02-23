@@ -4,6 +4,7 @@
 
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <c:set var="u" value="${sessionScope.usuarioLogueado}" />
 
 
@@ -19,7 +20,7 @@
         <c:import url="/INC/toast.jsp"/>
 
         <main class="page">
-            <section id="profileSection">
+            <section id="profileSection d-flex">
                 <div class="signUpWrapper col-12 col-lg-10 mt-5">
                     <div class="section-header">
                         <h4>Mi Perfil</h4>
@@ -111,7 +112,19 @@
 
                         </div>
                     </form>
+
                 </div>
+                <br>
+                <!-- Último acceso (solo si no es null) -->               
+                <c:if test="${not empty u.ultimoAcceso}">
+                    <div class="text-center mt-3">
+                        <p class="text-white small fw-bold">
+                            <i class="fa fa-history" aria-hidden="true"></i> 
+                            &Uacute;ltimo acceso: 
+                            <fmt:formatDate value="${u.ultimoAcceso}" pattern="dd/MMM/yyyy HH:mm" />
+                        </p>
+                    </div>
+                </c:if>
             </section>
         </main>
 
@@ -170,9 +183,9 @@
                             <div class="col-12 d-flex flex-column pt-1 gap-4">
                                 <div class="w-100 text-center" style="justify-items:center;">
                                     <div class="ratio ratio-1x1" style="width: 60%;">
-                                    <img id="previa" src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
-                                         class="rounded-circle border shadow-sm ratio-1x1" 
-                                         style="object-fit: cover;">
+                                        <img id="previa" src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
+                                             class="rounded-circle border shadow-sm ratio-1x1" 
+                                             style="object-fit: cover;">
                                     </div>
                                 </div>
                                 <div class="w-100 text-start mt-2">
