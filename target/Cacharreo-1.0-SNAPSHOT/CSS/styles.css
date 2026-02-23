@@ -1,0 +1,1116 @@
+:root {
+    --color-black: #0f0f0f;
+    --color-white: #f1f1f1;
+    /* Paleta de Colores */
+    --color-yellow: #DB9C01;
+    --color-lilac: #8E64B4;
+    --color-orange: #f39c12;
+    --color-soft-lilac: rgba(142, 100, 180, 0.25);
+    --color-details: #EDDD53; /* Añadida porque la usas en focus */
+
+    --bg-card: linear-gradient(37deg, rgba(255, 255, 255, 1) 0%, rgba(142, 100, 180, 0.14) 22%, rgba(142, 100, 180, 1) 90%);
+    --bg-body: linear-gradient(0deg,rgba(142, 100, 180, 1) 0%, rgba(219, 156, 1, 1) 95%);
+
+    /* Font Families */
+    --font-display: "Figtree", sans-serif;
+    --font-body: "Quicksand", sans-serif;
+
+    /* Sizes */
+    --text-xs: 0.75rem;
+    --text-xs--line-height: 1.333;
+    --text-sm: 0.875rem;
+    --text-sm--line-height: 1.429;
+    --text-base: 1rem;
+    --text-base--line-height: 1.5;
+    --text-xl: 1.25rem;
+    --text-xl--line-height: 1.4;
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: 1.2;
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --text-8xl: 6rem;
+    --text-8xl--line-height: 1;
+    --text-9xl: 8rem;
+    --text-9xl--line-height: 1;
+
+    /* Font Weights */
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Atajos Estilos (Shorthands) */
+    --text-h2: normal normal var(--font-weight-regular) var(--text-9xl)/var(--text-9xl--line-height) var(--font-display);
+    --text-h3: normal normal var(--font-weight-regular) var(--text-8xl)/var(--text-8xl--line-height) var(--font-display);
+    --text-h4: normal normal var(--font-weight-medium) var(--text-5xl)/var(--text-5xl--line-height) var(--font-display);
+    --font-text-3xl: normal normal var(--font-weight-semibold) var(--text-3xl)/var(--text-3xl--line-height) var(--font-body);
+    --font-text-xl: normal normal var(--font-weight-medium) var(--text-xl)/var(--text-xl--line-height) var(--font-body);
+    --font-text-base: normal normal var(--font-weight-medium) var(--text-base)/var(--text-base--line-height) var(--font-body);
+    --font-text-sm: normal normal var(--font-weight-regular) var(--text-sm)/var(--text-sm--line-height) var(--font-body);
+    --font-text-xs: normal normal var(--font-weight-semibold) var(--text-xs)/var(--text-xs--line-height) var(--font-body);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /*outline: 2px solid red !important; */
+
+}
+
+/* Importante para no generar scroll horizontal inncesario. Al no aplicar la regla en *, 
+no afecta a contenedores con scroll horizontal legítimo (ej.: carrusel) */
+html,
+body {
+    overflow-x: hidden;
+    height: 100%;
+}
+
+html {
+    font: var(--font-text-base);
+}
+
+body {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-black);
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* Hace que crezca hasta ocupar el 100% del espacio sobrante*/
+    display: flex;
+    flex-direction: column;
+    gap: 8rem;
+    padding: 2rem 4rem;
+    background: var(--color-white);
+
+}
+
+section {
+    margin-top: 4rem;
+}
+
+footer {
+    padding: 1.5rem 4rem;
+    color: var(--color-white);
+    background: var(--color-orange);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h2 {
+    font: var(--text-h2);
+    text-transform: uppercase;
+}
+
+h3 {
+    font: var(--text-h3);
+}
+
+h4 {
+    font: var(--text-h4);
+}
+
+
+/* Selecciona cualquier input que tenga el atributo readonly */
+input[readonly] {
+    background-color: #f8f9fa !important; 
+    color: #6c757d;                    
+    border-color: #dee2e6;          
+    cursor: not-allowed;      
+    pointer-events: none;  
+}
+
+input[readonly]:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+button.btn.btn-primary, button.btn.btn-secondary, button.btn.btn-primaryAlt{
+    position: relative;
+    background: transparent;
+    font: var(--font-text-base);
+    border-radius: 999px;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    font-weight: var(--font-weight-semibold);
+    transform: translateY(0);
+    color: var(--color-black);
+    border: 2px solid var(--color-black);
+    box-shadow: 0 4px 0 0 var(--color-black); /* Esto no ocupa espacio en el layout, así que no moverá nada en el transform */
+}
+
+button.btn.btn-primary{
+    background-color: var(--color-yellow);
+}
+
+button.btn.btn-primaryAlt{
+    background-color: var(--color-white);
+}
+
+button.btn.btn-secondary{
+    background-color: transparent;
+    
+}
+
+button.btn.btn-primary:hover, button.btn.btn-primaryAlt:hover {
+    background-color: var(--color-orange);
+}
+
+button.btn.btn-secondary:hover {
+    background-color: var(--color-soft-lilac);  
+}
+
+button.btn.btn-primary:active,
+button.btn.btn-primary:focus,
+button.btn.btn-primaryAlt:active,
+button.btn.btn-primaryAlt:focus {
+    /* Al pulsar, bajamos el botón 4px y reducimos la sombra a 0 */
+    transform: translateY(4px);
+    box-shadow: 0 0px 0 0 var(--color-black);
+    border: 2px solid var(--color-black);
+    color: var(--color-black);
+    transition: transform 0.05s, box-shadow 0.05s;
+}
+
+button.btn.btn-secondary:active,
+button.btn.btn-secondary:focus {
+    /* Al pulsar, bajamos el botón 4px y reducimos la sombra a 0 */
+    transform: translateY(4px);
+    box-shadow: 0 0px 0 0 var(--color-white);
+    border: 2px solid var(--color-white);
+    color: var(--color-white);
+    transition: transform 0.05s, box-shadow 0.05s;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+    /* Necesario, porque las img por defecto tienen display inline*/
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.text-3xl {
+    font: var(--font-text-3xl);
+    text-transform: lowercase;
+}
+
+.text-xl {
+    font: var(--font-text-xl);
+}
+
+.text-sm {
+    font: var(--font-text-sm);
+}
+
+/* HEADER: LOGO Y LINKS DE NAVEGACIÓN -----------------------------*/
+nav {
+    padding: 1rem;
+    margin-left: auto;
+}
+
+header.css-navbar {
+    position: fixed;
+    top: 0;
+    background: var(--color-yellow);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    /* Coloca la navbar por encima del resto de elementos para que no interfiera el overlay del hero.*/
+}
+
+img.logo {
+    height: 55px;
+    width: auto;
+    object-fit: contain; /* Asegura que la imagen no se deforme */
+}
+
+img.logo:hover {
+    cursor:pointer;
+}
+
+form.nav-form {
+    display:flex;
+    flex-direction:row;
+    width: 100%;
+
+}
+
+nav.nav-links {
+    display: flex;
+    gap: 1.2rem;
+}
+
+button.btn-logo {
+    margin-right: auto;
+    background: transparent;
+    border: none;
+}
+
+button.btn-link, button.btn-link-terms{
+    background: transparent;
+    border: none;
+    font: var(--font-text-base);
+    font-weight: var(--font-weight-medium);
+    padding: 0.5rem;
+    padding-bottom: 0.3rem;
+    transition: background 0.3s ease;
+    position: relative; /* Obligatorio para posicionar el subrayado */
+    overflow: hidden;
+    text-decoration: none;
+}
+
+button.btn-link:hover{
+    transform:translateY(0);
+    color: var(--color-black);
+}
+
+button.btn-link-terms:hover{
+    font-weight: var(--font-weight-semibold);
+}
+
+button.btn-link::before {
+    content: "";
+    position: absolute;
+    bottom: 3px;       /* Distancia desde el borde inferior */
+    left: 0;
+    width: 100%;
+    height: 1.5px;       /* Grosor de la línea */
+    background-color: var(--color-black);
+    /* Estado inicial: ancho 0 y origen a la izquierda */
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.3s ease-out;
+}
+
+button.btn-link:hover::before {
+    /* Estado al pasar el ratón: escala completa */
+    transform: scaleX(1);
+}
+
+.btn-group {
+    display: flex;
+    align-items: center;
+    margin-left: 1.5rem;
+    white-space: nowrap;
+    overflow-x: auto;
+
+}
+
+
+
+/* HERO: MARCA Y GRADIENTE DE FONDO --------------------------------- */
+.hero {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: url("../IMG/hero-bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hero img {
+    /* Empuja el elemento al fondo de su contenedor */
+    padding-top: 3rem;
+    width: 45%;
+}
+
+/* PRODUCTOS */
+
+.container {
+    padding: 1rem;
+}
+
+
+/* Carrusel (estático y con botones por fuera)*/
+/* Contenedor para dar espacio a los botones laterales */
+.carousel-container-custom {
+    position: relative;
+    padding: 0 60px; /* Espacio para que los botones quepan fuera */
+}
+
+/* Estilo base de los botones negros */
+.custom-nav-btn {
+    position: absolute !important;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+
+}
+
+/* Posicionamiento exterior */
+.prev-btn {
+    left: 0;
+}
+.next-btn {
+    right: -64px;
+}
+
+
+/* Estilo de la Card */
+.product-card {
+    background: #8E64B4;
+    background: linear-gradient(333deg, rgba(142, 100, 180, 1) 0%, rgba(142, 100, 180, 0.8142) 15%, rgba(255, 255, 255, 1) 35%);
+    border: 3px solid var(--color-black);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 6px 6px 0px #000000;
+    transition: transform 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-card:hover {
+    transform: translateY(0);
+    box-shadow: 2px 2px 0px #000000;
+}
+
+.product-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain; /* Para que la imagen no se deforme */
+    padding: 0;
+}
+
+.product-info {
+    text-align: center;
+    padding: 0;
+    margin-top: auto;
+}
+
+.product-brand {
+    color: var(--color-white);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+}
+
+.product-name {
+    font: var(--font-text-xl);
+}
+
+.product-price {
+    font: var(--font-text-3xl);
+    color: var(--color-black);
+    margin-bottom: 1rem;
+}
+
+.price-ribbon-flat {
+    display: inline-block;
+    background-color: var(--color-yellow);
+    color: white;
+    font-size: 1.5rem;
+    padding: 4px 40px 4px 12px;
+    /* recorte de flecha hacia adentro */
+    clip-path: polygon(0% 0%, 100% 0%, 82% 50%, 100% 100%, 0% 100%);
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+
+/* Secciones */
+.section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+    /* evita que lo que sobresalga genere scroll. Alternativa css moderno: clip.*/
+}
+
+.signUpWrapper .section-header{
+    padding-top: 0;
+}
+
+/* REGISTRO */
+main.page {
+    background: var(--bg-body);
+    align-content: center;
+    justify-content:center;
+}
+
+#signUpSection, #signInSection, #profileSection {
+    display:flex;
+    justify-content: center;
+}
+
+.signUpWrapper {
+    display: block;
+    background: var(--color-white);
+    border: 3px solid var(--color-black);
+    border-radius: 8px;
+    box-shadow: 6px 6px 0px #000000;
+    padding: 1.5rem 2rem;
+}
+
+/* FORMULARIO */
+label.form-label {
+    margin-bottom: 0;
+}
+.form-label.cp {
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.form-control, .form-select {
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+.row>*{
+    margin-top: 0.6rem;
+}
+
+
+
+
+/* MODAL */
+/* Contenedor principal */
+.modal-content {
+    background-color: var(--color-white);
+    border: 3px solid var(--color-black);
+    border-radius: 15px;
+    box-shadow: 8px 8px 0px 0px var(--color-black);
+    overflow: hidden;
+}
+
+/* Encabezado del Modal */
+.modal-header {
+    border-bottom: 2px solid var(--color-black);
+    background-color: var(--color-white);
+}
+
+.modal-title {
+    font: var(--font-text-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-black);
+    text-transform: uppercase;
+}
+
+/* Cuerpo del Modal */
+.modal-body {
+    font: var(--font-text-base);
+    font-weight: 400;
+    color: var(--color-black); 
+}
+
+.modal-body h6 {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-lilac);
+    margin-top: 1rem;
+    text-decoration: underline;
+}
+
+.price-tag {
+    font-weight: 900;
+    color: var(--color-lilac);
+    margin: 0;
+}
+
+.modal-footer {
+    border-top: 2px solid var(--color-black);
+    background-color: var(--color-soft-lilac);
+}
+
+/* Personalización del scrollbar */
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+.modal-body::-webkit-scrollbar-track {
+    background: var(--color-white);
+}
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--color-black);
+    border-radius: 10px;
+}
+
+
+/* CESTA */
+/* Contenedor principal */
+.cart-layout {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start; /* Importante para que el sticky funcione */
+}
+
+/* Lista de productos */
+.cart-items-container {
+    flex: 0 0 65%;
+}
+
+/* Columna de resumen (Restante) */
+.cart-summary-aside {
+    flex: 1;
+    position: sticky;
+    top: 100px; 
+    height: 100%;
+}
+
+/* La tarjeta de totales blanca con borde naranja */
+.cart-total-bar {
+    background-color: #ffffff;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    border-left: 5px solid #ff6600; /* Margen izquierdo naranja */
+    min-height: 60vh;
+}
+
+/* Contenedor de la tabla de resumen */
+.summary-table {
+    width: 100%;
+    margin: 1rem 0 0 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0 0.2rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.concept-text {
+    color: #888; /* Gris tenue */
+    font-weight: 500;
+}
+
+.value-text {
+    color: #333; 
+    font-weight: 700;
+}
+
+.shipping-fee {
+    color: #28a745; /* Verde para "GRATIS" */
+    font-size: 0.85rem;
+
+}
+
+/* Fila de Total */
+.total-final-row {
+    border-bottom: 2px solid #333;
+    margin-top: 0.4rem;
+    padding-top: 0.8rem;
+}
+
+.total-label {
+    font-weight: 800;
+    color: #000;
+    font-size: 1rem;
+}
+
+.total-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ff6600;; 
+}
+
+.btn-clear-link {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0.6rem 0 0.2rem 0;
+    cursor: pointer;
+    display: block;         
+    width: 100%;           
+    color: #999;          
+    font-size: 0.9rem;
+    text-align: center;
+    border-bottom: 1.5px solid #999;
+    transition: all 0.3s ease;  
+}
+
+.btn-clear-link:hover {
+    color: #333;                
+    border-bottom: 1px solid #333;
+}
+
+/* Ajustes de botones para que ocupen todo el ancho en la columna */
+.summary-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top:auto;
+}
+
+.summary-btns button, .summary-btns form {
+    width: 100%;
+}
+
+/* Responsivo: En móviles se pone uno debajo de otro */
+@media (max-width: 992px) {
+    .cart-layout {
+        flex-direction: column;
+    }
+    .cart-items-container, .cart-summary-aside {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+    .cart-summary-aside {
+        position: static; /* Quita el efecto fijo en móviles */
+    }
+}
+
+
+.cart-item-card {
+    display: flex; /* Alineación horizontal */
+    background-color: white;
+    border: 3px solid var(--color-black);
+    border-radius: 8px;
+    padding: 0.8rem;
+    box-shadow: 3px 3px 0px var(--color-black);
+    margin-bottom: 20px;
+}
+
+.cart-item-card h4 {
+    font: var(--font-text-xl);
+}
+.cart-item-image img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    background: white;
+}
+
+.cart-item-content {
+    flex-grow: 1;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.item-info-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.qty-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+
+/* MENSAJES FLOTANTES TIPO TOAST*/
+#liveToast {
+    
+    border-radius: 0 !important;
+    color: var(--color-black) !important;
+    min-width: 250px;
+}
+
+.toast-success {
+    background-color: rgba(163, 240, 69, 0.9) !important;
+    border: 2px solid rgba(43, 75, 4, 1) !important;
+    box-shadow: 4px 4px 0px rgba(43, 75, 4, 1) !important;
+}
+
+.toast-error {
+    background-color: rgba(240, 69, 69, 0.9) !important;
+    border: 2px solid rgba(113, 2, 0, 1) !important;
+    box-shadow: 3px 3px 0px rgba(113, 2, 0, 1) !important;
+}
+
+.toast-warning { 
+    background-color: #ffca28 !important; /* Un amarillo vibrante */
+    color: #000 !important;
+}
+
+.toast-error .btn-close { filter: invert(1); } /* Pone en blanco el botón para el fondo rojo */
+
+/*.popUp {
+    position: fixed;
+    right: 1.5rem;
+    top: 5rem;
+    margin-top: 0.8rem;  
+    padding: 10px 20px;
+    z-index: 1000;
+    animation: show 0.5s ease-out;
+}
+
+.popUp-added {
+    background-color: rgba(163, 240, 69, 0.7);
+    color: var(--color-black);
+    border: 2px solid rgba(43, 75, 4, 1);
+    box-shadow: 3px 3px 0px rgba(43, 75, 4, 1);
+}
+
+.popUp-removed {
+    background-color: rgba(255, 94, 92, 0.7);
+    color: var(--color-black);
+    border: 2px solid rgba(113, 2, 0, 1);
+    box-shadow: 3px 3px 0px rgba(113, 2, 0, 1);
+}
+
+@keyframes show {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}*/
+/* ABOUT */
+.about-me .content {
+    display: flex;
+    gap: 3rem;
+    align-items: stretch;
+    /* asegura que las columnas tengan la misma altura */
+}
+
+
+/* CONTACT ---------------------------------------- */
+.contact {
+    background: var(--color-secondary);
+    border-radius: 2rem 2rem 0 0; /* Redondea sólo las esquinas superiores */
+    margin: 0 auto;
+    padding: 0;
+    padding: 4rem 0rem 0rem 4rem;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.contact-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+/* Formulario (columna izquierda) */
+.contact-form {
+    flex: 1.1;
+    display: flex;
+    flex-direction: column;
+    gap: 2.3rem;
+}
+
+.field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.field-row label {
+    font: var(--font-text-xl);
+    margin-bottom: 0.1rem;
+}
+
+.field-row input,
+.field-row textarea {
+    background: transparent;
+    border: none;
+    color: var(--color-tertiary);
+    border-bottom: 2px solid var(--color-tertiary);
+    outline: none;
+    padding: 0.35rem 0 0.35rem 0;
+    transition: border-color 0.25s;
+}
+
+.field-row input:focus,
+.field-row textarea:focus {
+    border-bottom: 2px solid var(--color-details);
+}
+
+/* Panel derecho */
+.contact-info {
+    flex: 0.95;
+    display: flex;
+    flex-direction: column;
+    text-align: end;
+    justify-content: flex-end;
+}
+
+.contact-info h2 {
+    padding-right: 4rem;
+}
+
+.contact-box {
+    background: var(--color-tertiary);
+    border-radius: 2rem 2rem 0 0; /* Redondea sólo las esquinas superiores */
+    box-shadow: 0 0 44px rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+
+
+}
+
+.info-data {
+    display: flex;
+}
+
+.info-col {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 1rem;
+    gap: 0;
+}
+
+.info-col>h4 {
+    color: var(--color-primary);
+    padding-bottom: 1rem;
+}
+
+.info-desc {
+    font: var(--font-text-base);
+    color: var(--color-primary);
+}
+
+.info-socials {
+    display: flex;
+    align-items: end;
+    gap: 1rem;
+    margin-left: auto;
+    margin-right: 4rem;
+}
+
+.info-socials a {
+    display: block;
+    font-size: 50px;
+    font-weight: bold;
+    color: var(--color-primary);
+    /* Marcamos los enlaces como inactivos, de momento */
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Título mostrado en versión escritorio */
+
+.desktop{
+    display: block;
+}
+
+.mobile {
+    display:none;
+}
+
+/* Sticker mostrado en versión escritorio*/
+.tablet {
+    display: none;
+}
+
+/* ESTADO DE CAMPOS*/
+.is-valid {
+    border: 1.2px solid green;
+}
+
+.invalid {
+    color: red;
+    font-size: 0.75rem;
+
+}
+
+/*  RESPONSIVE -------------------- */
+
+/* Puntos de ruptura para responsive
+        Teléfonos pequeños: 320px;
+        Mayoría de teléfonos: 480px;
+        Tablet: 768px; 
+*/
+
+/* TABLET */
+@media (max-width: 768px) {
+    main{
+        gap: 5rem;
+    }
+    .hero img {
+        max-width: 70%;
+    }
+
+    .about-me .sticker-wrapper {
+        margin-bottom: 3rem;
+        display: none;
+    }
+
+    .about-me-info img {
+        padding:0;
+    }
+
+    .about-me .sticker-wrapper.tablet {
+        display: flex;
+        flex-direction: column;
+        margin-top: 4rem;
+        rotate: -16deg;
+    }
+
+    #infoText {
+        margin-bottom: auto;
+        margin-top: 0;
+    }
+}
+
+
+/* MAYORÍA DE TELÉFONOS */
+@media (max-width: 480px) {
+
+    main {
+        padding: 2rem 0rem;
+    }
+
+    footer {
+        padding: 1.5rem 2rem;
+        background: var(--color-details);
+    }
+
+    /* Disminución de tamaños para versión móvil*/
+    h2 {
+        font: var(--text-h3);
+        hyphens: auto; /* Salto de línea por sílabas para asegurar visibilidad en versión móvil*/
+    }
+
+    h3 {
+        font: var(--text-h4);
+        text-transform: lowercase;
+    }
+
+    /* Barra de navegación ---------------------------*/
+    /* Botón toggle para plegar/desplejar con enlaces de la navbar */
+    .css-navbar {
+        position: relative;
+    }
+
+    .css-navbar.nav-links {
+        display: none;
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.9);
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 50%;
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .css-navbar.nav-links.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    /* Hero --------------------------------------*/
+    .hero img {
+        max-width: 95%;
+        padding-top: 2rem;
+        margin-bottom: auto;
+        /*Centra en el hero (contrarresta el margin-top: 0 del elemento original)*/
+    }
+
+    .hero h3 {
+        display: none;
+    }
+
+    /* About me -----------------------------------*/
+    .about-me .content {
+        flex-direction: column;
+    }
+
+    .about-me .section-header {
+        padding: 0rem 1rem;
+    }
+
+    .sticker-wrapper {
+        margin: 3rem 0rem;
+        translate: -2rem; /* Desplaza el sticker a la izquierda para que se vea el contenido completo */
+        width: 110%; /* Los picos del sticker quedan fuera de la vista*/
+    }
+
+
+
+    /* Projects ------------------------------- */
+    .projects {
+        width: 100%;
+        padding: 1rem;
+    }
+    /* Contact -------------------------------- */
+    .contact{
+        width: 100%;
+        padding: 2rem 0rem 0rem 0rem;
+    }
+
+    .contact-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        width: 100%;
+    }
+
+    .contact-form {
+        width: 100%;
+        padding: 0rem 1rem;
+    }
+
+    .contact-box {
+        width: 100%;
+        padding: 2rem;
+    }
+
+    .contact-info{
+        width: 100%;
+    }
+
+    .contact-info .info-data {
+        flex-direction: column;
+    }
+
+    .contact h2 {
+        padding: 1rem;
+        text-align: start;
+    }
+
+    /* Título mostrado en vista móvil */
+    .desktop{
+        display: none;
+    }
+
+    .mobile {
+        display:block;
+    }
+
+    #infoText.mobile {
+        padding: 0rem 1rem;
+    }
+
+}
