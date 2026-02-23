@@ -2,7 +2,11 @@
 
 // Selectores
 const avatarInput = document.getElementById('avatar');
+
 const imgPrevia = document.getElementById('previa');
+const imgPerfil = document.getElementById('imgPerfil');
+const imgNavbar = document.getElementById('imgAvatar');
+
 const avatarError = document.getElementById('avatarError');
 const changeAvatarForm = document.getElementById('changeAvatarForm');
 const btnDelete = document.getElementById('btn-delete-avatar');
@@ -10,9 +14,9 @@ const btnSubmit = document.getElementById('btn-save-avatar'); // Aquí lo tienes
 
 // PREVISUALIZACIÓN Y VALIDACIÓN del formulario ---
 if (avatarInput) {
-    avatarInput.addEventListener('change', function() {
+    avatarInput.addEventListener('change', function () {
         const file = this.files[0];
-        
+
         if (file) {
             // Validar que sea imagen
             if (!file.type.startsWith('image/')) {
@@ -31,8 +35,9 @@ if (avatarInput) {
             // Si todo está bien, leemos el archivo para mostrar la previa
             marcarErrorAvatar(""); // Limpiar errores
             const reader = new FileReader();
-            reader.onload = function(e) {
-                if (imgPrevia) imgPrevia.src = e.target.result;
+            reader.onload = function (e) {
+                if (imgPrevia)
+                    imgPrevia.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
@@ -42,7 +47,7 @@ if (avatarInput) {
 // MANEJO DE LA SUBIDA(Evento submit del formulario)
 if (changeAvatarForm) {
     changeAvatarForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         if (!avatarInput.files[0]) {
             marcarErrorAvatar("Por favor, selecciona una foto primero.");
@@ -51,20 +56,28 @@ if (changeAvatarForm) {
 
         // Desactivamos el botón mientras se actualiza la imagen
         btnSubmit.disabled = true;
-        btnSubmit.textContent = "Subiendo...";
 
         const formData = new FormData();
         formData.append('accion', 'actualizarAvatar');
         formData.append('avatar', avatarInput.files[0]);
 
         try {
-            let response = await fetch(URL, { method: 'POST', body: formData });
+            let response = await fetch(URL, {method: 'POST', body: formData});
             let resultado = await response.json();
 
             if (resultado.success) {
                 lanzarToast((resultado.message || "¡Imagen actualizada!"), "exito");
+                btnSubmit.disabled = false;
+
+                if (imgPerfil && imgPrevia) {
+                    // Como 'previa.src' ya tiene el Base64 que generó el FileReader, el cambio es INSTANTÁNEO.
+                    imgPerfil.src = imgPrevia.src;
+
+                    // 3. OPCIONAL: Si tienes una miniatura en el Header (navbar), búscala por clase o ID y actualízala también
+                    //const imgNavbar = document.querySelector('.navbar-avatar'); // Cambia el selector según tu header.jsp
+                    //if (imgNavbar) imgNavbar.src = imgPrevia.src;
+                }
                 cerrarModalAvatar();
-                setTimeout(() => window.location.reload(), 1200);
             } else {
                 lanzarToast(resultado.message, "error");
                 btnSubmit.disabled = false;
@@ -80,23 +93,30 @@ if (changeAvatarForm) {
 // MANEJO DEL BORRADO (Evento click del botón)
 if (btnDelete) {
     btnDelete.addEventListener('click', async () => {
-        if (!confirm("¿Estás seguro de que quieres eliminar tu foto?")) return;
+        if (!confirm("¿Estás seguro de que quieres eliminar tu foto?"))
+            return;
 
         const data = new URLSearchParams();
         data.append('accion', 'eliminarAvatar');
 
         try {
-            let response = await fetch(AVATAR_URL, {
+            let response = await fetch(URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: data.toString()
             });
 
             let resultado = await response.json();
             if (resultado.success) {
                 lanzarToast("Foto eliminada.", "exito");
+
+                if (imgPerfil) {
+                    imgPerfil.src = "/Cacharreo/IMG/avatares/default.png";
+                }
+                // También reseteamos la del modal por si el usuario lo vuelve a abrir
+                if (imgPrevia)
+                    imgPrevia.src = "/Cacharreo/IMG/avatares/default.png";
                 cerrarModalAvatar();
-                setTimeout(() => window.location.reload(), 1200);
             }
         } catch (error) {
             lanzarToast("Error al borrar la foto.", "error");
@@ -104,17 +124,20 @@ if (btnDelete) {
     });
 }
 
-// --- FUNCIONES DE APOYO ---
+// Funciones auxiliares
 function marcarErrorAvatar(texto) {
-    if (avatarError) avatarError.textContent = texto;
+    if (avatarError)
+        avatarError.textContent = texto;
     avatarInput.classList.toggle('is-invalid', texto !== "");
 }
 
 function cerrarModalAvatar() {
     const modalEl = document.getElementById('changeAvatarModal');
     const modalInstance = bootstrap.Modal.getInstance(modalEl);
-    if (modalInstance) modalInstance.hide();
+    if (modalInstance)
+        modalInstance.hide();
     document.body.classList.remove('modal-open');
     const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) backdrop.remove();
+    if (backdrop)
+        backdrop.remove();
 }
