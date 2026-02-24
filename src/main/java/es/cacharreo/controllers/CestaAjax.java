@@ -91,8 +91,9 @@ public class CestaAjax extends HttpServlet {
             }
 
             //// Persistencia y totales (común a todos los case)
-            // Calculamos el total de la cesta (Importe base + IVA)
             float totalCesta = cesta.getImporte() + cesta.getIva();
+            objeto.put("subtotalCesta", String.format("%.2f", cesta.getImporte()).replace(",", "."));
+            objeto.put("ivaCesta", String.format("%.2f", cesta.getIva()).replace(",", "."));
             objeto.put("totalCesta", String.format("%.2f", totalCesta).replace(",", "."));
 
             String cestaStr = CestaUtils.parserPedidoAString(cesta);

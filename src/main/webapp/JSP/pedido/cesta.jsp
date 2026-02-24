@@ -63,7 +63,7 @@
                                                     </p>
 
                                                     <p class="mb-0">Subtotal: 
-                                                        <strong class="linea-subtotal">
+                                                        <strong class="linea-subtotal" >
                                                             <fmt:formatNumber value="${linea.importe}" type="currency" currencySymbol="€"/>
                                                         </strong>
                                                     </p>
@@ -94,7 +94,7 @@
                                         <h4 class="mb-4">Resumen</h4>
                                         <div class="summary-row">
                                             <span class="concept-text">Subtotal</span>
-                                            <span class="value-text">
+                                            <span class="value-text" id="cart-amount">
                                                 <fmt:formatNumber value="${cesta.importe}" type="currency" currencySymbol="€"/>
                                             </span>
                                         </div>

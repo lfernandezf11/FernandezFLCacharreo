@@ -10,32 +10,46 @@ async function actualizarUnidades(idProducto, accion, form) {
     const data = new URLSearchParams();
     data.append('accion', accion);
     data.append('idProducto', idProducto);
+
     try {
         let response = await fetch(URL, {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: data.toString()
         });
+
         if (response.ok) {
             let resultado = await response.json();
+            
             if (resultado.success) {
-                form.querySelector('.qty-val').textContent = resultado.nuevaCantidad; //Display de nueva cantidad
+                // 1. Actualizar cantidad en la tarjeta
+                form.querySelector('.qty-val').textContent = resultado.nuevaCantidad;
 
-                const totalPedidoEl = document.querySelector('.cart-total-bar h3');
-                if (totalPedidoEl) {
-                    // Display de nuevo total. Como ya viene formateado con dos decimales desde el controlador, solo añadimos el símbolo
-                    totalPedidoEl.innerHTML = `Total pedido: ${resultado.totalCesta} €`;
+                // 2. Actualizar el subtotal de la línea (la tarjeta)
+                const itemCard = form.closest('.cart-item-card');
+                const subtotalLineaEl = itemCard.querySelector('.linea-subtotal');
+                if (subtotalLineaEl) {
+                    subtotalLineaEl.textContent = resultado.subtotalProd + " €";
                 }
 
-                const itemCard = form.closest('.cart-item-card'); //Display de nuevo subtotal
-                const subtotalEl = itemCard.querySelector('.price-group p.mb-0 strong');
-                if (subtotalEl) {
-                    subtotalEl.textContent = resultado.subtotalProd + " €";
+                // 3. ACTUALIZAR RESUMEN DE TOTALES (Lado derecho)
+                const subtotalGlobal = document.getElementById('cart-amount');
+                const totalIva = document.getElementById('iva-amount');
+                const totalPedido = document.getElementById('total-final');
+
+                if (subtotalGlobal && resultado.subtotalCesta) {
+                    subtotalGlobal.textContent = resultado.subtotalCesta + " €";
+                }
+                if (totalIva && resultado.ivaCesta) {
+                    totalIva.textContent = resultado.ivaCesta + " €";
+                }
+                if (totalPedido && resultado.totalCesta) {
+                    totalPedido.textContent = resultado.totalCesta + " €"; //// Display de nuevo total. Como ya viene formateado con dos decimales desde el controlador, solo añadimos el símbolo
                 }
             }
         }
     } catch (error) {
-        lanzarToast(("Error de conexión al actualizar unidades:" + error), "error");
+        lanzarToast("Error de conexión al actualizar unidades: " + error, "error");
     }
 }
 
@@ -75,11 +89,19 @@ async function eliminarFila(idProducto, form) {
                     setTimeout(() => {
                         itemCard.remove();
 
-                        // Actualizamos el total general del pedido 
-                        const totalPedidoEl = document.querySelector('.cart-total-bar h3');
-                        if (totalPedidoEl && resultado.totalCesta) {
-                            totalPedidoEl.innerHTML = `Total pedido: ${resultado.totalCesta} €`;
-                        }
+                        const subtotalGlobal = document.getElementById('cart-amount');
+                const totalIva = document.getElementById('iva-amount');
+                const totalPedido = document.getElementById('total-final');
+
+                if (subtotalGlobal && resultado.subtotalCesta) {
+                    subtotalGlobal.textContent = resultado.subtotalCesta + " €";
+                }
+                if (totalIva && resultado.ivaCesta) {
+                    totalIva.textContent = resultado.ivaCesta + " €";
+                }
+                if (totalPedido && resultado.totalCesta) {
+                    totalPedido.textContent = resultado.totalCesta + " €"; //// Display de nuevo total. Como ya viene formateado con dos decimales desde el controlador, solo añadimos el símbolo
+                }
 
                         // Si era el último producto, recargamos para mostrar el estado "Cesta vacía"
                         const restantes = document.querySelectorAll('.cart-item-card').length;
@@ -160,7 +182,7 @@ document.addEventListener('submit', async (e) => {
                         modalInstance.hide();
                     }
 
-                    // SEGURO DE VIDA: Si después de 350ms (lo que dura la animación) 
+                    // Si después de 350ms (lo que dura la animación) 
                     // el backdrop sigue ahí, lo fulminamos sin bloquear el scroll.
                     setTimeout(() => {
                         const backdrop = document.querySelector('.modal-backdrop');
