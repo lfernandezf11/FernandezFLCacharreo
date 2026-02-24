@@ -44,7 +44,9 @@ public class CestaService {
         } else {
             // Si es nuevo, creamos la LineaPedido
             LineaPedido nuevaLinea = new LineaPedido();
-            nuevaLinea.setPedido(pedido);
+            // Línea necesaria para mantener la coherencia del carrito. Para el usuario anónimo, se queda a null, 
+            // pero para el registrado tiene que asignarse el id del pedido correspondiente.
+            nuevaLinea.setIdPedido(pedido.getIdPedido()); 
             nuevaLinea.setProducto(productoBD);
             nuevaLinea.setCantidad(1);
 

@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class LineaPedido implements Serializable{
     private Short idLinea;
-    private Pedido pedido;
+    private Short idPedido;
     private Producto producto;
     private Integer cantidad;
     private Float importe; //??? Base imponible de la linea antes de la suma y el iva?
@@ -24,12 +24,12 @@ public class LineaPedido implements Serializable{
         this.idLinea = idLinea;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public short getIdPedido() {
+        return idPedido;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setIdPedido(Short idPedido) {
+        this.idPedido = idPedido;
     }
 
     public Producto getProducto() {

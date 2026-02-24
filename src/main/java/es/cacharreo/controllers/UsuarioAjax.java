@@ -1,14 +1,20 @@
 package es.cacharreo.controllers;
 
 import com.google.gson.Gson;
+import es.cacharreo.DAO.IPedidoDAO;
 import es.cacharreo.DAO.IUsuarioDAO;
 import es.cacharreo.DAOFactory.DAOFactory;
+import es.cacharreo.beans.Pedido;
 import es.cacharreo.beans.Usuario;
+import es.cacharreo.models.CestaUtils;
+import es.cacharreo.models.Cookies;
 import es.cacharreo.models.Utilities;
 import java.io.IOException;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +58,7 @@ public class UsuarioAjax extends HttpServlet {
         HttpSession session = request.getSession();
         DAOFactory daof = DAOFactory.getDAOFactory();
         IUsuarioDAO uDAO = daof.getUsuarioDAO();
+        IPedidoDAO pDAO = daof.getPedidoDAO();
         Usuario usuario = null;
 
         String accion = request.getParameter("accion");
@@ -120,9 +127,22 @@ public class UsuarioAjax extends HttpServlet {
                                 usuario.setAvatar(nombreFichero);
                                 uDAO.updateAvatar(usuario); // Actualizamos el nombre en la BD
                             } catch (IOException ex) {
-
                                 uDAO.deleteUsuario(idUsuario);  // SI FALLA LA IMAGEN, borramos el usuario por seguridad
                                 throw new Exception("Error al escribir el archivo.");
+                            }
+                        }
+
+                        // Migración de cesta en el primer logueo (desde la sesión)
+                        Pedido cesta = (Pedido) session.getAttribute("cesta");
+
+                        // Si hay cesta y tiene líneas, la guardamos. El estado por defecto será 'c'
+                        if (cesta != null && cesta.getLineas() != null && !cesta.getLineas().isEmpty()) {
+                            cesta.setUsuario(usuario);
+                            cesta.setFecha(new Date());
+
+                            boolean guardado = pDAO.insertarCesta(cesta); // Este método inserta el pedido y sus líneas en bd, y también actualiza el id del pedido en cesta
+                            if (guardado) { // Éxito: pasamos a operar únicamente con sesión y bd   
+                                response.addCookie(Cookies.generarCookie("cestaCookie", "", 0, request));
                             }
                         }
                         session.setAttribute("usuarioLogueado", usuario);
@@ -146,14 +166,42 @@ public class UsuarioAjax extends HttpServlet {
                     g = new Gson();
 
                     usuario = g.fromJson(datosLogin, Usuario.class);
-
                     Usuario usuarioValidado = uDAO.login(usuario.getEmail(), Utilities.md5(usuario.getPassword()));
 
                     if (usuarioValidado != null) { //Login exitoso
+                        // En primer lugar, recuperamos su cesta de BD si existiera
+                        Pedido cestaBD = pDAO.getCestaByUsuario(usuarioValidado.getIdUsuario());
+
+                        if (cestaBD != null) {
+                            // CASO A: Ya existe una cesta persistente. La cargamos en la sesión y le asociamos su usuario
+                            // por si necesitamos operar con él de forma local
+                            session.setAttribute("cesta", cestaBD);
+                            cestaBD.setUsuario(usuarioValidado);
+
+                        } else if (usuarioValidado.getUltimoAcceso() == null) {
+                            // CASO B: No hay cesta en BD y es la "primera vez" que entra (no tiene último acceso asociado).
+                            // Migramos la cesta de la sesión (la anónima) a la base de datos.
+                            Pedido cesta = (Pedido) session.getAttribute("cesta");
+
+                            if (cesta != null && cesta.getLineas() != null && !cesta.getLineas().isEmpty()) {
+                                cesta.setUsuario(usuarioValidado);
+                                cesta.setFecha(new Date());
+
+                                boolean guardado = pDAO.insertarCesta(cesta);
+                                if (guardado) {
+                                    // Sincronizamos el objeto en sesión por si acaso el DAO hizo cambios
+                                    session.setAttribute("cesta", cesta);
+                                }
+                            }
+                        }
+                        // En todos los login exitosos, la cookie muere
+                        response.addCookie(Cookies.generarCookie("cestaCookie", "", 0, request));
                         session.setAttribute("usuarioLogueado", usuarioValidado);
                         objeto.put("success", true);
+
                     } else {
-                        objeto.put("success", false); // El JS maneja el mensaje de error: "email o contraseña incorrectos".
+                        // Credenciales incorrectas. El JS maneja el mensaje de error: "email o contraseña incorrectos".
+                        objeto.put("success", false);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -236,7 +284,7 @@ public class UsuarioAjax extends HttpServlet {
 
             case "actualizarAvatar":
                 objeto = new JSONObject();
-                
+
                 try {
                     usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
@@ -249,7 +297,6 @@ public class UsuarioAjax extends HttpServlet {
 
                         String ruta = request.getServletContext().getRealPath("/IMG/avatares/");
 
-                        
                         filePart.write(ruta + nombreFichero); // Escribimos el archivo en el servidor (sobrescribe si ya existe)
                         usuario.setAvatar(nombreFichero);
                         boolean ok = uDAO.updateAvatar(usuario);
@@ -276,12 +323,12 @@ public class UsuarioAjax extends HttpServlet {
                 objeto = new JSONObject();
                 try {
                     usuario = (Usuario) session.getAttribute("usuarioLogueado");
-                    
+
                     usuario.setAvatar(null); //el JSP mostrará default.png automáticamente
                     boolean ok = uDAO.updateAvatar(usuario);
 
                     if (ok) {
-                        session.setAttribute("usuarioLogueado", usuario); 
+                        session.setAttribute("usuarioLogueado", usuario);
                         objeto.put("success", true);
                         objeto.put("message", "Imagen de perfil eliminada.");
                     } else {

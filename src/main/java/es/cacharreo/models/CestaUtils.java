@@ -45,7 +45,6 @@ public class CestaUtils {
         // Transformamos cada Producto en una LineaPedido y lo añadimos al pedido
         for (Producto p : productosDB) {
             LineaPedido linea = new LineaPedido();
-            linea.setPedido(pedido); // Relación bidireccional
             linea.setProducto(p);
             linea.setCantidad(cantidades.get(p.getIdProducto()));
 

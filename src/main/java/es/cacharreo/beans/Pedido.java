@@ -10,23 +10,9 @@ import java.util.List;
  */
 public class Pedido implements Serializable {
 
-    public enum Estado {
-        Carrito,
-        Finalizado;
-
-        /**
-         * Devuelve todos los valores posibles del enum.
-         *
-         * @return array con todos los estados
-         */
-        public Estado[] getValues() {
-            return Estado.values();
-        }
-    }
-
     private Short idPedido;
     private Date fecha;
-    private Estado estado; // default 'C'
+    private Character estado; // default 'C'
     private Usuario usuario; // A través de fk idUsuario
     private Float importe; // 2 decimales
     private Float iva; // 2 decimales
@@ -51,11 +37,11 @@ public class Pedido implements Serializable {
         this.fecha = fecha;
     }
 
-    public Estado getEstado() {
+    public char getEstado() {
         return estado;
     }
 
-    public void setEstado(Estado estado) {
+    public void setEstado(char estado) {
         this.estado = estado;
     }
 

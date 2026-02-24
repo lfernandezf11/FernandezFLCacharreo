@@ -1,5 +1,7 @@
 package es.cacharreo.DAO;
 
+import es.cacharreo.beans.Pedido;
+
 /**
  *
  * @author fdezf
@@ -18,6 +20,10 @@ public interface IPedidoDAO {
      * menos una fila), false en caso contrario.
      */
     public boolean borrarPedido(short idPedido);
+    
+    public boolean insertarCesta(Pedido pedido);
+    
+    public Pedido getCestaByIdUsuario(short idUsuario);
     
      /**
      * Abandona el hilo del pool de conexiones
