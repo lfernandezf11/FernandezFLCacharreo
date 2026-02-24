@@ -124,37 +124,76 @@ public class PedidoDAO implements IPedidoDAO {
         return cesta;
     }
 
-    
-// Método auxiliar privado para no repetir código
-    private List<LineaPedido> getLineasPedido(short idPedido, Connection connection) throws SQLException {
-        // Hereda la conexión de la consulta de la cesta por id, para reutilizar el hilo
-        List<LineaPedido> lineas = new ArrayList<>();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        // La consulta es un join entre las tablas lineaspedidos, productos (para asignar el Producto de cada línea)
-        // y categorias (para asignar la Categoría a cada Producto).
-        String sql = "SELECT lp.*, "
-                + "p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
-                + "c.idCategoria, c.nombre AS catNombre, c.imagen AS catImagen "
-                + "FROM lineaspedidos lp "
-                + "JOIN productos p ON lp.idproducto = p.idproducto "
-                + "LEFT JOIN categorias c ON p.idCategoria = c.idCategoria "
-                + "WHERE lp.idpedido = ?";
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setShort(1, idPedido);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                lineas.add(LineaPedidoDAO.mapearLineaPedido(rs));
-                // Este método ya asigna internamente el Producto a cada línea con el método de mapearProducto de ProductoDAO
-            }
+    @Override
+    public boolean updateCantidadLinea(short idPedido, short idProducto, int cantidad, float importe) {
+        String sql = "UPDATE lineaspedidos SET cantidad = ?, importe = ? WHERE idpedido = ? AND idproducto = ?";
+        try (Connection con = ConnectionFactory.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, cantidad);
+            ps.setFloat(2, importe);
+            ps.setShort(3, idPedido);
+            ps.setShort(4, idProducto);
+            
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al recuperar cesta de BD", e);
-        } // Aquí no se cierra la conexión, sino en el método padre, al terminar la consulta.
-        return lineas;
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al actualizar cantidad de línea", e);
+            return false;
+        }
     }
+
+    @Override
+    public boolean insertarLineaIndividual(LineaPedido lp) {
+        String sql = "INSERT INTO lineaspedidos (idpedido, idproducto, cantidad, importe) VALUES (?, ?, ?, ?)";
+        try (Connection con = ConnectionFactory.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setShort(1, lp.getIdPedido());
+            ps.setShort(2, lp.getProducto().getIdProducto());
+            ps.setInt(3, lp.getCantidad());
+            ps.setFloat(4, lp.getImporte());
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al insertar línea individual", e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteLineaIndividual(short idPedido, short idProducto) {
+        String sql = "DELETE FROM lineaspedidos WHERE idpedido = ? AND idproducto = ?";
+        try (Connection con = ConnectionFactory.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setShort(1, idPedido);
+            ps.setShort(2, idProducto);
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al eliminar línea", e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateTotalesPedido(Pedido p) {
+        String sql = "UPDATE pedidos SET importe = ?, iva = ? WHERE idpedido = ?";
+        try (Connection con = ConnectionFactory.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setFloat(1, p.getImporte());
+            ps.setFloat(2, p.getIva());
+            ps.setShort(3, p.getIdPedido());
+            
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al actualizar totales del pedido", e);
+            return false;
+        }
+    }
+    
+    
 
     @Override
     public boolean borrarPedido(short idPedido) {
@@ -199,5 +238,36 @@ public class PedidoDAO implements IPedidoDAO {
         // El estado ya sabemos que es 'c'
         // El usuario se asigna con el parámetro de entrada del método padre.
         return pedido;
+    }
+    
+    // Método auxiliar privado para no repetir código
+    private List<LineaPedido> getLineasPedido(short idPedido, Connection connection) throws SQLException {
+        // Hereda la conexión de la consulta de la cesta por id, para reutilizar el hilo
+        List<LineaPedido> lineas = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        // La consulta es un join entre las tablas lineaspedidos, productos (para asignar el Producto de cada línea)
+        // y categorias (para asignar la Categoría a cada Producto).
+        String sql = "SELECT lp.*, "
+                + "p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
+                + "c.idCategoria, c.nombre AS catNombre, c.imagen AS catImagen "
+                + "FROM lineaspedidos lp "
+                + "JOIN productos p ON lp.idproducto = p.idproducto "
+                + "LEFT JOIN categorias c ON p.idCategoria = c.idCategoria "
+                + "WHERE lp.idpedido = ?";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setShort(1, idPedido);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lineas.add(LineaPedidoDAO.mapearLineaPedido(rs));
+                // Este método ya asigna internamente el Producto a cada línea con el método de mapearProducto de ProductoDAO
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al recuperar cesta de BD", e);
+        } // Aquí no se cierra la conexión, sino en el método padre, al terminar la consulta.
+        return lineas;
     }
 }
