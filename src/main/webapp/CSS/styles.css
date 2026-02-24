@@ -8,7 +8,7 @@
     --color-soft-lilac: rgba(142, 100, 180, 0.25);
     --color-details: #EDDD53; /* Añadida porque la usas en focus */
 
-    --bg-card: linear-gradient(37deg, rgba(255, 255, 255, 1) 0%, rgba(142, 100, 180, 0.14) 22%, rgba(142, 100, 180, 1) 90%);
+    /*--bg-card: linear-gradient(37deg, rgba(255, 255, 255, 1) 0%, rgba(142, 100, 180, 0.14) 22%, rgba(142, 100, 180, 1) 90%);*/
     --bg-body: linear-gradient(0deg,rgba(142, 100, 180, 1) 0%, rgba(219, 156, 1, 1) 95%);
 
     /* Font Families */
@@ -397,8 +397,8 @@ button.btn-link:hover::before {
 
 /* Estilo de la Card */
 .product-card {
-    background: #8E64B4;
-    background: linear-gradient(333deg, rgba(142, 100, 180, 1) 0%, rgba(142, 100, 180, 0.8142) 15%, rgba(255, 255, 255, 1) 35%);
+    /*background: #8E64B4;*/
+    background: white;
     border: 3px solid var(--color-black);
     border-radius: 8px;
     padding: 1.5rem;

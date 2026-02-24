@@ -1,5 +1,9 @@
 const URL = '/Cacharreo/CestaAjax';
 
+const subtotalGlobal = document.getElementById('cart-amount');
+const totalIva = document.getElementById('iva-amount');
+const totalPedido = document.getElementById('total-final');
+
 /**
  * Función para actualizar las unidades de la cesta de forma asíncrona
  * @param {string} idProducto 
@@ -20,7 +24,7 @@ async function actualizarUnidades(idProducto, accion, form) {
 
         if (response.ok) {
             let resultado = await response.json();
-            
+
             if (resultado.success) {
                 // 1. Actualizar cantidad en la tarjeta
                 form.querySelector('.qty-val').textContent = resultado.nuevaCantidad;
@@ -33,10 +37,6 @@ async function actualizarUnidades(idProducto, accion, form) {
                 }
 
                 // 3. ACTUALIZAR RESUMEN DE TOTALES (Lado derecho)
-                const subtotalGlobal = document.getElementById('cart-amount');
-                const totalIva = document.getElementById('iva-amount');
-                const totalPedido = document.getElementById('total-final');
-
                 if (subtotalGlobal && resultado.subtotalCesta) {
                     subtotalGlobal.textContent = resultado.subtotalCesta + " €";
                 }
@@ -89,19 +89,15 @@ async function eliminarFila(idProducto, form) {
                     setTimeout(() => {
                         itemCard.remove();
 
-                        const subtotalGlobal = document.getElementById('cart-amount');
-                const totalIva = document.getElementById('iva-amount');
-                const totalPedido = document.getElementById('total-final');
-
-                if (subtotalGlobal && resultado.subtotalCesta) {
-                    subtotalGlobal.textContent = resultado.subtotalCesta + " €";
-                }
-                if (totalIva && resultado.ivaCesta) {
-                    totalIva.textContent = resultado.ivaCesta + " €";
-                }
-                if (totalPedido && resultado.totalCesta) {
-                    totalPedido.textContent = resultado.totalCesta + " €"; //// Display de nuevo total. Como ya viene formateado con dos decimales desde el controlador, solo añadimos el símbolo
-                }
+                        if (subtotalGlobal && resultado.subtotalCesta) {
+                            subtotalGlobal.textContent = resultado.subtotalCesta + " €";
+                        }
+                        if (totalIva && resultado.ivaCesta) {
+                            totalIva.textContent = resultado.ivaCesta + " €";
+                        }
+                        if (totalPedido && resultado.totalCesta) {
+                            totalPedido.textContent = resultado.totalCesta + " €"; //// Display de nuevo total. Como ya viene formateado con dos decimales desde el controlador, solo añadimos el símbolo
+                        }
 
                         // Si era el último producto, recargamos para mostrar el estado "Cesta vacía"
                         const restantes = document.querySelectorAll('.cart-item-card').length;

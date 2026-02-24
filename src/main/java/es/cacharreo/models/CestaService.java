@@ -22,6 +22,9 @@ public class CestaService {
      * Gestiona la lógica de añadir un producto al pedido. Si ya existe en las
      * líneas, incrementa su cantidad. Si no, crea una nueva línea. Si el pedido
      * es persistente (usuario logueado), impacta los cambios en BD.
+     * 
+     * En el caso de usuarios logueados sin pedido previo en BD, se encarga de
+     * realizar la inserción inicial de la cesta completa.
      *
      * @param pedido El objeto pedido (la cesta)
      * @param idProd ID del producto a añadir
@@ -39,7 +42,7 @@ public class CestaService {
             return "";
         }
 
-        // Buscamos si ya existe una línea para este producto en el pedido
+        // Buscamos si ya existe una línea para este producto en el pedido (en memoria)
         LineaPedido lineaPreexistente = null;
         for (LineaPedido lp : pedido.getLineas()) {
             if (Objects.equals(lp.getProducto().getIdProducto(), idProd)) {
@@ -48,33 +51,44 @@ public class CestaService {
             }
         }
 
+        boolean esNuevaLinea = false;
         if (lineaPreexistente != null) {
-
             lineaPreexistente.setCantidad(lineaPreexistente.getCantidad() + 1); // Si ya existe, incrementamos cantidad
-            pedido.calcularTotales(); // IMPORTANTE: después de cada cambio, recalculamos importes de líneas, IVA e Importe Total
-
-            // Si el pedido ya existe en BD, actualizamos la línea existente
-            if (pedido.getIdPedido() != null) {
-                pedidoDAO.updateCantidadLinea(pedido.getIdPedido(), idProd,
-                        lineaPreexistente.getCantidad(),
-                        lineaPreexistente.getImporte());
-                pedidoDAO.updateTotalesPedido(pedido);
-            }
         } else {
-            // Si es nuevo, creamos la LineaPedido
+            // Si es nuevo en la cesta de sesión, creamos la LineaPedido
             LineaPedido nuevaLinea = new LineaPedido();
-            // Línea necesaria para mantener la coherencia del carrito. Para el usuario anónimo, se queda a null, 
-            // pero para el registrado tiene que asignarse el id del pedido correspondiente.
             nuevaLinea.setIdPedido(pedido.getIdPedido());
             nuevaLinea.setProducto(productoBD);
             nuevaLinea.setCantidad(1);
 
             pedido.getLineas().add(nuevaLinea);
-            pedido.calcularTotales();
+            lineaPreexistente = nuevaLinea; // La referenciamos para la posible persistencia posterior
+            esNuevaLinea = true;
+        }
 
-            // Si el pedido ya existe en BD, insertamos la nueva línea
-            if (pedido.getIdPedido() != null) {
-                pedidoDAO.insertarLineaIndividual(nuevaLinea);
+        // IMPORTANTE: después de cada cambio, recalculamos importes de líneas, IVA e Importe Total
+        pedido.calcularTotales();
+
+        // PERSISTENCIA: Si el usuario está logueado
+        if (pedido.getUsuario() != null) {
+            
+            if (pedido.getIdPedido() == null) {
+                // CASO 1: Usuario logueado añadiendo su primer producto (Cesta nueva en BD)
+                pedidoDAO.insertarCesta(pedido);
+                
+            } else {
+                // CASO 2: El pedido ya existía en BD (ya tiene ID)
+                if (esNuevaLinea) {
+                    // Si la línea es nueva para este pedido existente, la insertamos
+                    lineaPreexistente.setIdPedido(pedido.getIdPedido());
+                    pedidoDAO.insertarLineaIndividual(lineaPreexistente);
+                } else {
+                    // Si la línea ya existía, actualizamos cantidad e importe en la tabla
+                    pedidoDAO.updateCantidadLinea(pedido.getIdPedido(), idProd,
+                            lineaPreexistente.getCantidad(),
+                            lineaPreexistente.getImporte());
+                }
+                // En ambos casos de actualización de línea, refrescamos los totales de la cabecera del pedido
                 pedidoDAO.updateTotalesPedido(pedido);
             }
         }
@@ -86,7 +100,8 @@ public class CestaService {
      * correspondiente. Si el pedido es persistente, sincroniza el cambio en la
      * base de datos.
      *
-     * * @param pedido El objeto pedido actual.
+     *
+     * @param pedido El objeto pedido actual.
      * @param idProd ID del producto a incrementar.
      */
     public static void sumarUnidad(Pedido pedido, Short idProd) {
@@ -113,7 +128,8 @@ public class CestaService {
      * Resta una unidad siempre que la cantidad actual sea mayor que 1. Si el
      * pedido es persistente, sincroniza el cambio en la base de datos.
      *
-     * * @param pedido El objeto pedido actual.
+     *
+     * @param pedido El objeto pedido actual.
      * @param idProd ID del producto a decrementar.
      */
     public static void restarUnidad(Pedido pedido, Short idProd) {
@@ -142,7 +158,7 @@ public class CestaService {
      * Elimina la línea completa del pedido basándose en el ID del producto. Si
      * el pedido es persistente, elimina la fila correspondiente en la BD.
      *
-     * 
+     *
      * @param pedido El objeto pedido actual.
      * @param idProd ID del producto a eliminar.
      */
