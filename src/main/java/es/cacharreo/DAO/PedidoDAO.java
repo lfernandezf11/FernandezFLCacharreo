@@ -114,6 +114,7 @@ public class PedidoDAO implements IPedidoDAO {
                 // IMPORTANTE: Ahora necesitamos cargar sus líneas a través del idPedido, y después asignarlas antes de devolverlo
                 lineas = getLineasPedido(cesta.getIdPedido(), connection);
                 cesta.setLineas(lineas);
+                cesta.calcularTotales(); // Sincronizamos totales antes de devolver la cesta
             }
         } catch (SQLException e) {
             Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al recuperar cesta de BD", e);

@@ -248,6 +248,30 @@ public class UsuarioDAO implements IUsuarioDAO {
         return actualizado;
     }
 
+    
+    @Override
+public boolean updateUltimoAcceso(short idUsuario) {
+    boolean ok = false;
+    Connection connection = null;
+    PreparedStatement preparada = null;
+    String sql = "UPDATE usuarios SET ultimoAcceso = NOW() WHERE idusuario = ?";
+
+    try {
+        connection = ConnectionFactory.getConnection();
+        preparada = connection.prepareStatement(sql);
+        preparada.setShort(1, idUsuario);
+
+        if (preparada.executeUpdate() > 0) {
+            ok = true;
+        }
+    } catch (SQLException e) {
+        Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, "Error al actualizar ultimoAcceso", e);
+    } finally {
+        this.closeConnection();
+    }
+    return ok;
+}
+
     @Override
     public boolean deleteUsuario(Short idUsuario) { // Únicamente para un rollback si falla el registro.
         boolean eliminado = false;

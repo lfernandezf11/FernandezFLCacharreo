@@ -270,23 +270,22 @@ editProfileForm.addEventListener('submit', async (e) => {
 const btnAbrirModal = document.querySelector('[data-bs-target="#changePasswordModal"]');
 const modalEl = document.getElementById('changePasswordModal');
 
-// 2. Evento que se dispara cuando el modal termina de cerrarse
 modalEl.addEventListener('hidden.bs.modal', function () {
-    // Quitamos el foco del botón de cerrar (que hacía que el botón trigger del modal desapareciera) y lo devolvemos al botón original.
+    // 1. Limpieza de interfaz
     if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
     }
+    if (btnAbrirModal) btnAbrirModal.focus();
 
-    if (btnAbrirModal) {
-        btnAbrirModal.focus();
-    }
+    // Reset del formulario (¡Súper importante!)
+    editPassForm.reset(); 
+    editPassForm.querySelectorAll('.invalid').forEach(el => el.textContent = '');
 
-    // Limpieza de clases de Bootstrap por si acaso hay restos que impidan recargar bien la página
+    // impieza de clases de bootstrap para asegurar que no quedan 'restos' 
     document.body.classList.remove('modal-open');
     document.body.style.overflow = '';
     document.body.style.paddingRight = '';
-    const backdrops = document.querySelectorAll('.modal-backdrop');
-    backdrops.forEach(b => b.remove());
+    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
 });
 
 

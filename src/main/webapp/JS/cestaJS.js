@@ -116,7 +116,7 @@ document.addEventListener('click', (e) => {
             actualizarUnidades(idProd, accion, form);
         }
     }
-    
+
     // Botón VACIAR CESTA (Global)
     if (e.target.id === 'btn-delete') {
         vaciarCestaCompleta();
@@ -127,6 +127,8 @@ document.addEventListener('click', (e) => {
         tramitarPedido();
     }
 });
+
+
 
 // Manejo del evento Submit del formulario de añadir producto
 document.addEventListener('submit', async (e) => {
@@ -150,14 +152,34 @@ document.addEventListener('submit', async (e) => {
                 const resultado = await response.json();
                 if (resultado.success) {
                     const modalEl = form.closest('.modal');
-                    const modalInstance = bootstrap.Modal.getInstance(modalEl); // Forzamos el cierre del modal
-                    if (modalInstance)
+
+                    // getOrCreateInstance es mucho más fiable que getInstance
+                    const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+                    if (modalInstance) {
                         modalInstance.hide();
+                    }
+
+                    // SEGURO DE VIDA: Si después de 350ms (lo que dura la animación) 
+                    // el backdrop sigue ahí, lo fulminamos sin bloquear el scroll.
+                    setTimeout(() => {
+                        const backdrop = document.querySelector('.modal-backdrop');
+                        if (backdrop) {
+                            console.warn("Forzando limpieza de backdrop 'zombie'...");
+                            backdrop.remove();
+                            document.body.classList.remove('modal-open');
+                            document.body.style.overflow = '';
+                            document.body.style.paddingRight = '';
+                        }
+                    }, 400);
+
                     lanzarToast(resultado.message, "exito"); // "Producto talycual añadido al carrito"
-                } else {
-                    lanzarToast(("Error: " + (resultado.message || "No se pudo registrar.")), "error");
                 }
+
+            } else {
+                lanzarToast(("Error: " + (resultado.message || "No se pudo registrar.")), "error");
             }
+
         } catch (error) {
             lanzarToast("Error crítico de conexión", "error");
         } finally {

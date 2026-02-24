@@ -14,6 +14,7 @@ public interface IUsuarioDAO {
     public String addUsuario(Usuario usuario);
 
     public Usuario login(String email, String passwordHash);
+    
 
     public Boolean updateUsuario(Usuario usuario);
 
@@ -30,6 +31,8 @@ public interface IUsuarioDAO {
     public boolean updatePassword(String email, String passActualHash, String passNuevaHash);
     
     public boolean updateAvatar(Usuario usuario);
+    
+    public boolean updateUltimoAcceso(short idUsuario);
     
     public boolean deleteUsuario(Short idUsuario);
 

@@ -2,15 +2,19 @@ package es.cacharreo.controllers;
 
 import es.cacharreo.DAO.ICategoriaDAO;
 import es.cacharreo.DAO.IProductoDAO;
+import es.cacharreo.DAO.IUsuarioDAO;
 import es.cacharreo.DAOFactory.DAOFactory;
 import es.cacharreo.beans.Categoria;
+import es.cacharreo.beans.LineaPedido;
 import es.cacharreo.beans.Pedido;
 import es.cacharreo.beans.Producto;
+import es.cacharreo.beans.Usuario;
 import es.cacharreo.models.CestaUtils;
 import es.cacharreo.models.Cookies;
 import es.cacharreo.models.ProductoUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -58,7 +62,7 @@ public class FrontController extends HttpServlet {
          */
         HttpSession session = request.getSession();
         String cestaStr = Cookies.recuperarCookieValue(request, "cestaCookie");
-        
+
         /* 
          3. Construimos el pedido a partir del valor recuperado. 
             Este método ya controla cestaStr nulo o vacío, devolviendo un Pedido inicializado.*/
@@ -98,17 +102,20 @@ public class FrontController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAOFactory daof = DAOFactory.getDAOFactory();
-        IProductoDAO prDAO = daof.getProductoDAO();
-        String url = null;
 
+        HttpSession session = request.getSession();
+        DAOFactory daof = DAOFactory.getDAOFactory();
+        IUsuarioDAO uDAO = daof.getUsuarioDAO();
+        Usuario usuario = null;
+
+        String url = null;
         String accion = request.getParameter("accion");
 
         if (accion == null) {
-        request.setAttribute("error", "Acción no válida o sesión expirada.");
-        request.getRequestDispatcher("/JSP/aviso/aviso.jsp").forward(request, response);
-        return;
-    }
+            request.setAttribute("error", "Acción no válida o sesión expirada.");
+            request.getRequestDispatcher("/JSP/aviso/aviso.jsp").forward(request, response);
+            return;
+        }
 
         switch (accion) {
             case "inicio":
@@ -128,11 +135,27 @@ public class FrontController extends HttpServlet {
                 url = "/JSP/usuario/login.jsp";
                 break;
 
+            case "logout":
+                usuario = (Usuario) session.getAttribute("usuarioLogueado");
+                if (usuario != null) {
+                    uDAO.updateUltimoAcceso(usuario.getIdUsuario());
+                }
+                session.invalidate(); // imnpia todo, con lo que antes de redirigir hay que resetear la home
+                
+                // "Entorno de invitado"
+                HttpSession nuevaSesion = request.getSession(true);
+                nuevaSesion.setAttribute("cesta", new Pedido()); // El constructor por defecto inicializa sin nulos y con importes a 0.
+                ProductoUtils.prepararSubcatalogo(request);
+                
+                url = "/index.jsp";
+                break;
+
             case "verCesta":
                 url = "/JSP/pedido/cesta.jsp";
                 break;
 
             default:
+                ProductoUtils.prepararSubcatalogo(request);
                 url = "/index.jsp";
                 break;
         }

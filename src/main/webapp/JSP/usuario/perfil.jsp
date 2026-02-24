@@ -96,7 +96,8 @@
                                     <img id="imgPerfil" src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
                                          class="rounded-circle border shadow-sm ratio-1x1" 
                                          width="200" height="200"
-                                         style="object-fit: cover;">
+                                         style="object-fit: cover;"
+                                         onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#changeAvatarModal">
                                     <i class="fa fa-camera-retro" aria-hidden="true"></i> Cambiar foto de perfil

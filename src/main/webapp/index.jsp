@@ -32,7 +32,7 @@
                     <h4>Los más populares_</h4>
                 </div>  
                 <div class="carousel-container-custom">
-                    <button class="btn btn-primary custom-nav-btn prev-btn" type="button" data-bs-target="#multiItemCarousel" data-bs-slide="prev">
+                    <button class="btn btn-primaryAlt custom-nav-btn prev-btn" type="button" data-bs-target="#multiItemCarousel" data-bs-slide="prev">
                         <i class="fa-solid fa-angles-left"></i>
                     </button>
                     <div id="multiItemCarousel" class="carousel slide" data-bs-interval="false">
@@ -107,7 +107,7 @@
                             </c:forEach>
                         </div>
 
-                        <button class="custom-nav-btn next-btn btn btn-primary" type="button" data-bs-target="#multiItemCarousel" data-bs-slide="next">
+                        <button class="custom-nav-btn next-btn btn btn-primaryAlt" type="button" data-bs-target="#multiItemCarousel" data-bs-slide="next">
                             <i class="fa-solid fa-angles-right"></i>
                         </button>
 

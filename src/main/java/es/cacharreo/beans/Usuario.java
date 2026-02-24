@@ -3,7 +3,6 @@ package es.cacharreo.beans;
 import es.cacharreo.models.Utilities;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * Clase bean que representa un usuario del sistema de registro.

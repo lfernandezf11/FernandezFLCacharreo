@@ -1,6 +1,7 @@
 package es.cacharreo.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,10 @@ public class Pedido implements Serializable {
     private Float iva; // 2 decimales
     private List<LineaPedido> lineas; // Almacena las líneas con sus Productos, cantidades e importes correspondientes
 
-    public Pedido() {
+    public Pedido() { // Para inicializar sin nulos en las líneas y con estado base cero.
+        this.lineas = new ArrayList<>();
+        this.importe = 0.0f;
+        this.iva = 0.0f;
     }
 
     public Short getIdPedido() {
@@ -77,7 +81,6 @@ public class Pedido implements Serializable {
         this.lineas = lineas;
     }
 
-    
     /**
      * Calcula y actualiza los totales del pedido basándose en sus líneas. Este
      * método sincroniza el importe de cada línea y los totales de la cabecera,
