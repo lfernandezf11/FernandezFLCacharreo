@@ -169,14 +169,12 @@ public class UsuarioAjax extends HttpServlet {
                     Usuario usuarioValidado = uDAO.login(usuario.getEmail(), Utilities.md5(usuario.getPassword()));
 
                     if (usuarioValidado != null) { //Login exitoso
-                        // En primer lugar, recuperamos su cesta de BD si existiera
-                        Pedido cestaBD = pDAO.getCestaByUsuario(usuarioValidado.getIdUsuario());
+                        // En primer lugar, recuperamos su cesta de BD si existiera (el método ya devuelve el usuario asignado)
+                        Pedido cestaBD = pDAO.getCestaByUsuario(usuarioValidado);
 
                         if (cestaBD != null) {
-                            // CASO A: Ya existe una cesta persistente. La cargamos en la sesión y le asociamos su usuario
-                            // por si necesitamos operar con él de forma local
+                            // CASO A: Ya existe una cesta persistente. La cargamos en la sesión (el usuario viene asignado del
                             session.setAttribute("cesta", cestaBD);
-                            cestaBD.setUsuario(usuarioValidado);
 
                         } else if (usuarioValidado.getUltimoAcceso() == null) {
                             // CASO B: No hay cesta en BD y es la "primera vez" que entra (no tiene último acceso asociado).

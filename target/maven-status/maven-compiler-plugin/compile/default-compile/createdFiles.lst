@@ -25,7 +25,6 @@ es\cacharreo\listeners\ListenersList.class
 es\cacharreo\DAO\ICategoriaDAO.class
 es\cacharreo\DAO\LineaPedidoDAO.class
 es\cacharreo\models\CestaService.class
-es\cacharreo\beans\Pedido$Estado.class
 es\cacharreo\beans\Categoria.class
 es\cacharreo\models\Cookies.class
 es\cacharreo\DAO\ConnectionFactory.class

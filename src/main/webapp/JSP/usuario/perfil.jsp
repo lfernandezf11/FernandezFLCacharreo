@@ -19,8 +19,8 @@
         <c:import url="/INC/header.jsp"/>
         <c:import url="/INC/toast.jsp"/>
 
-        <main class="page">
-            <section id="profileSection d-flex">
+        <main class="page gap-4">
+            <section id="profileSection">
                 <div class="signUpWrapper col-12 col-lg-10 mt-5">
                     <div class="section-header">
                         <h4>Mi Perfil</h4>
@@ -115,9 +115,11 @@
 
                 </div>
                 <br>
-                <!-- Último acceso (solo si no es null) -->               
+                
+            </section>
+                                         <!-- Último acceso (solo si no es null) -->               
                 <c:if test="${not empty u.ultimoAcceso}">
-                    <div class="text-center mt-3">
+                    <div class="text-start mt-3">
                         <p class="text-white small fw-bold">
                             <i class="fa fa-history" aria-hidden="true"></i> 
                             &Uacute;ltimo acceso: 
@@ -125,7 +127,6 @@
                         </p>
                     </div>
                 </c:if>
-            </section>
         </main>
 
         <!-- Modal para cambiar contraseña -->

@@ -123,6 +123,7 @@ public class PedidoDAO implements IPedidoDAO {
         return cesta;
     }
 
+    
 // Método auxiliar privado para no repetir código
     private List<LineaPedido> getLineasPedido(short idPedido, Connection connection) throws SQLException {
         // Hereda la conexión de la consulta de la cesta por id, para reutilizar el hilo

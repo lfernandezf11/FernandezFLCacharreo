@@ -72,10 +72,8 @@ if (changeAvatarForm) {
                 if (imgPerfil && imgPrevia) {
                     // Como 'previa.src' ya tiene el Base64 que generó el FileReader, el cambio es INSTANTÁNEO.
                     imgPerfil.src = imgPrevia.src;
-
-                    // 3. OPCIONAL: Si tienes una miniatura en el Header (navbar), búscala por clase o ID y actualízala también
-                    //const imgNavbar = document.querySelector('.navbar-avatar'); // Cambia el selector según tu header.jsp
-                    //if (imgNavbar) imgNavbar.src = imgPrevia.src;
+                    const imgNavbar = document.getElementById('imgNavbar'); 
+                    if (imgNavbar) imgNavbar.src = imgPrevia.src;
                 }
                 cerrarModalAvatar();
             } else {
