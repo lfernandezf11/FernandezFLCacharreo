@@ -191,7 +191,7 @@ public class ProductoDAO implements IProductoDAO {
         ConnectionFactory.closeConnection();
     }
 
-    private Producto mapearProducto(ResultSet rs) throws SQLException {
+    public static Producto mapearProducto(ResultSet rs) throws SQLException {
         Producto prod = new Producto();
         prod.setIdProducto(rs.getShort("idProducto"));
         prod.setNombre(rs.getString("prodNombre"));

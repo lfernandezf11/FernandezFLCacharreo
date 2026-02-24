@@ -1,6 +1,7 @@
 package es.cacharreo.DAO;
 
 import es.cacharreo.beans.Pedido;
+import es.cacharreo.beans.Usuario;
 
 /**
  *
@@ -23,7 +24,7 @@ public interface IPedidoDAO {
     
     public boolean insertarCesta(Pedido pedido);
     
-    public Pedido getCestaByIdUsuario(short idUsuario);
+    public Pedido getCestaByUsuario(Usuario usuario);
     
      /**
      * Abandona el hilo del pool de conexiones

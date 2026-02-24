@@ -92,7 +92,7 @@ public class PedidoDAO implements IPedidoDAO {
     }
 
     @Override
-    public Pedido getCestaByIdUsuario(short idUsuario) {
+    public Pedido getCestaByUsuario(Usuario usuario) {
         Pedido cesta = null;
         List<LineaPedido> lineas = new ArrayList<>();
         Connection connection = null;
@@ -104,11 +104,12 @@ public class PedidoDAO implements IPedidoDAO {
         try {
             connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement(sql);
-            ps.setShort(1, idUsuario);
+            ps.setShort(1, usuario.getIdUsuario());
             rs = ps.executeQuery();
 
             if (rs.next()) {
                 cesta = mapearPedido(rs);
+                cesta.setUsuario(usuario);
 
                 // IMPORTANTE: Ahora necesitamos cargar sus líneas a través del idPedido, y después asignarlas antes de devolverlo
                 lineas = getLineasPedido(cesta.getIdPedido(), connection);
@@ -124,41 +125,34 @@ public class PedidoDAO implements IPedidoDAO {
 
 // Método auxiliar privado para no repetir código
     private List<LineaPedido> getLineasPedido(short idPedido, Connection connection) throws SQLException {
+        // Hereda la conexión de la consulta de la cesta por id, para reutilizar el hilo
         List<LineaPedido> lineas = new ArrayList<>();
-        Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        // Hacemos JOIN con productos para tener los datos del objeto Producto (nombre, precio, etc.)
-        String sql = "SELECT lp.*, p.nombre, p.precio, p.imagen FROM lineaspedidos lp "
-                + "JOIN productos p ON lp.idproducto = p.idproducto WHERE lp.idpedido = ?";
 
+        // La consulta es un join entre las tablas lineaspedidos, productos (para asignar el Producto de cada línea)
+        // y categorias (para asignar la Categoría a cada Producto).
+        String sql = "SELECT lp.*, "
+                + "p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
+                + "c.idCategoria, c.nombre AS catNombre, c.imagen AS catImagen "
+                + "FROM lineaspedidos lp "
+                + "JOIN productos p ON lp.idproducto = p.idproducto "
+                + "LEFT JOIN categorias c ON p.idCategoria = c.idCategoria "
+                + "WHERE lp.idpedido = ?";
         try {
-            connection = ConnectionFactory.getConnection();
             ps = connection.prepareStatement(sql);
             ps.setShort(1, idPedido);
             rs = ps.executeQuery();
-                       
-                while (rs.next()) {
-                    LineaPedido lp = new LineaPedido();
-                    lp.setIdLinea(rs.getShort("idlinea"));
-                    lp.setIdPedido(idPedido);
-                    lp.setCantidad(rs.getInt("cantidad"));
 
-                    // Hidratamos el objeto Producto dentro de la línea
-                    Producto prod = new Producto();
-                    prod.setIdProducto(rs.getShort("idproducto"));
-                    prod.setNombre(rs.getString("nombre"));
-                    prod.setPrecio(rs.getFloat("precio"));
-                    prod.setImagen(rs.getString("imagen"));
-
-                    lp.setProducto(prod);
-                    lineas.add(lp);
-                }
+            while (rs.next()) {
+                lineas.add(LineaPedidoDAO.mapearLineaPedido(rs));
+                // Este método ya asigna internamente el Producto a cada línea con el método de mapearProducto de ProductoDAO
             }
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al recuperar cesta de BD", e);
+        } // Aquí no se cierra la conexión, sino en el método padre, al terminar la consulta.
         return lineas;
-        }
-        
-    
+    }
 
     @Override
     public boolean borrarPedido(short idPedido) {
@@ -201,6 +195,7 @@ public class PedidoDAO implements IPedidoDAO {
         pedido.setImporte(rs.getFloat("importe"));
         pedido.setIva(rs.getFloat("iva"));
         // El estado ya sabemos que es 'c'
+        // El usuario se asigna con el parámetro de entrada del método padre.
         return pedido;
     }
 }
