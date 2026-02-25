@@ -213,6 +213,5 @@
         <c:import url="/INC/footer.jsp"/>
         <script src="${pageContext.request.contextPath}/JS/perfilForm.js"></script>
         <script src="${pageContext.request.contextPath}/JS/cambioAvatar.js"></script>
-        <script src="${pageContext.request.contextPath}/JS/mostrarPassword.js"></script>
     </body>
 </html>
