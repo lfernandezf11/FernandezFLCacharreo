@@ -83,10 +83,9 @@ public class CestaService {
                     lineaPreexistente.setIdPedido(pedido.getIdPedido());
                     pedidoDAO.insertarLineaIndividual(lineaPreexistente);
                 } else {
-                    // Si la línea ya existía, actualizamos cantidad e importe en la tabla
+                    // Si la línea ya existía, actualizamos cantidad en la tabla
                     pedidoDAO.updateCantidadLinea(pedido.getIdPedido(), idProd,
-                            lineaPreexistente.getCantidad(),
-                            lineaPreexistente.getImporte());
+                            lineaPreexistente.getCantidad());
                 }
                 // En ambos casos de actualización de línea, refrescamos los totales de la cabecera del pedido
                 pedidoDAO.updateTotalesPedido(pedido);
@@ -116,7 +115,7 @@ public class CestaService {
                 if (pedido.getIdPedido() != null) {
                     IPedidoDAO pedidoDAO = DAOFactory.getDAOFactory().getPedidoDAO();
                     pedidoDAO.updateCantidadLinea(pedido.getIdPedido(), idProd,
-                            lp.getCantidad(), lp.getImporte());
+                            lp.getCantidad());
                     pedidoDAO.updateTotalesPedido(pedido);
                 }
                 break;
@@ -145,7 +144,7 @@ public class CestaService {
                     if (pedido.getIdPedido() != null) {
                         IPedidoDAO pedidoDAO = DAOFactory.getDAOFactory().getPedidoDAO();
                         pedidoDAO.updateCantidadLinea(pedido.getIdPedido(), idProd,
-                                lp.getCantidad(), lp.getImporte());
+                                lp.getCantidad());
                         pedidoDAO.updateTotalesPedido(pedido);
                     }
                 }
@@ -173,18 +172,18 @@ public class CestaService {
                 if (pedido.getIdPedido() != null) {
                     DAOFactory.getDAOFactory().getPedidoDAO().deleteLineaIndividual(pedido.getIdPedido(), idProd);
                 }
-
                 lineas.remove(i);
                 break;
             }
         }
 
-        // Sincronizamos importes de líneas y totales de cabecera
-        pedido.calcularTotales();
-
-        // PERSISTENCIA: Actualizamos los totales de la cabecera en BD tras borrar la línea
-        if (pedido.getIdPedido() != null) {
+        // 3. Si la cesta aún tiene líneas, actualizamos su importe en sesión y bd. 
+        // Si está vacía, desvinculamos el idPedido de la sesión, porque ese id ya no existe en la bd.
+        if (!pedido.getLineas().isEmpty()) {
+            pedido.calcularTotales();
             DAOFactory.getDAOFactory().getPedidoDAO().updateTotalesPedido(pedido);
+        } else { 
+            pedido.setIdPedido(null); 
         }
     }
 }

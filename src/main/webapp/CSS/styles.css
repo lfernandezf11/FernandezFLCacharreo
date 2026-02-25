@@ -571,6 +571,7 @@ body:not(.modal-open) {
 
 /* Cuerpo del Modal */
 .modal-body {
+    background: white;
     font: var(--font-text-base);
     font-weight: 400;
     color: var(--color-black); 

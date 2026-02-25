@@ -23,8 +23,8 @@
         <section class="hero" id="hero">
             <img src="${context}/IMG/logoHero.png" alt="Logo Cacharreo">
         </section>
-            
-            
+
+
 
         <main>
             <section id="trending">
@@ -59,9 +59,9 @@
                                                             <div class="text-start">
                                                                 <h3 class="product-name">${producto.nombre}</h3>
 
-                                                                <p class="product-price price-ribbon-flat fw-bold">
-                                                                    <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
-                                                                </p>
+                                                                <h4 class="price-tag" style="font-size: 40px;">
+                                                                        <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                                                </h4>
                                                             </div>
                                                         </div>
                                                     </article>
@@ -77,7 +77,13 @@
                                                             </div>
 
                                                             <div class="modal-body">
+                                                                <div class="product-image mb-2">
+                                                                    <img src="${context}/IMG/productos/${producto.imagen != null ? producto.imagen : 'default'}.jpg" 
+                                                                         alt="${producto.nombre}"> 
+                                                                </div>
+
                                                                 <div class="product-details">
+
                                                                     <p class="description-text">
                                                                         ${producto.descripcion}
                                                                     </p>

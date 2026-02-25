@@ -35,10 +35,9 @@ public interface IPedidoDAO {
      * @param idPedido Identificador único del pedido.
      * @param idProducto Identificador del producto en la línea.
      * @param cantidad Nueva cantidad total para la línea.
-     * @param importe Nuevo importe calculado para la línea (cantidad * precio).
      * @return true si se actualizó correctamente, false en caso contrario.
      */
-    public boolean updateCantidadLinea(short idPedido, short idProducto, int cantidad, float importe);
+    public boolean updateCantidadLinea(short idPedido, short idProducto, int cantidad);
 
     /**
      * Inserta una nueva línea de pedido en la base de datos.

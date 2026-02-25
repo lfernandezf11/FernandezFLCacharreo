@@ -254,7 +254,7 @@ public boolean updateUltimoAcceso(short idUsuario) {
     boolean ok = false;
     Connection connection = null;
     PreparedStatement preparada = null;
-    String sql = "UPDATE usuarios SET ultimoAcceso = NOW() WHERE idusuario = ?";
+    String sql = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE idusuario = ?";
 
     try {
         connection = ConnectionFactory.getConnection();

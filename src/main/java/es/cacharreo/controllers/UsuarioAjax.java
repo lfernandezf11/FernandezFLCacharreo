@@ -6,7 +6,6 @@ import es.cacharreo.DAO.IUsuarioDAO;
 import es.cacharreo.DAOFactory.DAOFactory;
 import es.cacharreo.beans.Pedido;
 import es.cacharreo.beans.Usuario;
-import es.cacharreo.models.CestaUtils;
 import es.cacharreo.models.Cookies;
 import es.cacharreo.models.Utilities;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -173,7 +171,7 @@ public class UsuarioAjax extends HttpServlet {
                         Pedido cestaBD = pDAO.getCestaByUsuario(usuarioValidado);
 
                         if (cestaBD != null) {
-                            // CASO A: Ya existe una cesta persistente. La cargamos en la sesión (el usuario viene asignado del
+                            // CASO A: Ya existe una cesta persistente. La cargamos en la sesión (el usuario viene asignado del método)
                             session.setAttribute("cesta", cestaBD);
 
                         } else if (usuarioValidado.getUltimoAcceso() == null) {
@@ -191,7 +189,19 @@ public class UsuarioAjax extends HttpServlet {
                                     session.setAttribute("cesta", cesta);
                                 }
                             }
-                        }
+                        }else {
+        // CASO C: Usuario que ya ha accedido antes pero no tiene cesta en BD
+        // Sobreescribimos la cesta de la sesión con una totalmente nueva y vacía
+        Pedido nuevaCesta = new Pedido(); 
+        nuevaCesta.setUsuario(usuarioValidado); // Vinculamos el usuario a este nuevo objeto
+        
+        // Actualizamos la sesión con el objeto limpio
+        session.setAttribute("cesta", nuevaCesta);
+        
+        // Nota: Al ser una cesta vacía, no llamamos a pDAO.insertarCesta aún.
+        // Se insertará automáticamente en la BD cuando añada el primer producto 
+        // gracias a la lógica de tu CestaService.
+    }
                         // En todos los login exitosos, la cookie muere
                         response.addCookie(Cookies.generarCookie("cestaCookie", "", 0, request));
                         session.setAttribute("usuarioLogueado", usuarioValidado);
