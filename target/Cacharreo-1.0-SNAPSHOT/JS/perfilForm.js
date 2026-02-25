@@ -6,13 +6,13 @@ const provinciaEl = document.getElementById('provinciaPerfil');
 const cpEl = document.getElementById('codigoPostalPerfil');
 const telefonoEl = document.getElementById('telefonoPerfil');
 const btnSaveProfile = document.getElementById('btn-save-profile');
+const editProfileForm = document.querySelector('.editProfileForm');
 
 const passActual = document.getElementById('currentPass');
 const passNueva = document.getElementById('newPass');
 const confirmPassNueva = document.getElementById('confirmNewPass');
 const btnSavePass = document.getElementById('btn-save-pass');
-
-const editProfileForm = document.querySelector('.editProfileForm');
+const editPassForm = document.querySelector('.changePasswordForm');
 
 // Configuración del estado inicial
 let datosOriginales = almacenarDatosEditables();
@@ -155,19 +155,17 @@ passActual.addEventListener('input', () => {
 });
 
 passNueva.addEventListener('input', () => {
-    validatePassword(); // Tu función actual que muestra el error de formato
+    validatePassword();
     validarFormularioPassword();
 });
 
 confirmPassNueva.addEventListener('input', () => {
-    validatePasswordsIguales(); // Tu función actual que muestra si coinciden
+    validatePasswordsIguales(); 
     validarFormularioPassword();
 });
 
 
 // EVENTO SUBMIT DEL FORMULARIO DE PERFIL
-
-
 editProfileForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -209,43 +207,24 @@ editProfileForm.addEventListener('submit', async (e) => {
                 setTimeout(() => window.location.reload(), 2000);
             } else {
                 lanzarToast(resultado.message || "Error al guardar los cambios", "error");
+                if (btnSaveProfile) btnSaveProfile.disabled = false;
             }
+        } else {
+             lanzarToast("Error en la respuesta del servidor", "error");
+             if (btnSaveProfile) btnSaveProfile.disabled = false;
         }
     } catch (error) {
-        lanzarToast(resultado.message || "Error crítico de conexión", "error");
+        lanzarToast("Error crítico de conexión", "error");
+        if (btnSaveProfile) btnSaveProfile.disabled = false;
     }
 });
 
-// ESCUCHADOR DEL MODAL DE CONTRASEÑA PARA LIMPIEZA AUTOMÁTICA
-const btnAbrirModal = document.querySelector('[data-bs-target="#changePasswordModal"]');
-const modalEl = document.getElementById('changePasswordModal');
-const editPassForm = document.querySelector('.changePasswordForm');
-
-modalEl.addEventListener('hidden.bs.modal', function () {
-    // 1. Limpieza de interfaz sin romper el flujo de Bootstrap
-    if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur();
-    }
-    
-    resetForm(editPassForm); 
-    
-    if (btnSavePass) btnSavePass.disabled = true;
-    if (btnAbrirModal) btnAbrirModal.focus();
-
-    const backdrops = document.querySelectorAll('.modal-backdrop');
-    if (backdrops.length > 0) {
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-        backdrops.forEach(b => b.remove());
-    }
-});
 
 // EVENTO SUBMIT DEL FORMULARIO DE CONTRASEÑA
 editPassForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    if(btnSavePass) btnSavePass.disabled = true;
+    if(btnSavePass) btnSavePass.disabled = true; //bloqueo preventivo
 
     const data = new URLSearchParams();
     data.append('accion', 'actualizarPassword');
@@ -264,14 +243,13 @@ editPassForm.addEventListener('submit', async (e) => {
         if (response.ok) {
             let resultado = await response.json();
             if (resultado.success) {
+                //Localizamos el modal padre de este formulario y damos orden de cerrar. Esto dispara el listener global de hidden.bs.modal
+                const modalEl = editPassForm.closest('.modal');
                 const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                if (modalInstance) {
+                
+                if (modalInstance) 
                     modalInstance.hide();
-                } else {
-                    $(modalEl).hide(); 
-                    $('.modal-backdrop').remove();
-                    $('body').removeClass('modal-open');
-                }
+                
                 lanzarToast(resultado.message, "exito");
             } else {
                 lanzarToast(resultado.message || "Error", "error");
@@ -282,7 +260,7 @@ editPassForm.addEventListener('submit', async (e) => {
         }
     } catch (error) {
         lanzarToast("Error crítico de conexión", "error");
-        if (btnSavePass) btnSavePass.disabled = false; // Re-habilitar para reintento
+        if (btnSavePass) btnSavePass.disabled = false; // Rehabilitar para reintento
     }
 });
 

@@ -184,19 +184,19 @@ function validateNumber(element, regex, fieldName) {
 }
 
 /*function validateDireccion() {
-    const valor = direccionEl.value.trim();
-    if (valor === "") {
-        showError(direccionEl, "La dirección es obligatoria.");
-        return false;
-    }
-    if (!REGEX_DIRECCION.test(valor)) {
-        showError(direccionEl, "La dirección contiene caracteres no permitidos.");
-        return false;
-    }
-    showError(direccionEl, "");
-    return true;
-}
-;*/
+ const valor = direccionEl.value.trim();
+ if (valor === "") {
+ showError(direccionEl, "La dirección es obligatoria.");
+ return false;
+ }
+ if (!REGEX_DIRECCION.test(valor)) {
+ showError(direccionEl, "La dirección contiene caracteres no permitidos.");
+ return false;
+ }
+ showError(direccionEl, "");
+ return true;
+ }
+ ;*/
 
 function validateProvincia() {
     const provincia = provinciaEl.value; //Viene de un select, no hace falta trim()
@@ -208,3 +208,52 @@ function validateProvincia() {
     return true;
 }
 ;
+
+
+/// LISTENERS DE CIERRE DE MODALES
+// Para evitar la colisión de las animaciones de cierre de modal de bootstrap y las acciones programadas 
+// con las respuestas de ajax, es necesario controlar manualmente la desaparición de estilos residuales
+// y el elemento enfocado.
+
+// 1. Cuando el modal empieza a cerrarse
+document.addEventListener('hide.bs.modal', function (event) {
+    const modalEl = event.target; // El modal que se está cerrando
+
+    // Para detectar el botón que abrió este modal específico, recuperamos la instancia de bootstrap
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    const btnAbrir = modalInstance._element.querySelector('[data-bs-toggle="modal"]')
+            || document.querySelector(`[data-bs-target="#${modalEl.id}"]`);
+
+
+    modalEl.setAttribute('inert', '');  // Fuerza el bloqueo de accesibilidad (Inert)
+    // Manejo del foco
+    if (document.activeElement)
+        document.activeElement.blur();
+
+    if (btnAbrir)
+        setTimeout(() => btnAbrir.focus(), 0);
+});
+
+
+// 2. Cuando el modal se ha cerrado
+document.addEventListener('hidden.bs.modal', function (event) {
+    const modalEl = event.target;
+
+    modalEl.removeAttribute('inert');  // Restaurar interactividad para la próxima apertura
+
+    // Limpieza de seguridad del body (evita el cuelgue visual)
+    setTimeout(() => {
+        const modalesAbiertos = document.querySelectorAll('.modal.show').length;
+        if (modalesAbiertos === 0) {
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+        }
+    }, 100);
+
+    // Reset de formularios contenidos en el modal
+    const form = modalEl.querySelector('form');
+    if (form)
+        resetForm(form);
+});

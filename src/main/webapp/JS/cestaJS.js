@@ -150,13 +150,17 @@ document.addEventListener('click', (e) => {
 document.addEventListener('submit', async (e) => {
     if (e.target.classList.contains('addForm')) {
         e.preventDefault();
+        
         const form = e.target;
-        const btnSubmit = form.querySelector('#btn-add'); // Captura respecto al modal actual (en document.getElementById, devuelve el primer id, y todos los modales tienen el mismo).
+
+        const btnSubmit = form.querySelector('.btn-add'); 
         const idProducto = form.querySelector('input[name="idProducto"]').value;
+        
         const data = new URLSearchParams();
         data.append('accion', 'addCarrito');
         data.append('idProducto', idProducto);
-        btnSubmit.disabled = true; // Evita el pulsado de añadir mientras la petición se lleva a cabo.
+        
+        if (btnSubmit) btnSubmit.disabled = true;
 
         try {
             const response = await fetch(URL_CESTA, {
@@ -164,42 +168,30 @@ document.addEventListener('submit', async (e) => {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: data.toString()
             });
+
             if (response.ok) {
                 const resultado = await response.json();
+                
                 if (resultado.success) {
+                    //Localizamos el modal y lo cerramos
                     const modalEl = form.closest('.modal');
-
-                    // getOrCreateInstance es mucho más fiable que getInstance
                     const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
 
                     if (modalInstance) {
-                        modalInstance.hide();
-                    }
-
-                    // Si después de 350ms (lo que dura la animación) 
-                    // el backdrop sigue ahí, lo fulminamos sin bloquear el scroll.
-                    setTimeout(() => {
-                        const backdrop = document.querySelector('.modal-backdrop');
-                        if (backdrop) {
-                            console.warn("Forzando limpieza de backdrop 'zombie'...");
-                            backdrop.remove();
-                            document.body.classList.remove('modal-open');
-                            document.body.style.overflow = '';
-                            document.body.style.paddingRight = '';
+                        modalInstance.hide(); //dispara los listeners de cierre de modal
                         }
-                    }, 400);
 
-                    lanzarToast(resultado.message, "exito"); // "Producto talycual añadido al carrito"
+                    lanzarToast(resultado.message, "exito");
+                } else {
+                    lanzarToast("Error: " + (resultado.message || "No se pudo registrar."), "error");
                 }
-
-            } else {
-                lanzarToast(("Error: " + (resultado.message || "No se pudo registrar.")), "error");
             }
-
         } catch (error) {
             lanzarToast("Error crítico de conexión", "error");
         } finally {
-            btnSubmit.disabled = false;
+            // Rehabilitamos el botón solo si el modal no se cerró (hay error)
+            // Si el modal se cerró, el listener global lo reseteará al ocultarse.
+            if (btnSubmit) btnSubmit.disabled = false;
         }
     }
 });

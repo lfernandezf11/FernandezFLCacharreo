@@ -180,8 +180,10 @@ direccionEl.addEventListener('blur', validateTexto(direccionEl));
 cpEl.addEventListener('blur', () => validateNumber(cpEl, REGEX_CP, "C&oacute;digo Postal"));
 telefonoEl.addEventListener('blur', () => validateNumber(telefonoEl, REGEX_TLF, "Tel&eacute;fono"));
 provinciaEl.addEventListener('blur', validateProvincia);
+
 pass1El.addEventListener('input', validatePassword); // En tiempo real, conforme el usuario va escribiendo se comprueba el contenido.
 pass2El.addEventListener('blur', validatePasswordsIguales);
+
 emailEl.addEventListener('blur', validateEmail);
 nifEl.addEventListener('blur', validateNif);
 

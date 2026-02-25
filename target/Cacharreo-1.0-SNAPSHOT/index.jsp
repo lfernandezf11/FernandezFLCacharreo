@@ -89,7 +89,7 @@
 
                                                             <form class="modal-footer addForm">
                                                                 <input type="hidden" name="idProducto" value="${producto.idProducto}">
-                                                                <button type="submit" name="accion" value="addCarrito" class="btn btn-primary" id="btn-add">
+                                                                <button type="submit" name="accion" value="addCarrito" class="btn btn-primary btn-add">
                                                                     Añadir a la cesta
                                                                 </button>
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

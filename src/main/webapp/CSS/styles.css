@@ -166,24 +166,13 @@ button.btn.btn-secondary:hover {
 }
 
 button.btn.btn-primary:active,
-button.btn.btn-primary:focus,
-button.btn.btn-primaryAlt:active,
-button.btn.btn-primaryAlt:focus {
+button.btn.btn-primaryAlt:active, 
+button.btn.btn-secondary:active {
     /* Al pulsar, bajamos el botón 4px y reducimos la sombra a 0 */
     transform: translateY(4px);
     box-shadow: 0 0px 0 0 var(--color-black);
     border: 2px solid var(--color-black);
     color: var(--color-black);
-    transition: transform 0.05s, box-shadow 0.05s;
-}
-
-button.btn.btn-secondary:active,
-button.btn.btn-secondary:focus {
-    /* Al pulsar, bajamos el botón 4px y reducimos la sombra a 0 */
-    transform: translateY(4px);
-    box-shadow: 0 0px 0 0 var(--color-white);
-    border: 2px solid var(--color-white);
-    color: var(--color-white);
     transition: transform 0.05s, box-shadow 0.05s;
 }
 
@@ -541,6 +530,12 @@ label.form-label {
 
 /* MODAL */
 /* Contenedor principal */
+/* Fuerza la limpieza del estado de Bootstrap si se queda colgado */
+body:not(.modal-open) {
+    padding-right: 0 !important;
+    overflow: auto !important;
+}
+
 .modal-content {
     background-color: var(--color-white);
     border: 3px solid var(--color-black);
