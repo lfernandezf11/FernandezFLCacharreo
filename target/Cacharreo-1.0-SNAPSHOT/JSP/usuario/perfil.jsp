@@ -187,7 +187,8 @@
                                     <div class="ratio ratio-1x1" style="width: 60%;">
                                         <img id="previa" src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
                                              class="rounded-circle border shadow-sm ratio-1x1" 
-                                             style="object-fit: cover;">
+                                             style="object-fit: cover;"
+                                             onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
                                     </div>
                                 </div>
                                 <div class="w-100 text-start mt-2">
@@ -212,5 +213,6 @@
         <c:import url="/INC/footer.jsp"/>
         <script src="${pageContext.request.contextPath}/JS/perfilForm.js"></script>
         <script src="${pageContext.request.contextPath}/JS/cambioAvatar.js"></script>
+        <script src="${pageContext.request.contextPath}/JS/mostrarPassword.js"></script>
     </body>
 </html>

@@ -122,6 +122,10 @@ public class FrontController extends HttpServlet {
                 ProductoUtils.prepararSubcatalogo(request); // Maneja la recarga de 8 productos aleatorios.
                 url = "/index.jsp";
                 break;
+                
+            case "perfil":
+                url = "/JSP/usuario/perfil.jsp";
+                break;
 
             case "productos":
                 url = "/JSP/productos.jsp";
