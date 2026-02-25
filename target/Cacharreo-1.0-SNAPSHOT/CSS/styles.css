@@ -3,9 +3,13 @@
     --color-white: #f1f1f1;
     /* Paleta de Colores */
     --color-yellow: #DB9C01;
-    --color-lilac: #8E64B4;
-    --color-orange: #f39c12;
+    
     --color-soft-lilac: rgba(142, 100, 180, 0.25);
+    --color-lilac: #8E64B4;
+    --color-dark-lilac: #62457B;
+    --color-darkest-lilac: #32233F;
+    --color-orange: #f39c12;
+    
     --color-details: #EDDD53; /* Añadida porque la usas en focus */
 
     /*--bg-card: linear-gradient(37deg, rgba(255, 255, 255, 1) 0%, rgba(142, 100, 180, 0.14) 22%, rgba(142, 100, 180, 1) 90%);*/
@@ -92,13 +96,21 @@ section {
     margin-top: 4rem;
 }
 
-footer {
+/*footer {
     padding: 1.5rem 4rem;
     color: var(--color-white);
     background: var(--color-orange);
     display: flex;
     align-items: center;
     justify-content: space-between;
+}*/
+
+/* Estilo para los botones circulares de redes sociales */
+.rounded-circle {
+    border: 2px solid white;
+    width: 38px;
+    height: 38px;
+    transition: all 0.3s ease;
 }
 
 h2 {
