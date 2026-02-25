@@ -513,6 +513,20 @@ label.form-label {
     margin-top: 0.6rem;
 }
 
+.password-field {
+  position: relative;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: white;
+  cursor: pointer;
+  color: #666;
+}
 
 
 
@@ -580,6 +594,7 @@ label.form-label {
     opacity: 1 !important;
     visibility: visible !important;
 }
+
 
 /* CESTA */
 /* Contenedor principal */
@@ -1151,3 +1166,5 @@ label.form-label {
     }
 
 }
+
+

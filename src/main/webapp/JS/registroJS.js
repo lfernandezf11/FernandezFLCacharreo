@@ -34,24 +34,6 @@ const avatarEl = document.getElementById('avatar'); // Campos de imagen
 const previaEl = document.getElementById('previa');
 
 
-function showError(element, text) {
-
-const small = element.parentNode.querySelector('small.invalid');
-if (small) {
-    small.textContent = text;
-    if (text !== "") {
-        element.classList.add('is-invalid');
-        element.classList.remove('is-valid');
-    } else {
-        element.classList.remove('is-invalid');
-        // Solo añadimos verde si el campo no está vacío
-        if (element.value.trim() !== "")
-            element.classList.add('is-valid');
-    }
-}
-}
-
-
 ////////////////// VALIDACIONES
 // Validación genérica para campos de texto (Nombre, Apellidos, Localidad)
 function validateTexto(element) {

@@ -25,14 +25,19 @@
                     </div>  
                     <form class="row signInForm">  
 
-                        <div class="col-12">
+                        <div class="col-12 field">
                             <label for="emailLogin" class="form-label">Email</label>
                             <input type="email" class="form-control" id="emailLogin" name="email">
 
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 field">
                             <label for="passwordLogin" class="form-label">Contrase&ntilde;a</label>
-                            <input type="password" class="form-control" id="passwordLogin" name="password">
+                            <div class="password-field">
+                                <input type="password" class="form-control" id="passwordLogin" name="password">
+                                <button type="button" class="toggle-pass">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="col-12">

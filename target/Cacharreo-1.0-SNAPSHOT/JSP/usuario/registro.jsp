@@ -24,32 +24,32 @@
                     <form class="row g-3 signUpForm" enctype="multipart/form-data">
                         <div class="col-md-8">
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-6 field">
                                     <label for="nombre" class="form-label">Nombre</label>
                                     <input type="text" class="form-control" id="nombre" name="nombre">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 field">
                                     <label for="apellidos" class="form-label">Apellidos</label>
                                     <input type="text" class="form-control" id="apellidos" name="apellidos">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" name="email">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="direccion" class="form-label">Direcci&oacute;n</label>
                                     <input type="text" class="form-control" id="direccion" placeholder="1234 Main St" name="direccion">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="localidad" class="form-label">Localidad</label>
                                     <input type="text" class="form-control" id="localidad" name="localidad">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 field">
                                     <label for="provincia" class="form-label">Provincia</label>
                                     <select id="provincia" class="form-select" name="provincia">
                                         <option value="" selected disabled>Selecciona tu provincia...</option>
@@ -108,30 +108,41 @@
                                     </select>
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 field">
                                     <label for="codigoPostal" class="form-label cp">C&oacute;digo postal</label>
                                     <input type="text" class="form-control" id="codigoPostal" name="codigoPostal">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 field">
                                     <label for="nif" class="form-label">NIF</label>
                                     <input type="text" class="form-control" id="nif" name="nif">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 field">
                                     <label for="telefono" class="form-label">Tel&eacute;fono</label>
                                     <input type="tlf" class="form-control" id="telefono" name="telefono">
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="password1" class="form-label">Contrase&ntilde;a</label>
-                                    <input type="password" class="form-control" id="password1" name="password">
+                                    <div class="password-field">
+                                        <input type="password" class="form-control" id="password1" name="password">
+                                        <button type="button" class="toggle-pass">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-12">
+
+                                <div class="col-12 field">
                                     <label for="password2" class="form-label">Repite la contrase&ntilde;a</label>
-                                    <input type="password" class="form-control" id="password2">
+                                    <div class="password-field">
+                                        <input type="password" class="form-control" id="password2">
+                                        <button type="button" class="toggle-pass">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                     <small class="invalid"></small>
                                 </div>
                             </div>
@@ -145,7 +156,7 @@
                                          class="rounded-circle border shadow-sm ratio-1x1" 
                                          width="180" height="180" style="object-fit: cover;">
                                 </div>
-                                <div class="text-center">
+                                <div class="text-center field">
                                     <label for="avatar" class="form-label">Foto de perfil</label>
                                     <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
                                     <div class="mt-2">
@@ -160,7 +171,7 @@
                         </div>
 
                         <div class="col-12">
-                            <div class="form-check">
+                            <div class="form-check field">
                                 <input class="form-check-input" type="checkbox" id="gridCheck">
                                 <label class="form-check-label" for="gridCheck">
                                     Acepto los 

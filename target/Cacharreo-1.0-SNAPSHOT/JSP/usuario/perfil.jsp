@@ -39,30 +39,30 @@
                                     <input type="text" class="form-control bg-light" id="nif" name="nif" value="${u.nif}" readonly tabindex="-1">
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 field">
                                     <label for="nombrePerfil" class="form-label">Nombre</label>
                                     <input type="text" class="form-control" id="nombrePerfil" name="nombre" value="${u.nombre}">
                                     <small class="invalid"></small>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 field">
                                     <label for="apellidosPerfil" class="form-label">Apellidos</label>
                                     <input type="text" class="form-control" id="apellidosPerfil" name="apellidos" value="${u.apellidos}">
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="direccionPerfil" class="form-label">Direcci&oacute;n</label>
                                     <input type="text" class="form-control" id="direccionPerfil" name="direccion" value="${u.direccion}">
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 field">
                                     <label for="localidadPerfil" class="form-label">Localidad</label>
                                     <input type="text" class="form-control" id="localidadPerfil" name="localidad" value="${u.localidad}">
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-6 field">
                                     <label for="provinciaPerfil" class="form-label">Provincia</label>
                                     <select id="provinciaPerfil" class="form-select" name="provincia">
                                         <c:set var="provincias" value="Alava,Albacete,Alicante,Almeria,Asturias,Avila,Badajoz,Baleares,Barcelona,Bizkaia,Burgos,Caceres,Cadiz,Cantabria,Castellon,Ceuta,Ciudad Real,Cordoba,Coruña,Cuenca,Gipuzkoa,Girona,Granada,Guadalajara,Huelva,Huesca,Jaen,Leon,Lleida,Lugo,Madrid,Malaga,Melilla,Murcia,Navarra,Ourense,Palencia,Palmas,Pontevedra,Rioja,Salamanca,Santa Cruz de Tenerife,Segovia,Sevilla,Soria,Tarragona,Teruel,Toledo,Valencia,Valladolid,Zamora,Zaragoza" />
@@ -75,13 +75,13 @@
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-4 field">
                                     <label for="codigoPostalPerfil" class="form-label">C&oacute;digo postal</label>
                                     <input type="text" class="form-control" id="codigoPostalPerfil" name="codigoPostal" value="${u.codigoPostal}">
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-md-8">
+                                <div class="col-md-8 field">
                                     <label for="telefonoPerfil" class="form-label">Tel&eacute;fono</label>
                                     <input type="text" class="form-control" id="telefonoPerfil" name="telefono" value="${u.telefono}">
                                     <small class="invalid"></small>
@@ -116,18 +116,18 @@
 
                 </div>
                 <br>
-                
+
             </section>
-                                         <!-- Último acceso (solo si no es null) -->               
-                <c:if test="${not empty u.ultimoAcceso}">
-                    <div class="text-start mt-3">
-                        <p class="text-white small fw-bold">
-                            <i class="fa fa-history" aria-hidden="true"></i> 
-                            &Uacute;ltimo acceso: 
-                            <fmt:formatDate value="${u.ultimoAcceso}" pattern="dd/MMM/yyyy HH:mm" />
-                        </p>
-                    </div>
-                </c:if>
+            <!-- Último acceso (solo si no es null) -->               
+            <c:if test="${not empty u.ultimoAcceso}">
+                <div class="text-start mt-3">
+                    <p class="text-white small fw-bold">
+                        <i class="fa fa-history" aria-hidden="true"></i> 
+                        &Uacute;ltimo acceso: 
+                        <fmt:formatDate value="${u.ultimoAcceso}" pattern="dd/MMM/yyyy HH:mm" />
+                    </p>
+                </div>
+            </c:if>
         </main>
 
         <!-- Modal para cambiar contraseña -->
@@ -142,21 +142,36 @@
                     <form id="changePasswordForm" class="changePasswordForm fw-400">
                         <div class="modal-body m-3">
                             <div class="row g-3">
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="currentPass" class="form-label">Contrase&ntilde;a actual</label>
-                                    <input type="password" class="form-control" id="currentPass" name="password">
+                                    <div class="password-field">
+                                        <input type="password" class="form-control" id="currentPass" name="password">
+                                        <button type="button" class="toggle-pass">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="newPass" class="form-label">Nueva contrase&ntilde;a</label>
-                                    <input type="password" class="form-control" id="newPass" name="nuevaPassword">
+                                    <div class="password-field">
+                                        <input type="password" class="form-control" id="newPass" name="nuevaPassword">
+                                        <button type="button" class="toggle-pass">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                     <small class="invalid"></small>
                                 </div>
 
-                                <div class="col-12">
+                                <div class="col-12 field">
                                     <label for="confirmNewPass" class="form-label">Confirmar nueva contrase&ntilde;a</label>
-                                    <input type="password" class="form-control" id="confirmNewPass">
+                                    <div class="password-field">
+                                        <input type="password" class="form-control" id="confirmNewPass">
+                                        <button type="button" class="toggle-pass">
+                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                     <small class="invalid"></small>
                                 </div>
                             </div>
@@ -191,7 +206,7 @@
                                              onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
                                     </div>
                                 </div>
-                                <div class="w-100 text-start mt-2">
+                                <div class="w-100 text-start mt-2 field">
                                     <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
                                     <small class="text-muted">JPG, PNG (Máx. 100KB)</small>
                                     <small class="invalid" id="avatarError"></small>
