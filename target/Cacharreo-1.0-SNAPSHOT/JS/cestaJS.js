@@ -24,8 +24,13 @@ async function actualizarUnidades(idProducto, accion, form) {
             let resultado = await response.json();
 
             if (resultado.success) {
-                // 1. Actualizar cantidad en la tarjeta
+                // 1. Actualizar cantidad en la tarjeta, controlando que el botón - esté deshabilitado si hay una unidad del producto
                 form.querySelector('.qty-val').textContent = resultado.nuevaCantidad;
+                
+                const btnRestar = form.querySelector('button[value="restar"]');
+                if (btnRestar) {
+                btnRestar.disabled = (parseInt(resultado.nuevaCantidad) <= 1);
+            }
 
                 // 2. Actualizar el subtotal de la línea (la tarjeta)
                 const itemCard = form.closest('.cart-item-card');

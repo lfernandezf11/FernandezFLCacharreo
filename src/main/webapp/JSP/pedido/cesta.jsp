@@ -81,7 +81,8 @@
                                                     <input type="hidden" name="idProducto" value="${linea.producto.idProducto}">
 
                                                     <div class="qty-selector">
-                                                        <button type="button" name="accion" value="restar" class="btn btn-secondary pt-1 pb-1 fw-semibold">-</button>
+                                                        <button type="button" name="accion" value="restar" class="btn btn-secondary pt-1 pb-1 fw-semibold" 
+                                                                <c:if test="${linea.cantidad <= 1}">disabled</c:if>>-</button>
                                                         <span class="qty-val fw-semibold">${linea.cantidad}</span>
                                                         <button type="button" name="accion" value="sumar" class="btn btn-secondary pt-1 pb-1 fw-semibold">+</button>
                                                     </div>
