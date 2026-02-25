@@ -16,11 +16,13 @@
 
         <c:if test="${not empty usuarioLogueado}">
             <div class="btn-group-logueado d-flex align-content-center justify-items-center gap-0 "> 
-                <img id="imgNavbar" src="${context}/IMG/avatares/${not empty usuarioLogueado.avatar ? usuarioLogueado.avatar : 'default.png'}" 
-                     class="rounded-circle border shadow-sm ratio-1x1 align-self-center ms-2 me-2" 
-                     height="50" width="50"
-                     style="object-fit: cover;"
-                     onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
+                <button type="submit" name="accion" value="perfil" class="p-0 border-0 bg-transparent align-self-center">
+                    <img id="imgNavbar" src="${context}/IMG/avatares/${not empty usuarioLogueado.avatar ? usuarioLogueado.avatar : 'default.png'}" 
+                         class="rounded-circle border shadow-sm ratio-1x1 ms-2 me-2" 
+                         height="50" width="50"
+                         style="object-fit: cover; cursor: pointer;"
+                         onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
+                </button>
                 <div class="d-flex flex-column text-start align-self-center p-0 pb-0">
                     <small class="m-0">${not empty usuarioLogueado.nombre ? usuarioLogueado.nombre : ''}</small>
                     <button type="submit" name="accion" value="logout" class="text-danger fw-semibold p-0 btn-logout-navbar"><small class="mt-0 pt-0">Cerrar sesi&oacute;n</small></button>
