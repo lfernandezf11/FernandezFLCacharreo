@@ -176,7 +176,7 @@ if (soloNumeros.length === 8) {
 nombreEl.addEventListener('blur', () => validateTexto(nombreEl));
 apellidosEl.addEventListener('blur', () => validateTexto(apellidosEl));
 localidadEl.addEventListener('blur', () => validateTexto(localidadEl));
-direccionEl.addEventListener('blur', validateTexto(direccionEl));
+direccionEl.addEventListener('blur', () => validateTexto(direccionEl));
 cpEl.addEventListener('blur', () => validateNumber(cpEl, REGEX_CP, "C&oacute;digo Postal"));
 telefonoEl.addEventListener('blur', () => validateNumber(telefonoEl, REGEX_TLF, "Tel&eacute;fono"));
 provinciaEl.addEventListener('blur', validateProvincia);
@@ -231,7 +231,7 @@ const validaciones = [
     validateTexto(nombreEl),
     validateTexto(apellidosEl),
     validateTexto(localidadEl),
-    validateDireccion(),
+    validateDireccion(direccionEl),
     validateProvincia(),
     validateNumber(cpEl, REGEX_CP, "C&oacute;digo Postal"),
     validateNumber(telefonoEl, REGEX_TLF, "Tel&eacute;fono"),

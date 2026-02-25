@@ -94,9 +94,8 @@
                             <div class="sticky-md-top" style="top: 20px; z-index: 1; justify-items:center; ">
                                 <div class="mb-3 text-center align-center">
                                     <img id="imgPerfil" src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
-                                         class="rounded-circle border shadow-sm ratio-1x1" 
-                                         width="200" height="200"
-                                         style="object-fit: cover;"
+                                         class="rounded-circle border shadow-sm" 
+                                         style="width: 200px; height: 200px; object-fit: cover;"
                                          onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#changeAvatarModal">
@@ -197,14 +196,13 @@
 
                     <form id="changeAvatarForm" class="changeAvatarForm fw-400">
                         <div class="modal-body m-3">
-                            <div class="col-12 d-flex flex-column pt-1 gap-4">
-                                <div class="w-100 text-center" style="justify-items:center;">
-                                    <div class="ratio ratio-1x1" style="width: 60%;">
-                                        <img id="previa" src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
-                                             class="rounded-circle border shadow-sm ratio-1x1" 
-                                             style="object-fit: cover;"
-                                             onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
-                                    </div>
+                            <div class="col-12 d-flex flex-column pt-1 gap-2">
+                                <div class="d-flex justify-content-center w-100 mb-3">
+                                    <img id="previa" 
+                                         src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
+                                         class="rounded-circle border shadow-sm" 
+                                         style="width: 200px; height: 200px; object-fit: cover; flex-shrink: 0;"
+                                         onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
                                 </div>
                                 <div class="w-100 text-start mt-2 field">
                                     <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
