@@ -1,5 +1,3 @@
-const URL = '/Cacharreo/CestaAjax';
-
 const subtotalGlobal = document.getElementById('cart-amount');
 const totalIva = document.getElementById('iva-amount');
 const totalPedido = document.getElementById('total-final');
@@ -16,7 +14,7 @@ async function actualizarUnidades(idProducto, accion, form) {
     data.append('idProducto', idProducto);
 
     try {
-        let response = await fetch(URL, {
+        let response = await fetch(URL_CESTA, {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: data.toString()
@@ -67,7 +65,7 @@ async function eliminarFila(idProducto, form) {
     data.append('idProducto', idProducto);
 
     try {
-        let response = await fetch(URL, {
+        let response = await fetch(URL_CESTA, {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: data.toString()
@@ -161,7 +159,7 @@ document.addEventListener('submit', async (e) => {
         btnSubmit.disabled = true; // Evita el pulsado de añadir mientras la petición se lleva a cabo.
 
         try {
-            const response = await fetch(URL, {
+            const response = await fetch(URL_CESTA, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: data.toString()

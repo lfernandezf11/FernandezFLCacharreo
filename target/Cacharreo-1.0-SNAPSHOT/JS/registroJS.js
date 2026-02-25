@@ -1,13 +1,3 @@
-const URL = 'UsuarioAjax'; // Endpoint para peticiones ajax
-
-const REGEX_LETRAS = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const REGEX_CP = /^\d{5}$/;
-const REGEX_TLF = /^\d{9}$/;
-const REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-const REGEX_NUMDNI = /^\d{8}$/;
-const REGEX_DIRECCION = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,\/\-º°ª.]+$/;
-
 let imagenInput; // Variable para almacenar la imagen previa del avatar
 
 
@@ -35,75 +25,6 @@ const previaEl = document.getElementById('previa');
 
 
 ////////////////// VALIDACIONES
-// Validación genérica para campos de texto (Nombre, Apellidos, Localidad)
-function validateTexto(element) {
-const valor = element.value.trim();
-if (valor === "") {
-    showError(element, `El campo es obligatorio.`);
-    return false;
-}
-if (!REGEX_LETRAS.test(valor)) {
-    showError(element, `El campo solo admite letras.`);
-    return false;
-}
-showError(element, "");
-return true;
-}
-
-// Validación para campos numéricos (cp, tlf)
-function validateNumber(element, regex, fieldName) {
-const valor = element.value.trim();
-
-if (fieldName === "Tel&eacute;fono" && valor === "") { // Campo nullable vacío, correcto
-    showError(element, "");
-    return true;
-}
-
-if (valor === "") {
-    showError(element, `El campo es obligatorio.`);
-    return false;
-}
-
-if (!regex.test(valor)) {
-    // Personalizamos el mensaje según el campo
-    const msg = fieldName === "C&oacute;digo Postal"
-            ? "Debe tener exactamente 5 dígitos."
-            : "Debe tener exactamente 9 dígitos.";
-
-    showError(element, msg);
-    return false;
-}
-
-showError(element, "");
-return true;
-}
-
-function validateDireccion() {
-const valor = direccionEl.value.trim();
-if (valor === "") {
-    showError(direccionEl, "La dirección es obligatoria.");
-    return false;
-}
-if (!REGEX_DIRECCION.test(valor)) {
-    showError(direccionEl, "La dirección contiene caracteres no permitidos.");
-    return false;
-}
-showError(direccionEl, "");
-return true;
-}
-;
-
-function validateProvincia() {
-const provincia = provinciaEl.value; //Viene de un select, no hace falta trim()
-if (provincia === "") {
-    showError(provinciaEl, "Selecciona una provincia de la lista.");
-    return false;
-}
-showError(provinciaEl, "");
-return true;
-}
-;
-
 function validatePassword() {
 const password = pass1El.value;
 
@@ -179,7 +100,7 @@ data.append('accion', 'validateEmail');
 data.append('email', email);
 
 try {
-    let response = await fetch(URL, {
+    let response = await fetch(URL_USUARIO, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}, // Indicamos al Servlet que enviamos datos de formulario
         body: data.toString()
@@ -222,7 +143,7 @@ if (soloNumeros.length === 8) {
     data.append('nif', soloNumeros);
 
     try {
-        let response = await fetch(URL, {
+        let response = await fetch(URL_USUARIO, {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: data.toString()
@@ -255,7 +176,7 @@ if (soloNumeros.length === 8) {
 nombreEl.addEventListener('blur', () => validateTexto(nombreEl));
 apellidosEl.addEventListener('blur', () => validateTexto(apellidosEl));
 localidadEl.addEventListener('blur', () => validateTexto(localidadEl));
-direccionEl.addEventListener('blur', validateDireccion);
+direccionEl.addEventListener('blur', validateTexto(direccionEl));
 cpEl.addEventListener('blur', () => validateNumber(cpEl, REGEX_CP, "C&oacute;digo Postal"));
 telefonoEl.addEventListener('blur', () => validateNumber(telefonoEl, REGEX_TLF, "Tel&eacute;fono"));
 provinciaEl.addEventListener('blur', validateProvincia);
@@ -352,7 +273,7 @@ if (validaciones.every(valido => valido === true) && asyncOk) { // Validación e
 
         try {
             // Con FormData, no es necesario poner headers de 'Content-Type'. El navegador lo configura solo.
-            let variable = await fetch(URL, {
+            let variable = await fetch(URL_USUARIO, {
                 method: 'POST',
                 body: formData 
             });

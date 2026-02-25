@@ -187,6 +187,16 @@ button.btn.btn-secondary:focus {
     transition: transform 0.05s, box-shadow 0.05s;
 }
 
+button:disabled, 
+button[disabled] {
+    background-color: #cccccc !important;
+    border-color: #bbbbbb !important;
+    box-shadow: 0 4px 0 0 #bbbbbb !important;
+    color: #666666 !important;
+    cursor: not-allowed !important;
+    opacity: 0.65;
+}
+
 img {
     max-width: 100%;
     display: block;
@@ -527,7 +537,6 @@ label.form-label {
   cursor: pointer;
   color: #666;
 }
-
 
 
 /* MODAL */

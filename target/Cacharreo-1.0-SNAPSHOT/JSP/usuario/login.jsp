@@ -39,13 +39,13 @@
                                 </button>
                             </div>
                         </div>
-
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary mt-1" id="btn-login">Acceder</button>
-                        </div>
                         <small class="invalid is-invalid"></small>
-                    </form>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary mt-1 mb-2" id="btn-login">Acceder</button>
+                        </div>
 
+                    </form>
+                    
                     <form action="${context}/FrontController" method="post">
                         ¿Eres nuevo? Date de alta 
                         <button type="submit" name="accion" value="registro" class="btn btn-link-terms text-primary p-0 mb-1 text-decoration-none">aquí</button>

@@ -1,18 +1,9 @@
-const URL = 'UsuarioAjax'; // Endpoint para peticiones ajax de login
-
-const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 // Campos de texto
 const emailEl = document.getElementById('emailLogin');
 const passEl = document.getElementById('passwordLogin');
 const error = document.querySelector('.signInForm .invalid');
+error.textContent = "";
 
-function showErrorLogin(text) {
-    if (error) {
-        error.textContent = text;
-        error.style.display = text !== "" ? "block" : "none";
-    }
-}
 
 // EVENTO SUBMIT DEL FORMULARIO
 const form = document.querySelector('.signInForm');
@@ -24,15 +15,13 @@ form.addEventListener('submit', async (e) => {
     const password = passEl.value;
 
     if (email === "" || password === "") { // Validación de campos vacíos
-        showErrorLogin("Todos los datos son necesarios");
+        error.textContent = "Todos los datos son obligatorios";
         return;
     }
 
-    if (!REGEX_EMAIL.test(email)) { // Validación de formato
-        showErrorLogin("El formato del email no es válido.");
-        return;
-    }
-    showErrorLogin(""); // Campos llenos y con formato correcto: limpiamos errores previos
+    emailEl.classList.remove('is-invalid');
+    passEl.classList.remove('is-invalid');
+    error.textContent = "";
 
     const data = new URLSearchParams();
     data.append('accion', 'loginUsuario');
@@ -43,7 +32,7 @@ form.addEventListener('submit', async (e) => {
     }));
 
     try {
-        let variable = await fetch(URL, {
+        let variable = await fetch(URL_USUARIO, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -57,7 +46,9 @@ form.addEventListener('submit', async (e) => {
             if (resultado.success) {
                 window.location.href = "/Cacharreo/JSP/usuario/perfil.jsp"; // Si el login es correcto, redirigimos al perfil
             } else {
-                showErrorLogin("Usuario o contraseña incorrectos.");
+                error.textContent = "Usuario o contraseña incorrectos.";
+                emailEl.classList.add('is-invalid');
+                passEl.classList.add('is-invalid');
             }
         } else {
             lanzarToast(("Error de servidor: " + variable.statusText), "error");

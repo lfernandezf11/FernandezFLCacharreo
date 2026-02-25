@@ -1,3 +1,14 @@
+const URL_USUARIO = '/Cacharreo/UsuarioAjax'; // Endpoint para peticiones ajax 
+const URL_CESTA = '/Cacharreo/CestaAjax';
+
+//const REGEX_LETRAS = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const REGEX_CP = /^\d{5}$/;
+const REGEX_TLF = /^[679]\d{8}$/;
+const REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+const REGEX_NUMDNI = /^\d{8}$/;
+//const REGEX_DIRECCION = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,\/\-º°ª.]+$/;
+
 /**
  * Lanza una notificación Toast de Bootstrap
  * @param {string} mensaje - Texto a mostrar
@@ -6,8 +17,9 @@
 function lanzarToast(mensaje, tipo) {
     const toastEl = document.getElementById('liveToast');
     const toastBody = document.getElementById('toastBody');
-    
-    if (!toastEl || !toastBody) return;
+
+    if (!toastEl || !toastBody)
+        return;
 
     toastBody.textContent = mensaje;
 
@@ -23,8 +35,24 @@ function lanzarToast(mensaje, tipo) {
         toastEl.classList.add('toast-warning');
     }
 
-    const bsToast = bootstrap.Toast.getOrCreateInstance(toastEl);
+    const bsToast = bootstrap.Toast.getOrCreateInstance(toastEl, {
+        delay: 2000});
     bsToast.show();
+
+    const cerrarAlClicar = (e) => {
+        if (!toastEl.contains(e.target)) {
+            bsToast.hide();
+            document.removeEventListener('click', cerrarAlClicar);
+        }
+    };
+
+    setTimeout(() => {
+        document.addEventListener('click', cerrarAlClicar);
+    }, 100);
+
+    toastEl.addEventListener('hidden.bs.toast', () => {
+        document.removeEventListener('click', cerrarAlClicar);
+    }, {once: true});
 }
 
 /**
@@ -33,31 +61,31 @@ function lanzarToast(mensaje, tipo) {
  * @param {HTMLElement} iconEl - El elemento del icono (<i>).
  */
 function togglePassword(inputEl, iconEl) {
-  const show = inputEl.type === 'password'; 
-  
-  inputEl.type = show ? 'text' : 'password'; 
-  
-  iconEl.className = show ? 'fa fa-eye-slash' : 'fa fa-eye';
+    const show = inputEl.type === 'password';
+
+    inputEl.type = show ? 'text' : 'password';
+
+    iconEl.className = show ? 'fa fa-eye-slash' : 'fa fa-eye';
 }
 
 
 /* Listener para los campos passsword*/
 document.addEventListener('DOMContentLoaded', () => {
-  const passwordContainers = document.querySelectorAll('.password-field');
+    const passwordContainers = document.querySelectorAll('.password-field');
 
-  passwordContainers.forEach(container => {
-    const input = container.querySelector('input');
-    const toggleBtn = container.querySelector('.toggle-pass');
+    passwordContainers.forEach(container => {
+        const input = container.querySelector('input');
+        const toggleBtn = container.querySelector('.toggle-pass');
 
-    if (input && toggleBtn) {
-      const icon = toggleBtn.querySelector('i');
+        if (input && toggleBtn) {
+            const icon = toggleBtn.querySelector('i');
 
-      toggleBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        togglePassword(input, icon);
-      });
-    }
-  });
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                togglePassword(input, icon);
+            });
+        }
+    });
 });
 
 /**
@@ -67,12 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function showError(element, text) {
     const container = element.closest('.field');
-    
+
     const small = container ? container.querySelector('small.invalid') : null;
 
     if (small) {
         small.textContent = text;
-        
+
         small.style.display = text !== "" ? "block" : "none";
 
         if (text !== "") {
@@ -86,3 +114,97 @@ function showError(element, text) {
         }
     }
 }
+
+/**
+ * Resetea completamente un formulario: valores, clases de validación y mensajes de error.
+ * @param {HTMLFormElement} formEl - El elemento del formulario a resetear.
+ */
+function resetForm(formEl) {
+    if (!formEl)
+        return;
+
+    formEl.reset();
+
+    const inputs = formEl.querySelectorAll('.is-invalid, .is-valid');
+    inputs.forEach(input => {
+        input.classList.remove('is-invalid', 'is-valid');
+    });
+
+    const errorMessages = formEl.querySelectorAll('small.invalid');
+    errorMessages.forEach(small => {
+        small.textContent = "";
+        small.style.display = "none";
+    });
+}
+
+///////////////// VALIDACIONES
+// Validación genérica para campos de texto (Nombre, Apellidos, Localidad)
+function validateTexto(element) {
+    if (element.value.trim() === "") {
+        showError(element, `El campo es obligatorio.`);
+        return false;
+    }
+    showError(element, "");
+    return true;
+}
+
+// Validación para campos numéricos (cp, tlf)
+function validateNumber(element, regex, fieldName) {
+    const valor = element.value.trim();
+
+    if (fieldName === "Tel&eacute;fono" && valor === "") { // Campo nullable vacío, correcto
+        showError(element, "");
+        return true;
+    }
+
+    if (valor === "") {
+        showError(element, `El campo es obligatorio.`);
+        return false;
+    }
+
+    if (!regex.test(valor)) {
+        const msg = fieldName === "C&oacute;digo Postal"
+                ? "Debe tener exactamente 5 dígitos."
+                : "Debe empezar por 6, 7 o 9 y tener 9 dígitos.";
+        showError(element, msg);
+        return false;
+    }
+
+    // Validación Lógica Extra para CP (Máximo España: 52080)
+    if (fieldName === "C&oacute;digo Postal") {
+        const cpNumerico = parseInt(valor, 10);
+        if (cpNumerico > 52080) {
+            showError(element, "El código postal no es válido en España.");
+            return false;
+        }
+    }
+
+    showError(element, "");
+    return true;
+}
+
+/*function validateDireccion() {
+    const valor = direccionEl.value.trim();
+    if (valor === "") {
+        showError(direccionEl, "La dirección es obligatoria.");
+        return false;
+    }
+    if (!REGEX_DIRECCION.test(valor)) {
+        showError(direccionEl, "La dirección contiene caracteres no permitidos.");
+        return false;
+    }
+    showError(direccionEl, "");
+    return true;
+}
+;*/
+
+function validateProvincia() {
+    const provincia = provinciaEl.value; //Viene de un select, no hace falta trim()
+    if (provincia === "") {
+        showError(provinciaEl, "Selecciona una provincia de la lista.");
+        return false;
+    }
+    showError(provinciaEl, "");
+    return true;
+}
+;

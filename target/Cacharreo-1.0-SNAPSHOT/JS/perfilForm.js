@@ -1,11 +1,3 @@
-const URL = '/Cacharreo/UsuarioAjax'; // Endpoint para peticiones ajax
-
-const REGEX_LETRAS = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-const REGEX_CP = /^\d{5}$/;
-const REGEX_TLF = /^\d{9}$/;
-const REGEX_DIRECCION = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,\/\-º°ª.]+$/;
-const REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-
 const nombreEl = document.getElementById('nombrePerfil');
 const apellidosEl = document.getElementById('apellidosPerfil');
 const localidadEl = document.getElementById('localidadPerfil');
@@ -20,10 +12,13 @@ const passNueva = document.getElementById('newPass');
 const confirmPassNueva = document.getElementById('confirmNewPass');
 const btnSavePass = document.getElementById('btn-save-pass');
 
+const editProfileForm = document.querySelector('.editProfileForm');
+
 // Configuración del estado inicial
 let datosOriginales = almacenarDatosEditables();
 validarFormularioPerfil();
 btnSaveProfile.disabled = true;
+btnSavePass.disabled = true;
 
 // Función para almacenar los valores de los campos editables (no actualizamos si no hay datos nuevos)
 function almacenarDatosEditables() {
@@ -38,32 +33,12 @@ function almacenarDatosEditables() {
     });
 }
 
-function showErrorPerfil(element, text) {
-
-    const small = element.parentNode.querySelector('small.invalid');
-    if (small) {
-        small.textContent = text;
-        if (text !== "") {
-            element.classList.add('is-invalid');
-            element.classList.remove('is-valid');
-        } else {
-            element.classList.remove('is-invalid');
-            if (element.value.trim() !== "")
-                element.classList.add('is-valid');
-        }
-    }
-    // Cada vez que modificamos un mensaje, comprobamos el estado del formulario
-    validarFormularioPerfil();
-}
-
-
-
-function validarFormularioPerfil() {
+/*function validarFormularioPerfil() {
     const isNombreOk = REGEX_LETRAS.test(nombreEl.value.trim());
     const isApellidosOk = REGEX_LETRAS.test(apellidosEl.value.trim());
     const isLocalidadOk = REGEX_LETRAS.test(localidadEl.value.trim());
     const isDireccionOk = REGEX_DIRECCION.test(direccionEl.value.trim());
-    const isCPOk = REGEX_CP.test(cpEl.value.trim());
+    const isCPOk = REGEX_CP.test(cpEl.value.trim()) && parseInt(cpEl.value.trim(), 10) <= 52080;
     const isProvinciaOk = provinciaEl.value !== "";
 
     // Teléfono: opcional (vacío ok) o debe cumplir regex
@@ -71,87 +46,37 @@ function validarFormularioPerfil() {
     const isTelefonoOk = tlfValor === "" || REGEX_TLF.test(tlfValor);
 
     btnSaveProfile.disabled = !(isNombreOk && isApellidosOk && isLocalidadOk && isDireccionOk && isCPOk && isProvinciaOk && isTelefonoOk);
+}*/
+
+function validarFormularioPerfil() {
+    const tieneErroresVisuales = editProfileForm.querySelectorAll('.is-invalid').length > 0;
+
+    const camposVacios = [nombreEl, apellidosEl, localidadEl, direccionEl, cpEl, provinciaEl]
+                         .some(el => el.value.trim() === "");
+
+    btnSaveProfile.disabled = tieneErroresVisuales || camposVacios;
 }
 
-////////////////// VALIDACIONES
-// Validación genérica para campos de texto (Nombre, Apellidos, Localidad)
-function validateTexto(element) {
-    const valor = element.value.trim();
-    if (valor === "") {
-        showErrorPerfil(element, `El campo es obligatorio.`);
-        return false;
-    }
-    if (!REGEX_LETRAS.test(valor)) {
-        showErrorPerfil(element, `El campo solo admite letras.`);
-        return false;
-    }
-    showErrorPerfil(element, "");
-    return true;
+function validarFormularioPassword() {
+    const isPassActualOk = passActual.value.trim() !== "";
+    const isPassNuevaOk = REGEX_PASSWORD.test(passNueva.value);
+    const isConfirmOk = passNueva.value === confirmPassNueva.value && confirmPassNueva.value !== "";
+
+    btnSavePass.disabled = !(isPassActualOk && isPassNuevaOk && isConfirmOk);
 }
 
-// Validación para campos numéricos (cp, tlf)
-function validateNumber(element, regex, fieldName) {
-    const valor = element.value.trim();
 
-    if (fieldName === "Tel&eacute;fono" && valor === "") { // Campo nullable vacío, correcto
-        showErrorPerfil(element, "");
-        return true;
-    }
-
-    if (valor === "") {
-        showErrorPerfil(element, `El campo es obligatorio.`);
-        return false;
-    }
-
-    if (!regex.test(valor)) {
-        // Personalizamos el mensaje según el campo
-        const msg = fieldName === "C&oacute;digo Postal"
-                ? "Debe tener exactamente 5 dígitos."
-                : "Debe tener exactamente 9 dígitos.";
-        showErrorPerfil(element, msg);
-        return false;
-    }
-
-    showErrorPerfil(element, "");
-    return true;
-}
-
-function validateDireccion() {
-    const valor = direccionEl.value.trim();
-    if (valor === "") {
-        showErrorPerfil(direccionEl, "La dirección es obligatoria.");
-        return false;
-    }
-    if (!REGEX_DIRECCION.test(valor)) {
-        showErrorPerfil(direccionEl, "La dirección contiene caracteres no permitidos.");
-        return false;
-    }
-    showErrorPerfil(direccionEl, "");
-    return true;
-}
-;
-
-function validateProvincia() {
-    const provincia = provinciaEl.value; //Viene de un select, no hace falta trim()
-    if (provincia === "") {
-        showErrorPerfil(provinciaEl, "Selecciona una provincia de la lista.");
-        return false;
-    }
-    showErrorPerfil(provinciaEl, "");
-    return true;
-}
-;
 
 function validatePassword() {
     const password = passNueva.value;
 
     if (REGEX_PASSWORD.test(password)) {
-        showErrorPerfil(passNueva, "");
+        showError(passNueva, "");
         if (confirmPassNueva.value !== "")
             validatePasswordsIguales();
         return true;
     } else {
-        showErrorPerfil(passNueva, "Mínimo 8 caracteres, una mayúscula y una minúscula.");
+        showError(passNueva, "Mínimo 8 caracteres, una mayúscula y una minúscula.");
         return false;
     }
 
@@ -166,16 +91,21 @@ function validatePasswordsIguales() {
 
 // Si el segundo campo está vacío, no mostramos error aún (mejora la experiencia de usuario)
     if (p2 === "") {
-        showErrorPerfil(confirmPassNueva, "");
+        showError(confirmPassNueva, "");
         return false;
     }
-
+    
+    if (!REGEX_PASSWORD.test(p1) && p2 !== "" && p1 === p2) {
+        showError(confirmPassNueva, "Mínimo 8 caracteres, una mayúscula y una minúscula.");
+        return false;
+    }
+    
     if (p1 === p2) {
-        showErrorPerfil(confirmPassNueva, "");
+        showError(confirmPassNueva, "");
         return true;
 
     } else {
-        showErrorPerfil(confirmPassNueva, "Las contraseñas no coinciden.");
+        showError(confirmPassNueva, "Las contraseñas no coinciden.");
         return false;
     }
 }
@@ -184,38 +114,59 @@ function validatePasswordsIguales() {
 // Usamos 'input' para que el botón se active en el milisegundo en que la regex sea válida
 nombreEl.addEventListener('input', () => {
     validateTexto(nombreEl);
+    validarFormularioPerfil();
 });
 
 apellidosEl.addEventListener('input', () => {
     validateTexto(apellidosEl);
+    validarFormularioPerfil();
 });
 
 localidadEl.addEventListener('input', () => {
     validateTexto(localidadEl);
+    validarFormularioPerfil();
 });
 
 direccionEl.addEventListener('input', () => {
-    validateDireccion();
+    validateTexto(direccionEl);
+    validarFormularioPerfil();
 });
 
 cpEl.addEventListener('input', () => {
     validateNumber(cpEl, REGEX_CP, "C&oacute;digo Postal");
+    validarFormularioPerfil();
 });
 
 telefonoEl.addEventListener('input', () => {
     validateNumber(telefonoEl, REGEX_TLF, "Tel&eacute;fono");
+    validarFormularioPerfil();
 });
 
 provinciaEl.addEventListener('change', () => {
     validateProvincia();
+    validarFormularioPerfil();
 });
 
-passNueva.addEventListener('input', validatePassword); // En tiempo real, conforme el usuario va escribiendo se comprueba el contenido.
-confirmPassNueva.addEventListener('input', validatePasswordsIguales);
+passActual.addEventListener('input', () => {
+    if (passActual.value.trim() !== "") {
+        showError(passActual, "");
+    }
+    validarFormularioPassword();
+});
+
+passNueva.addEventListener('input', () => {
+    validatePassword(); // Tu función actual que muestra el error de formato
+    validarFormularioPassword();
+});
+
+confirmPassNueva.addEventListener('input', () => {
+    validatePasswordsIguales(); // Tu función actual que muestra si coinciden
+    validarFormularioPassword();
+});
 
 
 // EVENTO SUBMIT DEL FORMULARIO DE PERFIL
-const editProfileForm = document.querySelector('.editProfileForm');
+
 
 editProfileForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -243,7 +194,7 @@ editProfileForm.addEventListener('submit', async (e) => {
     }));
 
     try {
-        let response = await fetch(URL, {
+        let response = await fetch(URL_USUARIO, {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: data.toString()
@@ -266,77 +217,72 @@ editProfileForm.addEventListener('submit', async (e) => {
 });
 
 // ESCUCHADOR DEL MODAL DE CONTRASEÑA PARA LIMPIEZA AUTOMÁTICA
-// Este evento se dispara cuando el modal ha terminado de ocultarse (animación de bootstrap incluida)
 const btnAbrirModal = document.querySelector('[data-bs-target="#changePasswordModal"]');
 const modalEl = document.getElementById('changePasswordModal');
+const editPassForm = document.querySelector('.changePasswordForm');
 
 modalEl.addEventListener('hidden.bs.modal', function () {
-    // 1. Limpieza de interfaz
+    // 1. Limpieza de interfaz sin romper el flujo de Bootstrap
     if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
     }
+    
+    resetForm(editPassForm); 
+    
+    if (btnSavePass) btnSavePass.disabled = true;
     if (btnAbrirModal) btnAbrirModal.focus();
 
-    // Reset del formulario (¡Súper importante!)
-    editPassForm.reset(); 
-    editPassForm.querySelectorAll('.invalid').forEach(el => el.textContent = '');
-
-    // impieza de clases de bootstrap para asegurar que no quedan 'restos' 
-    document.body.classList.remove('modal-open');
-    document.body.style.overflow = '';
-    document.body.style.paddingRight = '';
-    document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    if (backdrops.length > 0) {
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+        backdrops.forEach(b => b.remove());
+    }
 });
 
-
 // EVENTO SUBMIT DEL FORMULARIO DE CONTRASEÑA
-const editPassForm = document.querySelector('.changePasswordForm');
-
 editPassForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Validamos campos antes de enviar
-    const isPassActualOk = passActual.value.trim() !== "";
-    const isPassNuevaOk = validatePassword();
-    const isConfirmOk = validatePasswordsIguales();
+    if(btnSavePass) btnSavePass.disabled = true;
 
-    if (!isPassActualOk) {
-        showErrorPerfil(passActual, "Debes introducir tu contraseña actual.");
-    }
+    const data = new URLSearchParams();
+    data.append('accion', 'actualizarPassword');
+    data.append('datosFormPass', JSON.stringify({
+        'password': passActual.value.trim(),
+        'nuevaPassword': passNueva.value.trim()
+    }));
 
-    if (isPassActualOk && isPassNuevaOk && isConfirmOk) {
-        const data = new URLSearchParams();
-        data.append('accion', 'actualizarPassword');
-        data.append('datosFormPass', JSON.stringify({
-            'password': passActual.value.trim(),
-            'nuevaPassword': passNueva.value.trim()
-        }));
+    try {
+        let response = await fetch(URL_USUARIO, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: data.toString()
+        });
 
-        try {
-            let response = await fetch(URL, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: data.toString()
-            });
-
-            if (response.ok) {
-                let resultado = await response.json();
-
-                if (resultado.success) {
-                    const modalInstance = bootstrap.Modal.getInstance(modalEl);
-                    if (modalInstance) {
-                        modalInstance.hide(); // dispara el evento del listener
-                    }
-                    lanzarToast(resultado.message, "exito");
-
+        if (response.ok) {
+            let resultado = await response.json();
+            if (resultado.success) {
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                if (modalInstance) {
+                    modalInstance.hide();
                 } else {
-                    lanzarToast(resultado.message || "La contraseña actual es incorrecta", "error");
-                    showErrorPerfil(passActual, "Contraseña incorrecta");
+                    $(modalEl).hide(); 
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open');
                 }
+                lanzarToast(resultado.message, "exito");
+            } else {
+                lanzarToast(resultado.message || "Error", "error");
+                // No cerramos el modal si hay error, solo reseteamos campos
+                resetForm(editPassForm);
+                if (btnSavePass) btnSavePass.disabled = true;
             }
-        } catch (error) {
-            lanzarToast("Error crítico de conexión", "error");
         }
+    } catch (error) {
+        lanzarToast("Error crítico de conexión", "error");
+        if (btnSavePass) btnSavePass.disabled = false; // Re-habilitar para reintento
     }
 });
 
