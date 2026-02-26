@@ -3,13 +3,13 @@
     --color-white: #f1f1f1;
     /* Paleta de Colores */
     --color-yellow: #DB9C01;
-    
+
     --color-soft-lilac: rgba(142, 100, 180, 0.25);
     --color-lilac: #8E64B4;
     --color-dark-lilac: #62457B;
     --color-darkest-lilac: #32233F;
     --color-orange: #f39c12;
-    
+
     --color-details: #EDDD53; /* Añadida porque la usas en focus */
 
     /*--bg-card: linear-gradient(37deg, rgba(255, 255, 255, 1) 0%, rgba(142, 100, 180, 0.14) 22%, rgba(142, 100, 180, 1) 90%);*/
@@ -58,7 +58,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /*outline: 2px solid red !important; */
+    /*outline: 2px solid red !important;*/
 
 }
 
@@ -86,26 +86,17 @@ main {
     flex: 1; /* Hace que crezca hasta ocupar el 100% del espacio sobrante*/
     display: flex;
     flex-direction: column;
-    gap: 8rem;
+    gap: 2rem;
     padding: 2rem 4rem;
     background: var(--color-white);
-
 }
 
 section {
-    margin-top: 4rem;
+    margin: 2rem 0;
 }
 
-/*footer {
-    padding: 1.5rem 4rem;
-    color: var(--color-white);
-    background: var(--color-orange);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}*/
-
-/* Estilo para los botones circulares de redes sociales */
+/* FOOTER */
+/* botones de redes sociales */
 .rounded-circle {
     border: 2px solid white;
     width: 38px;
@@ -120,6 +111,7 @@ h2 {
 
 h3 {
     font: var(--text-h3);
+    font-size: 72px;
 }
 
 h4 {
@@ -129,11 +121,11 @@ h4 {
 
 /* Selecciona cualquier input que tenga el atributo readonly */
 input[readonly] {
-    background-color: #f8f9fa !important; 
-    color: #6c757d;                    
-    border-color: #dee2e6;          
-    cursor: not-allowed;      
-    pointer-events: none;  
+    background-color: #f8f9fa !important;
+    color: #6c757d;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 input[readonly]:focus {
@@ -166,7 +158,7 @@ button.btn.btn-primaryAlt{
 
 button.btn.btn-secondary{
     background-color: transparent;
-    
+
 }
 
 button.btn.btn-primary:hover, button.btn.btn-primaryAlt:hover {
@@ -174,11 +166,11 @@ button.btn.btn-primary:hover, button.btn.btn-primaryAlt:hover {
 }
 
 button.btn.btn-secondary:hover {
-    background-color: var(--color-soft-lilac);  
+    background-color: var(--color-soft-lilac);
 }
 
 button.btn.btn-primary:active,
-button.btn.btn-primaryAlt:active, 
+button.btn.btn-primaryAlt:active,
 button.btn.btn-secondary:active {
     /* Al pulsar, bajamos el botón 4px y reducimos la sombra a 0 */
     transform: translateY(4px);
@@ -188,7 +180,7 @@ button.btn.btn-secondary:active {
     transition: transform 0.05s, box-shadow 0.05s;
 }
 
-button:disabled, 
+button:disabled,
 button[disabled] {
     background-color: #cccccc !important;
     border-color: #bbbbbb !important;
@@ -330,7 +322,7 @@ button.btn-link:hover::before {
 /* Creamos una reserva de espacio invisible con el texto en negrita */
 .btn-logout-navbar::after {
     content: attr(data-text);
-    content: "Cerrar sesión"; 
+    content: "Cerrar sesión";
     font-weight: bold;
     height: 0;
     visibility: hidden;
@@ -456,17 +448,7 @@ button.btn-link:hover::before {
     margin-bottom: 1rem;
 }
 
-.price-ribbon-flat {
-    display: inline-block;
-    background-color: var(--color-yellow);
-    color: white;
-    font-size: 1.5rem;
-    padding: 4px 40px 4px 12px;
-    /* recorte de flecha hacia adentro */
-    clip-path: polygon(0% 0%, 100% 0%, 82% 50%, 100% 100%, 0% 100%);
-    margin-top: 5px;
-    margin-bottom: 0;
-}
+
 
 
 /* Secciones */
@@ -484,6 +466,118 @@ button.btn-link:hover::before {
 .signUpWrapper .section-header{
     padding-top: 0;
 }
+
+
+/* SECCIÓN DE OPINIONES */
+/* --- 1. Contenedor Principal --- */
+.testimonial-carousel-section {
+    position: relative;
+    display: block;
+    width: 100%;
+    clear: both;
+    overflow: hidden;
+}
+
+.testimonial-carousel-section > img.position-absolute {
+    top: 0 !important;
+    right: 0 !important;
+    width: 70% !important; 
+    height: 100% !important;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.testimonial-carousel-section h3 {
+    line-height: 0.8;
+}
+
+/* Distribución de cabecera en 2 columnas*/
+.testimonial-carousel-section .row.mb-5 {
+    display: flex !important;
+    align-items: flex-end;
+}
+.testimonial-carousel-section .row.mb-5 .col-lg-7,
+.testimonial-carousel-section .row.mb-5 .col-md-7 {
+    width: 60%;
+}
+.testimonial-carousel-section .row.mb-5 .col-lg-5,
+.testimonial-carousel-section .row.mb-5 .col-md-5 {
+    width: 40%;
+}
+
+
+/* Forzamos que la columna de la imagen tenga espacio para los 600px */
+.testimonial-carousel-section .col-md-6,
+.testimonial-carousel-section .col-lg-5 {
+    flex: 0 0 auto;
+    width: 550px !important;
+}
+
+/* La columna de texto ocupa el espacio restante */
+.testimonial-carousel-section .col-md-6:last-child,
+.testimonial-carousel-section .col-lg-7 {
+    flex: 1;
+}
+
+/* Caja contenedora fija */
+.carousel-images-wrapper {
+    width: 100%;
+    max-width: 550px;
+    height: 425px;
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.carousel-image img {
+    width: 600px !important;
+    height: 500px !important;
+    object-fit: cover;
+}
+
+
+/* Transición FADE */
+.carousel-image, .carousel-item-content {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-image.active.show,
+.carousel-item-content.active.show {
+    opacity: 1 !important;
+    position: relative !important; /* Permite que el contenido empuje al padre */
+    z-index: 2;
+    display: block !important;
+}
+
+.carousel-image.fade:not(.show),
+.carousel-item-content.fade:not(.show) {
+    opacity: 0 !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.carousel-indicators-custom {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.carousel-dot.btn-primary {
+    background-color: var(--color-orange) !important;
+    transform: scale(1.1);
+}
+
+.testimonial-carousel-section h3 span#happy {
+    font-style: italic;
+    font-weight: 500;
+}
+
 
 /* REGISTRO */
 main.page {
@@ -525,18 +619,18 @@ label.form-label {
 }
 
 .password-field {
-  position: relative;
+    position: relative;
 }
 
 .toggle-pass {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  background: white;
-  cursor: pointer;
-  color: #666;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: white;
+    cursor: pointer;
+    color: #666;
 }
 
 
@@ -574,7 +668,7 @@ body:not(.modal-open) {
     background: white;
     font: var(--font-text-base);
     font-weight: 400;
-    color: var(--color-black); 
+    color: var(--color-black);
 }
 
 .modal-body h6 {
@@ -630,7 +724,7 @@ body:not(.modal-open) {
 .cart-summary-aside {
     flex: 1;
     position: sticky;
-    top: 100px; 
+    top: 100px;
     height: 100%;
 }
 
@@ -668,7 +762,7 @@ body:not(.modal-open) {
 }
 
 .value-text {
-    color: #333; 
+    color: #333;
     font-weight: 700;
 }
 
@@ -694,7 +788,8 @@ body:not(.modal-open) {
 .total-value {
     font-size: 1.25rem;
     font-weight: 800;
-    color: #ff6600;; 
+    color: #ff6600;
+    ;
 }
 
 .btn-clear-link {
@@ -703,17 +798,17 @@ body:not(.modal-open) {
     border-radius: 0;
     padding: 0.6rem 0 0.2rem 0;
     cursor: pointer;
-    display: block;         
-    width: 100%;           
-    color: #999;          
+    display: block;
+    width: 100%;
+    color: #999;
     font-size: 0.9rem;
     text-align: center;
     border-bottom: 1.5px solid #999;
-    transition: all 0.3s ease;  
+    transition: all 0.3s ease;
 }
 
 .btn-clear-link:hover {
-    color: #333;                
+    color: #333;
     border-bottom: 1px solid #333;
 }
 
@@ -793,7 +888,7 @@ body:not(.modal-open) {
 
 /* MENSAJES FLOTANTES TIPO TOAST*/
 #liveToast {
-    
+
     border-radius: 0 !important;
     color: var(--color-black) !important;
     min-width: 250px;
@@ -811,12 +906,14 @@ body:not(.modal-open) {
     box-shadow: 3px 3px 0px rgba(113, 2, 0, 1) !important;
 }
 
-.toast-warning { 
+.toast-warning {
     background-color: #ffca28 !important; /* Un amarillo vibrante */
     color: #000 !important;
 }
 
-.toast-error .btn-close { filter: invert(1); } /* Pone en blanco el botón para el fondo rojo */
+.toast-error .btn-close {
+    filter: invert(1);
+} /* Pone en blanco el botón para el fondo rojo */
 
 
 

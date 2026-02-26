@@ -17,8 +17,12 @@
         <link rel="stylesheet" type="text/css" href="${style}" /> 
     </head>
     <body>
-        <c:import url="/INC/header.jsp"/>
+
+           
+
+       <c:import url="/INC/header.jsp"/>
         <c:import url="/INC/toast.jsp"/>
+       
 
         <section class="hero" id="hero">
             <img src="${context}/IMG/logoHero.png" alt="Logo Cacharreo">
@@ -29,7 +33,7 @@
         <main>
             <section id="trending">
                 <div class="section-header">
-                    <h4>Los más populares_</h4>
+                    <h3>Los más populares</h3>
                 </div>  
                 <div class="carousel-container-custom">
                     <button class="btn btn-primaryAlt custom-nav-btn prev-btn" type="button" data-bs-target="#multiItemCarousel" data-bs-slide="prev">
@@ -119,9 +123,11 @@
 
                     </div>
             </section>
+             <c:import url="/INC/reviews.jsp"/>
         </main>
 
         <c:import url="/INC/footer.jsp"/>
         <script src="${pageContext.request.contextPath}/JS/cestaJS.js"></script>
+        <script src="${pageContext.request.contextPath}/JS/reviewsLogic.js"></script>
     </body>
 </html>
