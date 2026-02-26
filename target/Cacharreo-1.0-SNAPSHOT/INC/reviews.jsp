@@ -1,4 +1,4 @@
-<section class="py-5 py-lg-5 position-relative overflow-hidden testimonial-carousel-section">
+<section class="position-relative overflow-hidden testimonial-carousel-section">
     <img class="position-absolute top-0 end-0" src="${context}/IMG/orange-light.png" alt=""/>
 
     <div class="container position-relative p-0">

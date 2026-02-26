@@ -569,7 +569,7 @@ button.btn-link:hover::before {
 }
 
 .carousel-dot.btn-primary {
-    background-color: var(--color-orange) !important;
+    background-color: var(--color-orange) !important; 
     transform: scale(1.1);
 }
 

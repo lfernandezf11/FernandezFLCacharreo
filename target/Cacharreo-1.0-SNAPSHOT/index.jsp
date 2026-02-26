@@ -17,18 +17,12 @@
         <link rel="stylesheet" type="text/css" href="${style}" /> 
     </head>
     <body>
-
-           
-
-       <c:import url="/INC/header.jsp"/>
+        <c:import url="/INC/header.jsp"/>
         <c:import url="/INC/toast.jsp"/>
-       
 
         <section class="hero" id="hero">
             <img src="${context}/IMG/logoHero.png" alt="Logo Cacharreo">
         </section>
-
-
 
         <main>
             <section id="trending">
@@ -64,7 +58,7 @@
                                                                 <h3 class="product-name">${producto.nombre}</h3>
 
                                                                 <h4 class="price-tag" style="font-size: 40px;">
-                                                                        <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                                                    <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
                                                                 </h4>
                                                             </div>
                                                         </div>
@@ -123,7 +117,7 @@
 
                     </div>
             </section>
-             <c:import url="/INC/reviews.jsp"/>
+            <c:import url="/INC/reviews.jsp"/>
         </main>
 
         <c:import url="/INC/footer.jsp"/>

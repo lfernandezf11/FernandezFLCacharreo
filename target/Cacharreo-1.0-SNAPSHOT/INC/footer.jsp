@@ -2,7 +2,7 @@
     
     <div class="p-1" style="background-color: var(--color-lilac)">
         <div class="container d-flex justify-content-end align-items-center mt-0">
-            <section class="mt-0">
+            <section class="mt-0 mb-0">
                 <a class="btn btn-outline-light rounded-circle  p-0 d-inline-flex align-items-center justify-content-center m-1" 
                    href="https://www.facebook.com/" role="button" target="blank">
                     <i class="fab fa-facebook-f"></i></a>
