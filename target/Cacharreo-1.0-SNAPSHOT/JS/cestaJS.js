@@ -203,12 +203,35 @@ document.addEventListener('submit', async (e) => {
     }
 });
 
-(function () {
-    const setupPriceSlider = () => {
-        const minInput = document.getElementById('priceMin');
-        const maxInput = document.getElementById('priceMax');
-        const display = document.getElementById('priceDisplay');
 
+/* FILTROS */
+
+document.addEventListener('DOMContentLoaded', () => {
+    const minInput = document.getElementById('priceMin');
+    const maxInput = document.getElementById('priceMax');
+    const display = document.getElementById('priceDisplay');
+    const formulario = document.getElementById('filterForm');
+    const checks = document.querySelectorAll('#filterForm .form-check-input');
+    const botonLimpiar = document.getElementById('limpiarFiltros');
+
+    const btnAplicar = document.getElementById('btn-apply-filters');
+
+    // Valores iniciales para comparar si el slider se ha movido
+    const minOriginal = minInput ? minInput.value : null;
+    const maxOriginal = maxInput ? maxInput.value : null;
+    btnAplicar.disabled = true;
+
+    // Función para activar/desactivar el botón de filtrar según haya filtros seleccionados o no
+    const validarFiltros = () => {
+        if (!btnAplicar) return;
+
+        const hayChecks = Array.from(checks).some(c => c.checked); // checks marcados
+        const precioMovido = (minInput.value !== minOriginal) || (maxInput.value !== maxOriginal); //selectores de precio distintos a los originales
+
+        btnAplicar.disabled = !(hayChecks || precioMovido);
+    };
+
+    function setupPriceSlider() {
         if (!minInput || !maxInput || !display)
             return;
 
@@ -225,40 +248,36 @@ document.addEventListener('submit', async (e) => {
             }
 
             display.innerText = `${minVal}€ - ${maxVal}€`;
+            // Validar cada vez que se mueve el slider
+            validarFiltros();
         };
         minInput.addEventListener('input', updateSliders);
         maxInput.addEventListener('input', updateSliders);
-
     };
 
+    // Inicialización del slider
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", setupPriceSlider);
     } else {
         setupPriceSlider();
     }
-})();
 
-const botonLimpiar = document.getElementById('limpiarFiltros');
-
-if (botonLimpiar) {
-    botonLimpiar.addEventListener('click', () => {
-        const formulario = document.getElementById('filterForm');
-        const inputMin = document.getElementById('priceMin');
-        const inputMax = document.getElementById('priceMax');
-        const visor = document.getElementById('priceDisplay');
-
-        if (formulario) {
-            formulario.reset();
-        }
-
-        if (inputMin && inputMax && visor) {
-            // Actualizamos el texto con los valores que el reset acaba de poner
-            visor.innerText = `${inputMin.value}€ - ${inputMax.value}€`;
-
-            // OPCIONAL: Si pusiste la barra naranja, añade esta línea:
-            // pintarBarraNaranja(); 
-        }
-
-        console.log("Interfaz reseteada.");
+    // Escuchar cambios en los checkboxes
+    checks.forEach(check => {
+        check.addEventListener('change', validarFiltros);
     });
-}
+
+    // Gestión del botón de limpiar
+    if (botonLimpiar) {
+        botonLimpiar.addEventListener('click', () => {
+            if (formulario) {
+                formulario.reset();
+                display.innerText = `${minInput.value}€ - ${maxInput.value}€`;
+                // Al limpiar, el botón debe volver a desactivarse
+                validarFiltros();
+            }
+        });
+    }
+    // Ejecución inicial para que el botón nazca en el estado correcto
+    validarFiltros();
+});
