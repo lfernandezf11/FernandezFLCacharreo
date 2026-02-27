@@ -23,7 +23,7 @@
 
         <main>
             <section class="cart-section">
-                <div class="section-header">
+                <div class="section-header mt-4">
                     <h3 class="">Tu cesta</h3>
                 </div>
 

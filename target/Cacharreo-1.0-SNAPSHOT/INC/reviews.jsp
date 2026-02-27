@@ -1,5 +1,5 @@
-<section class="position-relative overflow-hidden testimonial-carousel-section">
-    <img class="position-absolute top-0 end-0" src="${context}/IMG/orange-light.png" alt=""/>
+<section class="position-relative overflow-hidden testimonial-carousel-section py-5">
+    <img class="position-absolute top-0 end-0 m-3" src="${context}/IMG/orange-light.png" alt=""/>
 
     <div class="container position-relative p-0">
         <div class="mx-auto">

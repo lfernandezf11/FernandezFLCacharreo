@@ -197,6 +197,7 @@
                         </div>
                     </div>
                 </div>
+            </section>
         </main>
 
         <c:import url="/INC/footer.jsp"/>

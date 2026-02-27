@@ -188,99 +188,99 @@ public class ProductoDAO implements IProductoDAO {
     }
 
     @Override
-public List<Float> getPreciosLimite() {
-    List<Float> limites = new ArrayList<>();
-    // Consultamos el mínimo y el máximo en una sola sentencia para mayor eficiencia
-    String sql = "SELECT MIN(precio), MAX(precio) FROM productos";
+    public List<Float> getPreciosLimite() {
+        List<Float> limites = new ArrayList<>();
+        // Consultamos el mínimo y el máximo en una sola sentencia para mayor eficiencia
+        String sql = "SELECT MIN(precio), MAX(precio) FROM productos";
 
-    Connection connection = null;
-    PreparedStatement preparada = null;
-    ResultSet rs = null;
+        Connection connection = null;
+        PreparedStatement preparada = null;
+        ResultSet rs = null;
 
-    try {
-        connection = ConnectionFactory.getConnection();
-        preparada = connection.prepareStatement(sql);
-        rs = preparada.executeQuery();
+        try {
+            connection = ConnectionFactory.getConnection();
+            preparada = connection.prepareStatement(sql);
+            rs = preparada.executeQuery();
 
-        if (rs.next()) {
-            limites.add(rs.getFloat(1)); // Precio Mínimo (índice 0)
-            limites.add(rs.getFloat(2)); // Precio Máximo (índice 1)
+            if (rs.next()) {
+                limites.add(rs.getFloat(1)); // Precio Mínimo (índice 0)
+                limites.add(rs.getFloat(2)); // Precio Máximo (índice 1)
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, "Error al obtener límites de precio", e);
+        } finally {
+            this.closeConnection();
         }
-    } catch (SQLException e) {
-        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, "Error al obtener límites de precio", e);
-    } finally {
-        this.closeConnection();
+
+        return limites;
     }
 
-    return limites;
-}
+    @Override
+    public List<Producto> getProductosFiltrados(String[] categorias, String[] marcas, float min, float max) {
+        Connection conexion = null;
+        List<Producto> productos = new ArrayList<>();
 
-@Override
-public List<Producto> getProductosFiltrados(String[] categorias, String[] marcas, float min, float max) {
-    Connection conexion = null;
-    List<Producto> productos = new ArrayList<>();
-    
-    //Base de la consulta con ALIAS (para que coincidan con mapearProducto)
-    StringBuilder sql = new StringBuilder(
-        "SELECT p.idproducto, p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
-        + "c.idcategoria, c.nombre AS catNombre, c.imagen AS catImagen "
-        + "FROM productos p "
-        + "LEFT JOIN categorias c ON p.idcategoria = c.idcategoria"
-    );
-    
-    StringBuilder where = new StringBuilder();
-    boolean esPrimero = true;
+        //Base de la consulta con ALIAS (para que coincidan con mapearProducto)
+        StringBuilder sql = new StringBuilder(
+                "SELECT p.idproducto, p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
+                + "c.idcategoria, c.nombre AS catNombre, c.imagen AS catImagen "
+                + "FROM productos p "
+                + "LEFT JOIN categorias c ON p.idcategoria = c.idcategoria"
+        );
 
-    // --- FILTRO CATEGORÍAS ---
-    if (categorias != null && categorias.length > 0) {
+        StringBuilder where = new StringBuilder();
+        boolean esPrimero = true;
+
+        // --- FILTRO CATEGORÍAS ---
+        if (categorias != null && categorias.length > 0) {
+            where.append(esPrimero ? " WHERE " : " AND ");
+            where.append("p.idcategoria IN (");
+            for (String cat : categorias) {
+                where.append(cat).append(",");
+            }
+            where.replace(where.length() - 1, where.length(), ")");
+            esPrimero = false;
+        }
+
+        // --- FILTRO MARCAS ---
+        if (marcas != null && marcas.length > 0) {
+            where.append(esPrimero ? " WHERE " : " AND ");
+            where.append("p.marca IN (");
+            for (String m : marcas) {
+                where.append("'").append(m).append("',");
+            }
+            where.replace(where.length() - 1, where.length(), ")");
+            esPrimero = false;
+        }
+
+        // --- FILTRO PRECIO ---
         where.append(esPrimero ? " WHERE " : " AND ");
-        where.append("p.idcategoria IN (");
-        for (String cat : categorias) {
-            where.append(cat).append(",");
+        where.append("p.precio BETWEEN ").append(min).append(" AND ").append(max);
+
+        sql.append(where);
+
+        // --- DEBUGGER: Copia lo que salga en la consola y pruébalo en MySQL Workbench ---
+        System.out.println("DEBUG SQL CONSTRUIDO: " + sql.toString());
+
+        try {
+            conexion = ConnectionFactory.getConnection();
+            Statement s = conexion.createStatement();
+            ResultSet rs = s.executeQuery(sql.toString());
+
+            while (rs.next()) {
+                Producto p = mapearProducto(rs);
+                productos.add(p);
+            }
+
+            System.out.println("DEBUG: Productos encontrados en DB: " + productos.size());
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, "Error ejecutando getProductosFiltrados", ex);
+        } finally {
+            this.closeConnection();
         }
-        where.replace(where.length() - 1, where.length(), ")");
-        esPrimero = false;
+        return productos;
     }
-
-    // --- FILTRO MARCAS ---
-    if (marcas != null && marcas.length > 0) {
-        where.append(esPrimero ? " WHERE " : " AND ");
-        where.append("p.marca IN (");
-        for (String m : marcas) {
-            where.append("'").append(m).append("',"); 
-        }
-        where.replace(where.length() - 1, where.length(), ")");
-        esPrimero = false;
-    }
-
-    // --- FILTRO PRECIO ---
-    where.append(esPrimero ? " WHERE " : " AND ");
-    where.append("p.precio BETWEEN ").append(min).append(" AND ").append(max);
-
-    sql.append(where);
-
-    // --- DEBUGGER: Copia lo que salga en la consola y pruébalo en MySQL Workbench ---
-    System.out.println("DEBUG SQL CONSTRUIDO: " + sql.toString());
-
-    try {
-        conexion = ConnectionFactory.getConnection();
-        Statement s = conexion.createStatement();
-        ResultSet rs = s.executeQuery(sql.toString());
-
-        while (rs.next()) {
-            Producto p = mapearProducto(rs);
-            productos.add(p);
-        }
-        
-        System.out.println("DEBUG: Productos encontrados en DB: " + productos.size());
-
-    } catch (SQLException ex) {
-        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, "Error ejecutando getProductosFiltrados", ex);
-    } finally {
-        this.closeConnection();
-    }
-    return productos;
-}
 
     @Override
     public void closeConnection() {

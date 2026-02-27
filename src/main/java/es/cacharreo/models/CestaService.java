@@ -183,7 +183,9 @@ public class CestaService {
             pedido.calcularTotales();
             DAOFactory.getDAOFactory().getPedidoDAO().updateTotalesPedido(pedido);
         } else { 
-            pedido.setIdPedido(null); 
+            pedido.setIdPedido(null);
+            pedido.calcularTotales();
+            
         }
     }
 }
