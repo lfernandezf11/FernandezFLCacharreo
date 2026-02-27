@@ -187,6 +187,34 @@ public class ProductoDAO implements IProductoDAO {
     }
 
     @Override
+public List<Float> getPreciosLimite() {
+    List<Float> limites = new ArrayList<>();
+    // Consultamos el mínimo y el máximo en una sola sentencia para mayor eficiencia
+    String sql = "SELECT MIN(precio), MAX(precio) FROM productos";
+
+    Connection connection = null;
+    PreparedStatement preparada = null;
+    ResultSet rs = null;
+
+    try {
+        connection = ConnectionFactory.getConnection();
+        preparada = connection.prepareStatement(sql);
+        rs = preparada.executeQuery();
+
+        if (rs.next()) {
+            limites.add(rs.getFloat(1)); // Precio Mínimo (índice 0)
+            limites.add(rs.getFloat(2)); // Precio Máximo (índice 1)
+        }
+    } catch (SQLException e) {
+        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, "Error al obtener límites de precio", e);
+    } finally {
+        this.closeConnection();
+    }
+
+    return limites;
+}
+
+    @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
     }

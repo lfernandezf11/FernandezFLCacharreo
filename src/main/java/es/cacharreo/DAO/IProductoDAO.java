@@ -14,7 +14,7 @@ public interface IProductoDAO {
     public Producto getProductoUnicoById(Short idProducto); 
     
     public List<String> getMarcas();
-
+public List<Float> getPreciosLimite();
     public void closeConnection();
 }
 

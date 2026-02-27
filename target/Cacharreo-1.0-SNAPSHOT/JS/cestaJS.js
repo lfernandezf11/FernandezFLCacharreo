@@ -26,11 +26,11 @@ async function actualizarUnidades(idProducto, accion, form) {
             if (resultado.success) {
                 // 1. Actualizar cantidad en la tarjeta, controlando que el botón - esté deshabilitado si hay una unidad del producto
                 form.querySelector('.qty-val').textContent = resultado.nuevaCantidad;
-                
+
                 const btnRestar = form.querySelector('button[value="restar"]');
                 if (btnRestar) {
-                btnRestar.disabled = (parseInt(resultado.nuevaCantidad) <= 1);
-            }
+                    btnRestar.disabled = (parseInt(resultado.nuevaCantidad) <= 1);
+                }
 
                 // 2. Actualizar el subtotal de la línea (la tarjeta)
                 const itemCard = form.closest('.cart-item-card');
@@ -155,17 +155,18 @@ document.addEventListener('click', (e) => {
 document.addEventListener('submit', async (e) => {
     if (e.target.classList.contains('addForm')) {
         e.preventDefault();
-        
+
         const form = e.target;
 
-        const btnSubmit = form.querySelector('.btn-add'); 
+        const btnSubmit = form.querySelector('.btn-add');
         const idProducto = form.querySelector('input[name="idProducto"]').value;
-        
+
         const data = new URLSearchParams();
         data.append('accion', 'addCarrito');
         data.append('idProducto', idProducto);
-        
-        if (btnSubmit) btnSubmit.disabled = true;
+
+        if (btnSubmit)
+            btnSubmit.disabled = true;
 
         try {
             const response = await fetch(URL_CESTA, {
@@ -176,7 +177,7 @@ document.addEventListener('submit', async (e) => {
 
             if (response.ok) {
                 const resultado = await response.json();
-                
+
                 if (resultado.success) {
                     //Localizamos el modal y lo cerramos
                     const modalEl = form.closest('.modal');
@@ -184,7 +185,7 @@ document.addEventListener('submit', async (e) => {
 
                     if (modalInstance) {
                         modalInstance.hide(); //dispara los listeners de cierre de modal
-                        }
+                    }
 
                     lanzarToast(resultado.message, "exito");
                 } else {
@@ -196,7 +197,68 @@ document.addEventListener('submit', async (e) => {
         } finally {
             // Rehabilitamos el botón solo si el modal no se cerró (hay error)
             // Si el modal se cerró, el listener global lo reseteará al ocultarse.
-            if (btnSubmit) btnSubmit.disabled = false;
+            if (btnSubmit)
+                btnSubmit.disabled = false;
         }
     }
 });
+
+(function () {
+    const setupPriceSlider = () => {
+        const minInput = document.getElementById('priceMin');
+        const maxInput = document.getElementById('priceMax');
+        const display = document.getElementById('priceDisplay');
+
+        if (!minInput || !maxInput || !display)
+            return;
+
+        const updateSliders = (e) => {
+            let minVal = parseInt(minInput.value);
+            let maxVal = parseInt(maxInput.value);
+
+            if (e.target.id === 'priceMin' && minVal > maxVal) {
+                minInput.value = maxVal;
+                minVal = maxVal;
+            } else if (e.target.id === 'priceMax' && maxVal < minVal) {
+                maxInput.value = minVal;
+                maxVal = minVal;
+            }
+
+            display.innerText = `${minVal}€ - ${maxVal}€`;
+        };
+        minInput.addEventListener('input', updateSliders);
+        maxInput.addEventListener('input', updateSliders);
+
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", setupPriceSlider);
+    } else {
+        setupPriceSlider();
+    }
+})();
+
+const botonLimpiar = document.getElementById('limpiarFiltros');
+
+if (botonLimpiar) {
+    botonLimpiar.addEventListener('click', () => {
+        const formulario = document.getElementById('filterForm');
+        const inputMin = document.getElementById('priceMin');
+        const inputMax = document.getElementById('priceMax');
+        const visor = document.getElementById('priceDisplay');
+
+        if (formulario) {
+            formulario.reset();
+        }
+
+        if (inputMin && inputMax && visor) {
+            // Actualizamos el texto con los valores que el reset acaba de poner
+            visor.innerText = `${inputMin.value}€ - ${inputMax.value}€`;
+
+            // OPCIONAL: Si pusiste la barra naranja, añade esta línea:
+            // pintarBarraNaranja(); 
+        }
+
+        console.log("Interfaz reseteada.");
+    });
+}

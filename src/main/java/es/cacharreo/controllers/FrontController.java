@@ -5,16 +5,13 @@ import es.cacharreo.DAO.IProductoDAO;
 import es.cacharreo.DAO.IUsuarioDAO;
 import es.cacharreo.DAOFactory.DAOFactory;
 import es.cacharreo.beans.Categoria;
-import es.cacharreo.beans.LineaPedido;
 import es.cacharreo.beans.Pedido;
-import es.cacharreo.beans.Producto;
 import es.cacharreo.beans.Usuario;
 import es.cacharreo.models.CestaUtils;
 import es.cacharreo.models.Cookies;
 import es.cacharreo.models.ProductoUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -76,6 +73,8 @@ public class FrontController extends HttpServlet {
 
         List<Categoria> categorias = (List<Categoria>) ctx.getAttribute("categorias");
         List<String> marcas = (List<String>) ctx.getAttribute("marcas");
+        Float maxPrecio = (Float) ctx.getAttribute("maxPrecio");
+        Float minPrecio = (Float) ctx.getAttribute("minPrecio");
 
         if (categorias == null) {
             ICategoriaDAO cDAO = daof.getCategoriaDAO();
@@ -88,6 +87,13 @@ public class FrontController extends HttpServlet {
             ctx.setAttribute("marcas", marcas);
         }
 
+        if (maxPrecio == null || minPrecio == null) {
+            List<Float> limites = pDAO.getPreciosLimite();
+            if (limites.size() == 2) {
+                ctx.setAttribute("minPrecio", limites.get(0));
+                ctx.setAttribute("maxPrecio", limites.get(1));
+            }
+        }
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
@@ -122,13 +128,13 @@ public class FrontController extends HttpServlet {
                 ProductoUtils.prepararSubcatalogo(request); // Maneja la recarga de 8 productos aleatorios.
                 url = "/index.jsp";
                 break;
-                
+
             case "perfil":
                 url = "/JSP/usuario/perfil.jsp";
                 break;
 
             case "productos":
-                url = "/JSP/productos.jsp";
+                url = "/JSP/pedido/productos.jsp";
                 break;
 
             case "registro":
@@ -145,12 +151,12 @@ public class FrontController extends HttpServlet {
                     uDAO.updateUltimoAcceso(usuario.getIdUsuario());
                 }
                 session.invalidate(); // imnpia todo, con lo que antes de redirigir hay que resetear la home
-                
+
                 // "Entorno de invitado"
                 HttpSession nuevaSesion = request.getSession(true);
                 nuevaSesion.setAttribute("cesta", new Pedido()); // El constructor por defecto inicializa sin nulos y con importes a 0.
                 ProductoUtils.prepararSubcatalogo(request);
-                
+
                 url = "/index.jsp";
                 break;
 
