@@ -27,7 +27,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12 col-lg-3 mb-4">
-                            <aside class="filters-sidebar">
+                            <aside class="filter-sidebar">
                                 <div class="cart-total-bar">
                                     <h4 class="mb-4">Filtros</h4>
 
@@ -40,11 +40,11 @@
                                                         type="button" id="dropCat" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                                     Seleccionar
                                                 </button>
-                                                <ul class="dropdown-menu w-100 shadow-sm p-2" aria-labelledby="dropCat">
+                                                <ul class="dropdown-menu w-100 shadow-sm p-2 scrollable-menu" aria-labelledby="dropCat">
                                                     <c:forEach var="cat" items="${applicationScope.categorias}">
                                                         <li class="px-2 py-1">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" name="f_categoria" value="${cat.idCategoria}" id="cat${cat.idCategoria}">
+                                                                <input class="form-check-input" type="checkbox" name="fCategoria" value="${cat.idCategoria}" id="cat${cat.idCategoria}">
                                                                 <label class="form-check-label w-100" for="cat${cat.idCategoria}">
                                                                     ${cat.nombre}
                                                                 </label>
@@ -62,11 +62,11 @@
                                                         type="button" id="dropMarca" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                                     Seleccionar
                                                 </button>
-                                                <ul class="dropdown-menu w-100 shadow-sm p-2" aria-labelledby="dropMarca">
+                                                <ul class="dropdown-menu w-100 shadow-sm p-2 scrollable-menu" aria-labelledby="dropMarca">
                                                     <c:forEach var="marca" items="${applicationScope.marcas}">
                                                         <li class="px-2 py-1">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" name="f_marca" value="${marca}" id="marca${marca}">
+                                                                <input class="form-check-input" type="checkbox" name="fMarca" value="${marca}" id="marca${marca}">
                                                                 <label class="form-check-label w-100" for="marca${marca}">
                                                                     ${marca}
                                                                 </label>
@@ -81,19 +81,20 @@
                                             <label class="form-label concept-text d-flex justify-content-between">
                                                 Rango de Precio:
                                                 <span id="priceDisplay" class="text-primary fw-bold">
-                                                    ${applicationScope.minPrecio}€ - ${applicationScope.maxPrecio}€
+                                                    <fmt:formatNumber value="${applicationScope.minPrecio}" type="currency" currencySymbol="€" /> - 
+                                                    <fmt:formatNumber value="${applicationScope.maxPrecio}" type="currency" currencySymbol="€" />
                                                 </span>
                                             </label>
 
                                             <div class="range-slider-container position-relative" style="height: 35px;">
                                                 <input type="range" class="form-range position-absolute top-0 start-0" 
-                                                       id="priceMin" name="f_precio_min"
+                                                       id="priceMin" name="fPrecioMin"
                                                        min="${applicationScope.minPrecio}" 
                                                        max="${applicationScope.maxPrecio}" 
                                                        value="${applicationScope.minPrecio}">
 
                                                 <input type="range" class="form-range position-absolute top-0 start-0" 
-                                                       id="priceMax" name="f_precio_max"
+                                                       id="priceMax" name="fPrecioMax"
                                                        min="${applicationScope.minPrecio}" 
                                                        max="${applicationScope.maxPrecio}" 
                                                        value="${applicationScope.maxPrecio}">
@@ -118,29 +119,71 @@
                         </div>
 
                         <div class="col-12 col-lg-9">
-                            <div class="row g-4 ms-2">
+                            <div class="row g-4 ms-2 pt-3">
                                 <c:choose>
                                     <c:when test="${not empty productosFiltrados}">
                                         <c:forEach var="producto" items="${productosFiltrados}">
-                                            <div class="col-12 col-md-6 col-xl-4">
+                                            <div class="col-12 col-md-6 col-lg-3 mb-3">
                                                 <article class="product-card h-100" 
                                                          data-bs-toggle="modal" 
                                                          data-bs-target="#modal${producto.idProducto}"
                                                          style="cursor: pointer;">
+
                                                     <div class="product-image">
                                                         <img src="${context}/IMG/productos/${producto.imagen != null ? producto.imagen : 'default'}.jpg" 
-                                                             class="img-fluid" alt="${producto.nombre}"> 
+                                                             alt="${producto.nombre}"> 
                                                     </div>
-                                                    <div class="product-info p-3">
-                                                        <span class="product-brand badge bg-secondary mb-2">${producto.marca}</span>
+
+                                                    <div class="product-info">
+                                                        <span class="product-brand badge bg-secondary mb-0">${producto.marca}</span>
                                                         <div class="text-start">
-                                                            <h3 class="product-name fs-5 fw-bold">${producto.nombre}</h3>
-                                                            <h4 class="price-tag text-primary h3">
+                                                            <h3 class="product-name">${producto.nombre}</h3>
+
+                                                            <h4 class="price-tag" style="font-size: 40px;">
                                                                 <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
                                                             </h4>
                                                         </div>
                                                     </div>
                                                 </article>
+                                            </div>
+
+                                            <!-- Modal para añadir el producto -->
+                                            <div class="modal fade" id="modal${producto.idProducto}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title fw-bold">${producto.nombre}</h5>
+                                                            <button type="button" class="btn-close custom-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            <div class="product-image mb-2">
+                                                                <img src="${context}/IMG/productos/${producto.imagen != null ? producto.imagen : 'default'}.jpg" 
+                                                                     alt="${producto.nombre}"> 
+                                                            </div>
+
+                                                            <div class="product-details">
+
+                                                                <p class="description-text">
+                                                                    ${producto.descripcion}
+                                                                </p>
+                                                                <h4 class="price-tag">
+                                                                    <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+
+                                                        <form class="modal-footer addForm">
+                                                            <input type="hidden" name="idProducto" value="${producto.idProducto}">
+                                                            <button type="submit" name="accion" value="addCarrito" class="btn btn-primary btn-add">
+                                                                Añadir a la cesta
+                                                            </button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                Seguir mirando
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </c:forEach>
                                     </c:when>

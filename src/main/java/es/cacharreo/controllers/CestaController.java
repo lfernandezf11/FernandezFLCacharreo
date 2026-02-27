@@ -1,18 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package es.cacharreo.controllers;
 
 import es.cacharreo.DAO.IPedidoDAO;
 import es.cacharreo.DAO.IProductoDAO;
 import es.cacharreo.DAOFactory.DAOFactory;
 import es.cacharreo.beans.Pedido;
+import es.cacharreo.beans.Producto;
 import es.cacharreo.beans.Usuario;
 import es.cacharreo.models.Cookies;
-import es.cacharreo.models.ProductoUtils;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -104,6 +100,25 @@ public class CestaController extends HttpServlet {
                     }
                 } else {
                     request.setAttribute("aviso", "La cesta ya estaba vacía.");
+                }
+                break;
+
+            case "filtrarProductos":
+                String[] categorias = request.getParameterValues("fCategoria");
+                String[] marcas = request.getParameterValues("fMarca");
+                float min = Float.parseFloat(request.getParameter("fPrecioMin"));
+                float max = Float.parseFloat(request.getParameter("fPrecioMax"));
+
+                try {
+                    DAOFactory daof = DAOFactory.getDAOFactory();
+                    IProductoDAO pDAO = daof.getProductoDAO();
+
+                    List<Producto> filtrados = pDAO.getProductosFiltrados(categorias, marcas, min, max);
+                    
+                    request.setAttribute("productosFiltrados", filtrados);
+                    url = "/JSP/pedido/productos.jsp";
+                } catch (Exception e) {
+                    request.setAttribute("error", "Error al procesar los filtros.");
                 }
                 break;
 

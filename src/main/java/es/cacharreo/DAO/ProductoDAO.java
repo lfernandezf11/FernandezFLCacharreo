@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,10 +24,10 @@ public class ProductoDAO implements IProductoDAO {
         Connection connection = null;
         ResultSet rs = null;
         PreparedStatement preparada = null;
-        String sql = "SELECT p.idProducto, p.nombre as prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
-                + "c.idCategoria, c.nombre AS catNombre, c.imagen AS catImagen "
+        String sql = "SELECT p.idproducto, p.nombre as prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
+                + "c.idcategoria, c.nombre AS catNombre, c.imagen AS catImagen "
                 + "FROM productos p "
-                + "LEFT JOIN categorias c ON p.idCategoria = c.idCategoria"; // LEFT JOIN por si el producto no tiene categoría (es nullable)
+                + "LEFT JOIN categorias c ON p.idcategoria = c.idcategoria"; // LEFT JOIN por si el producto no tiene categoría (es nullable)
 
         try {
             connection = ConnectionFactory.getConnection();
@@ -54,10 +55,10 @@ public class ProductoDAO implements IProductoDAO {
         PreparedStatement preparada = null;
 
         // SQL con ordenación aleatoria y límite de 8 registros
-        String sql = "SELECT p.idProducto, p.nombre as prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
-                + "c.idCategoria, c.nombre AS catNombre, c.imagen AS catImagen "
+        String sql = "SELECT p.idproducto, p.nombre as prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
+                + "c.idcategoria, c.nombre AS catNombre, c.imagen AS catImagen "
                 + "FROM productos p "
-                + "LEFT JOIN categorias c ON p.idCategoria = c.idCategoria "
+                + "LEFT JOIN categorias c ON p.idcategoria = c.idcategoria "
                 + "ORDER BY RAND() "
                 + "LIMIT ?";
 
@@ -87,11 +88,11 @@ public class ProductoDAO implements IProductoDAO {
         ResultSet rs = null;
         PreparedStatement preparada = null;
         Producto prod = null;
-        String sql = "SELECT p.idProducto, p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
-                + "c.idCategoria, c.nombre AS catNombre, c.imagen AS catImagen "
+        String sql = "SELECT p.idproducto, p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
+                + "c.idcategoria, c.nombre AS catNombre, c.imagen AS catImagen "
                 + "FROM productos p "
-                + "LEFT JOIN categorias c ON p.idCategoria = c.idCategoria "
-                + "WHERE p.idProducto = ?";
+                + "LEFT JOIN categorias c ON p.idcategoria = c.idcategoria "
+                + "WHERE p.idproducto = ?";
 
         try {
             connection = ConnectionFactory.getConnection();
@@ -214,6 +215,73 @@ public List<Float> getPreciosLimite() {
     return limites;
 }
 
+@Override
+public List<Producto> getProductosFiltrados(String[] categorias, String[] marcas, float min, float max) {
+    Connection conexion = null;
+    List<Producto> productos = new ArrayList<>();
+    
+    //Base de la consulta con ALIAS (para que coincidan con mapearProducto)
+    StringBuilder sql = new StringBuilder(
+        "SELECT p.idproducto, p.nombre AS prodNombre, p.descripcion, p.precio, p.marca, p.imagen AS prodImagen, "
+        + "c.idcategoria, c.nombre AS catNombre, c.imagen AS catImagen "
+        + "FROM productos p "
+        + "LEFT JOIN categorias c ON p.idcategoria = c.idcategoria"
+    );
+    
+    StringBuilder where = new StringBuilder();
+    boolean esPrimero = true;
+
+    // --- FILTRO CATEGORÍAS ---
+    if (categorias != null && categorias.length > 0) {
+        where.append(esPrimero ? " WHERE " : " AND ");
+        where.append("p.idcategoria IN (");
+        for (String cat : categorias) {
+            where.append(cat).append(",");
+        }
+        where.replace(where.length() - 1, where.length(), ")");
+        esPrimero = false;
+    }
+
+    // --- FILTRO MARCAS ---
+    if (marcas != null && marcas.length > 0) {
+        where.append(esPrimero ? " WHERE " : " AND ");
+        where.append("p.marca IN (");
+        for (String m : marcas) {
+            where.append("'").append(m).append("',"); 
+        }
+        where.replace(where.length() - 1, where.length(), ")");
+        esPrimero = false;
+    }
+
+    // --- FILTRO PRECIO ---
+    where.append(esPrimero ? " WHERE " : " AND ");
+    where.append("p.precio BETWEEN ").append(min).append(" AND ").append(max);
+
+    sql.append(where);
+
+    // --- DEBUGGER: Copia lo que salga en la consola y pruébalo en MySQL Workbench ---
+    System.out.println("DEBUG SQL CONSTRUIDO: " + sql.toString());
+
+    try {
+        conexion = ConnectionFactory.getConnection();
+        Statement s = conexion.createStatement();
+        ResultSet rs = s.executeQuery(sql.toString());
+
+        while (rs.next()) {
+            Producto p = mapearProducto(rs);
+            productos.add(p);
+        }
+        
+        System.out.println("DEBUG: Productos encontrados en DB: " + productos.size());
+
+    } catch (SQLException ex) {
+        Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, "Error ejecutando getProductosFiltrados", ex);
+    } finally {
+        this.closeConnection();
+    }
+    return productos;
+}
+
     @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
@@ -221,7 +289,7 @@ public List<Float> getPreciosLimite() {
 
     public static Producto mapearProducto(ResultSet rs) throws SQLException {
         Producto prod = new Producto();
-        prod.setIdProducto(rs.getShort("idProducto"));
+        prod.setIdProducto(rs.getShort("idproducto"));
         prod.setNombre(rs.getString("prodNombre"));
         prod.setDescripcion(rs.getString("descripcion"));
         prod.setPrecio(rs.getFloat("precio"));
@@ -229,11 +297,11 @@ public List<Float> getPreciosLimite() {
         prod.setImagen(rs.getString("prodImagen"));
 
         /* 
-                Comprobamos el valor del idCategoria para instanciar o no Categoria para el producto.
+                Comprobamos el valor del idcategoria para instanciar o no Categoria para el producto.
                 Lo hacemos porque si el valor null en la base de datos, idCategoria adoptaría el valor por defecto de byte: 0.
                 no null.
          */
-        byte idCat = rs.getByte("idCategoria");
+        byte idCat = rs.getByte("idcategoria");
         if (!rs.wasNull()) {
             Categoria cat = new Categoria();
             cat.setIdCategoria(idCat);

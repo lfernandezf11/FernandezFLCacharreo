@@ -584,6 +584,7 @@ main.page {
     background: var(--bg-body);
     align-content: center;
     justify-content:center;
+    margin-top: 4rem; 
 }
 
 #signUpSection, #signInSection, #profileSection {
@@ -643,7 +644,7 @@ body:not(.modal-open) {
 }
 
 .modal-content {
-    background-color: var(--color-white);
+    background-color: white;
     border: 3px solid var(--color-black);
     border-radius: 15px;
     box-shadow: 8px 8px 0px 0px var(--color-black);
@@ -721,11 +722,11 @@ body:not(.modal-open) {
 }
 
 /* Columna de resumen (Restante) */
-.cart-summary-aside, .filters-sidebar {
+.cart-summary-aside, .filter-sidebar {
     flex: 1;
     position: sticky;
     top: 100px;
-    height: 100%;
+    /*height: 100%;*/
 }
 
 /* La tarjeta de totales blanca con borde naranja */
@@ -1281,13 +1282,8 @@ body:not(.modal-open) {
 
 }
 
-/* FILTROS */
-.filters-sidebar {
-    position: sticky;
-    top: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
 
+/* FILTROS */
 .filter-group .dropdown-toggle::after {
     margin-left: auto;
 }
@@ -1326,16 +1322,9 @@ body:not(.modal-open) {
     appearance: none;
 }
 
-/* Estilo para la barra de fondo (track) */
-.range-slider-container::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    height: 6px;
-    background: #e9ecef;
-    border-radius: 5px;
-    z-index: 0;
+/* Control de scroll para los desplegables de filtros */
+.scrollable-menu {
+    max-height: 250px;    /* Ajusta esta altura a tu gusto */
+    overflow-y: auto;     /* Activa el scroll vertical */
+    overflow-x: hidden;   /* Evita el scroll horizontal */
 }
-

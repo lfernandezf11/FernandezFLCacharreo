@@ -219,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Valores iniciales para comparar si el slider se ha movido
     const minOriginal = minInput ? minInput.value : null;
     const maxOriginal = maxInput ? maxInput.value : null;
-    btnAplicar.disabled = true;
 
     // Función para activar/desactivar el botón de filtrar según haya filtros seleccionados o no
     const validarFiltros = () => {
@@ -247,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 maxVal = minVal;
             }
 
-            display.innerText = `${minVal}€ - ${maxVal}€`;
+            display.innerText = `${minVal.toFixed(2)}€ - ${maxVal.toFixed(2)}€`;
             // Validar cada vez que se mueve el slider
             validarFiltros();
         };
@@ -272,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         botonLimpiar.addEventListener('click', () => {
             if (formulario) {
                 formulario.reset();
-                display.innerText = `${minInput.value}€ - ${maxInput.value}€`;
+                display.innerText = `${minInput.value.toFixed(2)}€ - ${maxInput.value.toFixed(2)}€`;
                 // Al limpiar, el botón debe volver a desactivarse
                 validarFiltros();
             }
