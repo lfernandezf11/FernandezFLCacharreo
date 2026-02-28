@@ -7,6 +7,7 @@ import es.cacharreo.beans.Pedido;
 import es.cacharreo.beans.Producto;
 import es.cacharreo.beans.Usuario;
 import es.cacharreo.models.Cookies;
+import es.cacharreo.models.ProductoUtils;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -112,16 +113,54 @@ public class CestaController extends HttpServlet {
                 try {
                     DAOFactory daof = DAOFactory.getDAOFactory();
                     IProductoDAO pDAO = daof.getProductoDAO();
-
-                    List<Producto> filtrados = pDAO.getProductosFiltrados(categorias, marcas, min, max);
                     
+                    // Refrescamos la página inicial antes de filtrar los productos. ¿Por qué? 
+                    // Porque ProductoUtils.prepararSubcatalogo() establece un atributo de sesión "productosFiltrados"
+                    // por defecto (con los 8 productos aleatorios), y tenemos que sobreescribirlo para devolver el 
+                    // resultado real del filtrado.
+                    ProductoUtils.prepararSubcatalogo(request); 
+                    List<Producto> filtrados = pDAO.getProductosFiltrados(categorias, marcas, min, max);
+
                     request.setAttribute("productosFiltrados", filtrados);
-                    url = "/JSP/pedido/productos.jsp";
+                    url = "/index.jsp";
                 } catch (Exception e) {
                     request.setAttribute("error", "Error al procesar los filtros.");
                 }
                 break;
 
+            case "tramitarPedido":
+                if (usuario == null) {
+                    request.setAttribute("aviso", "Tienes que iniciar sesión para completar tu pedido.");
+                    url = "/JSP/usuario/login.jsp";
+                } else {
+                    // Verificamos que exista el objeto cesta en sesión y tenga líneas
+                    if (cesta != null && !cesta.getLineas().isEmpty()) {
+                        IPedidoDAO pDAO = DAOFactory.getDAOFactory().getPedidoDAO();
+                        // El método actualiza la fecha y estado en bbdd y sesión
+                        // Necesario actualizar en sesión para poder pasarlo a la request para el resumen en resumenPedido.jsp
+                        boolean compraExitosa = pDAO.finalizarPedido(cesta);
+
+                        if (compraExitosa) {
+                            // Pasamos el pedido a la request antes de limpiar la sesión
+                            request.setAttribute("pedidoFinalizado", cesta);
+                            session.removeAttribute("cesta");
+
+                            // Seteamos una nueva cesta vacía para futuras compras en la misma sesión
+                            Pedido nuevaCesta = new Pedido();
+                            nuevaCesta.setUsuario(usuario);
+                            session.setAttribute("cesta", nuevaCesta);
+
+                            url = "/JSP/pedido/resumenPedido.jsp";
+                        } else {
+                            request.setAttribute("error", "No se pudo finalizar la compra en la base de datos.");
+                            url = "/JSP/pedido/cesta.jsp";
+                        }
+                    } else {
+                        request.setAttribute("aviso", "Tu cesta está vacía.");
+                        url = "/JSP/pedido/cesta.jsp";
+                    }
+                }
+                break;
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

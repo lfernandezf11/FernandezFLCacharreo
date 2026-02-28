@@ -55,6 +55,7 @@ function lanzarToast(mensaje, tipo) {
     }, {once: true});
 }
 
+
 /**
  * Alterna la visibilidad del campo de contraseña y cambia el icono.
  * @param {HTMLInputElement} inputEl - El elemento de entrada de texto.

@@ -83,7 +83,7 @@ async function eliminarFila(idProducto, form) {
                 const itemCard = form.closest('.cart-item-card'); // Tarjeta asociada al artículo para la animación
 
                 if (itemCard) {
-                    // Aplicamos transición CSS dinámica para un borrado elegante
+                    // Animación de borrado
                     itemCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                     itemCard.style.opacity = '0';
                     itemCard.style.transform = 'translateX(20px)';
@@ -91,25 +91,25 @@ async function eliminarFila(idProducto, form) {
                     // Esperamos a que la animación termine antes de quitar el elemento del DOM
                     setTimeout(() => {
                         itemCard.remove();
-
-                        if (subtotalGlobal && resultado.subtotalCesta) {
-                            subtotalGlobal.textContent = resultado.subtotalCesta + " €";
-                        }
-                        if (totalIva && resultado.ivaCesta) {
-                            totalIva.textContent = resultado.ivaCesta + " €";
-                        }
-                        if (totalPedido && resultado.totalCesta) {
-                            totalPedido.textContent = resultado.totalCesta + " €"; //// Display de nuevo total. Como ya viene formateado con dos decimales desde el controlador, solo añadimos el símbolo
+                        
+                        // Actualizamos totales CON PROTECCIÓN (si fallan, no rompen el script)
+                        try {
+                            if (subtotalGlobal)
+                                subtotalGlobal.textContent = (resultado.subtotalCesta || "0.00") + " €";
+                            if (totalIva)
+                                totalIva.textContent = (resultado.ivaCesta || "0.00") + " €";
+                            if (totalPedido)
+                                totalPedido.textContent = (resultado.totalCesta || "0.00") + " €"; // Display de nuevo total. Como ya viene formateado con dos decimales desde el controlador, solo añadimos el símbolo
+                        } catch (e) {
+                            console.warn("Error al actualizar textos de totales:", e);
                         }
 
                         // Si era el último producto, recargamos para mostrar el estado "Cesta vacía"
-                        const restantes = document.querySelectorAll('.cart-item-card').length;
-                        if (restantes === 0) {
+                        if (document.querySelectorAll('.cart-item-card').length === 0) {
                             location.reload();
                         }
-                    }, 500);
+                    }, 400);
                 }
-
                 lanzarToast(resultado.message, "exito");
             } else {
                 lanzarToast(resultado.message || "No se pudo eliminar el producto", "error");
@@ -117,35 +117,38 @@ async function eliminarFila(idProducto, form) {
         }
     } catch (error) {
         lanzarToast("Error crítico de conexión al eliminar", "error");
-        console.log(error);
     }
 }
 
 // MANEJO DE EVENTOS EN CESTA.JSP
 document.addEventListener('click', (e) => {
-    // Botones de línea (Sumar, Restar, Eliminar Producto)
-    if (e.target.matches('.qty-selector button, button[value="eliminar"')) {
+    // Buscamos si el clic fue en el botón o dentro de él
+    const btn = e.target.closest('.qty-selector button, button[value="eliminar"]');
+    
+    if (btn) {
         e.preventDefault();
-        const btn = e.target;
         const form = btn.closest('form');
-        const idProd = form.querySelector('input[name="idProducto"]').value; // El selector hace referencia al nombre porque el id es distinto para cada elemento.
-        const accion = btn.value; // "sumar", "restar" o "eliminar"
+        
+        // Verificación de seguridad
+        if (!form) {
+            console.error("No se encontró el formulario para este botón");
+            return;
+        }
+
+        const inputId = form.querySelector('input[name="idProducto"]');
+        if (!inputId) {
+            console.error("No se encontró el input idProducto en este formulario");
+            return;
+        }
+
+        const idProd = inputId.value;
+        const accion = btn.value;
 
         if (accion === "eliminar") {
             eliminarFila(idProd, form);
         } else {
             actualizarUnidades(idProd, accion, form);
         }
-    }
-
-    // Botón VACIAR CESTA (Global)
-    if (e.target.id === 'btn-delete') {
-        vaciarCestaCompleta();
-    }
-
-    // Botón TRAMITAR PEDIDO (Global)
-    if (e.target.id === 'btn-buy') {
-        tramitarPedido();
     }
 });
 
@@ -222,7 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para activar/desactivar el botón de filtrar según haya filtros seleccionados o no
     const validarFiltros = () => {
-        if (!btnAplicar) return;
+        if (!btnAplicar)
+            return;
 
         const hayChecks = Array.from(checks).some(c => c.checked); // checks marcados
         const precioMovido = (minInput.value !== minOriginal) || (maxInput.value !== maxOriginal); //selectores de precio distintos a los originales
@@ -252,7 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         minInput.addEventListener('input', updateSliders);
         maxInput.addEventListener('input', updateSliders);
-    };
+    }
+    ;
 
     // Inicialización del slider
     if (document.readyState === "loading") {

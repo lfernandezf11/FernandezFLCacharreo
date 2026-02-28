@@ -100,13 +100,17 @@ public class CestaAjax extends HttpServlet {
             Cookie c = Cookies.generarCookie(COOKIE_NAME, cestaStr, COOKIE_DURATION, request);
             response.addCookie(c);
 
-        } catch (Exception e) {
-            objeto.put("success", false);
-            objeto.put("message", "Error procesando la operación.");
-        } finally {
-            // Respuesta final (objeto Json), en el finally para asegurar que siempre se ejecute
-            response.getWriter().print(objeto);
-        }
+
+            } catch (Exception e) {
+    
+    e.printStackTrace(); 
+
+    objeto.put("success", false);
+    objeto.put("message", "Error procesando la operación: " + e.getMessage());
+} finally {
+    response.getWriter().print(objeto);
+}
+        
     }
 
     /* Returns a short description of the servlet.

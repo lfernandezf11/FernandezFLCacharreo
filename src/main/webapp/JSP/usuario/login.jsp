@@ -57,5 +57,22 @@
 
         <c:import url="/INC/footer.jsp"/>
         <script src="${pageContext.request.contextPath}/JS/loginJS.js"></script>
+        <script>
+            window.addEventListener('DOMContentLoaded', (event) => {
+                const mensajeExito = "${exito}";
+                const mensajeError = "${error}";
+                const mensajeAviso = "${aviso}";
+
+                if (mensajeExito) {
+                    lanzarToast(mensajeExito, "exito");
+                }
+                if (mensajeError) {
+                    lanzarToast(mensajeError, "error");
+                }
+                if (mensajeAviso) {
+                    lanzarToast(mensajeAviso, "aviso");
+                }
+            });
+        </script>
     </body>
 </html>

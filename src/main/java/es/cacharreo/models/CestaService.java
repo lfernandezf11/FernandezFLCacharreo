@@ -22,7 +22,7 @@ public class CestaService {
      * Gestiona la lógica de añadir un producto al pedido. Si ya existe en las
      * líneas, incrementa su cantidad. Si no, crea una nueva línea. Si el pedido
      * es persistente (usuario logueado), impacta los cambios en BD.
-     * 
+     *
      * En el caso de usuarios logueados sin pedido previo en BD, se encarga de
      * realizar la inserción inicial de la cesta completa.
      *
@@ -71,11 +71,11 @@ public class CestaService {
 
         // PERSISTENCIA: Si el usuario está logueado
         if (pedido.getUsuario() != null) {
-            
+
             if (pedido.getIdPedido() == null) {
                 // CASO 1: Usuario logueado añadiendo su primer producto (Cesta nueva en BD)
                 pedidoDAO.insertarCesta(pedido);
-                
+
             } else {
                 // CASO 2: El pedido ya existía en BD (ya tiene ID)
                 if (esNuevaLinea) {
@@ -177,15 +177,15 @@ public class CestaService {
             }
         }
 
-        // 3. Si la cesta aún tiene líneas, actualizamos su importe en sesión y bd. 
-        // Si está vacía, desvinculamos el idPedido de la sesión, porque ese id ya no existe en la bd.
-        if (!pedido.getLineas().isEmpty()) {
-            pedido.calcularTotales();
-            DAOFactory.getDAOFactory().getPedidoDAO().updateTotalesPedido(pedido);
-        } else { 
+        pedido.calcularTotales(); // Recalculamos para la sesión.
+
+        if (!pedido.getLineas().isEmpty()) { // Pedido resultante no vacío
+            // Si el pedido ya existe en la BD, aactualizamos su importe.
+            if (pedido.getIdPedido() != null) {
+                DAOFactory.getDAOFactory().getPedidoDAO().updateTotalesPedido(pedido);
+            }
+        } else { // Si la cesta está vacía, desvinculamos el idPedido de la sesión, porque ese id ya no existe en la bd.
             pedido.setIdPedido(null);
-            pedido.calcularTotales();
-            
         }
     }
 }

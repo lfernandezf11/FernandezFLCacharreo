@@ -125,7 +125,7 @@
 
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-12 col-lg-3 mb-4">
+                        <div class="col-12 col-lg-4 mb-4">
                             <aside class="filter-sidebar">
                                 <div class="cart-total-bar">
                                     <h4 class="mb-4">Filtros</h4>
@@ -217,12 +217,12 @@
                             </aside>
                         </div>
 
-                        <div class="col-12 col-lg-9">
+                        <div class="col-12 col-lg-8">
                             <div class="row g-4 ms-2 pt-3">
                                 <c:choose>
                                     <c:when test="${not empty productosFiltrados}">
                                         <c:forEach var="producto" items="${productosFiltrados}">
-                                            <div class="col-12 col-md-6 col-lg-3 mb-3">
+                                            <div class="col-12 col-md-6 col-lg-4 mb-3">
                                                 <article class="product-card h-100" 
                                                          data-bs-toggle="modal" 
                                                          data-bs-target="#modal${producto.idProducto}"
@@ -303,6 +303,5 @@
         <c:import url="/INC/footer.jsp"/>
         <script src="${pageContext.request.contextPath}/JS/cestaJS.js"></script>
         <script src="${pageContext.request.contextPath}/JS/reviewsLogic.js"></script>
-        <script src="${pageContext.request.contextPath}/JS/cestaJS.js"></script>
     </body>
 </html>

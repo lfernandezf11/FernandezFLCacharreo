@@ -130,11 +130,13 @@
                             </div>
 
                             <div class="summary-btns mt-3">
-                                <button type="button" name="accion" value="tramitarPedido" 
+                                <form action="${context}/CestaController" method="post">
+                                <button type="submit" name="accion" value="tramitarPedido" 
                                         class="btn btn-primary w-100 ${empty cesta.lineas ? 'disabled' : ''}" 
                                         id="btn-buy" ${empty cesta.lineas ? 'disabled' : ''}>
                                     Tramitar pedido
                                 </button>
+                                    </form>
 
                                 <c:if test="${not empty cesta.lineas}">
                                     <button type="button" 

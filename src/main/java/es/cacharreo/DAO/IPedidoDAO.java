@@ -65,6 +65,9 @@ public interface IPedidoDAO {
      */
     public boolean updateTotalesPedido(Pedido p);
     
+    
+    public boolean finalizarPedido(Pedido pedido);
+    
      /**
      * Abandona el hilo del pool de conexiones
      */

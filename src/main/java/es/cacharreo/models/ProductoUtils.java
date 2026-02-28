@@ -45,13 +45,14 @@ public class ProductoUtils {
             }
 
             request.setAttribute("subCatalogo", grupos);
+            request.setAttribute("productosFiltrados", subCatalogo);
+        // Por defecto, utilizamos los mismos productos como placeholder para los filtros.
         } else {
             request.setAttribute("mensaje", "No hay productos para mostrar");
         }
     }
 
-
-/**
+    /**
      * Crea una copia de un producto del catálogo para usarlo en la cesta.
      *
      * @param base Producto original del catálogo

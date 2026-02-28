@@ -39,7 +39,7 @@ public class PedidoDAO implements IPedidoDAO {
 
             // Conversión de fecha de java.util.Date a java.sql.Date
             java.util.Date fechaUtil = (pedido.getFecha() != null) ? pedido.getFecha() : new java.util.Date();
-psPedido.setDate(1, new java.sql.Date(fechaUtil.getTime()));
+            psPedido.setDate(1, new java.sql.Date(fechaUtil.getTime()));
             psPedido.setShort(2, pedido.getUsuario().getIdUsuario());
             psPedido.setFloat(3, (pedido.getImporte() != null) ? pedido.getImporte() : 0.0f);
             psPedido.setFloat(4, (pedido.getIva() != null) ? pedido.getIva() : 0.0f);
@@ -125,13 +125,12 @@ psPedido.setDate(1, new java.sql.Date(fechaUtil.getTime()));
     @Override
     public boolean updateCantidadLinea(short idPedido, short idProducto, int cantidad) {
         String sql = "UPDATE lineaspedidos SET cantidad = ? WHERE idpedido = ? AND idproducto = ?";
-        try (Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)) {
-            
+        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setInt(1, cantidad);
             ps.setShort(2, idPedido);
             ps.setShort(3, idProducto);
-            
+
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al actualizar cantidad de línea", e);
@@ -142,13 +141,12 @@ psPedido.setDate(1, new java.sql.Date(fechaUtil.getTime()));
     @Override
     public boolean insertarLineaIndividual(LineaPedido lp) {
         String sql = "INSERT INTO lineaspedidos (idpedido, idproducto, cantidad) VALUES (?, ?, ?)";
-        try (Connection con = ConnectionFactory.getConnection();
-            PreparedStatement ps = con.prepareStatement(sql)) {
-            
+        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setShort(1, lp.getIdPedido());
             ps.setShort(2, lp.getProducto().getIdProducto());
             ps.setInt(3, lp.getCantidad());
-            
+
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al insertar línea individual", e);
@@ -157,60 +155,56 @@ psPedido.setDate(1, new java.sql.Date(fechaUtil.getTime()));
     }
 
     @Override
-public boolean deleteLineaIndividual(short idPedido, short idProducto) {
-    String sqlBorrarLp = "DELETE FROM lineaspedidos WHERE idpedido = ? AND idproducto = ?";
-    String sqlCountLineas = "SELECT COUNT(*) FROM lineaspedidos WHERE idpedido = ?";
-    String sqlBorrarP = "DELETE FROM pedidos WHERE idpedido = ?";
+    public boolean deleteLineaIndividual(short idPedido, short idProducto) {
+        String sqlBorrarLp = "DELETE FROM lineaspedidos WHERE idpedido = ? AND idproducto = ?";
+        String sqlCountLineas = "SELECT COUNT(*) FROM lineaspedidos WHERE idpedido = ?";
+        String sqlBorrarP = "DELETE FROM pedidos WHERE idpedido = ?";
 
-    try (Connection con = ConnectionFactory.getConnection();
-         PreparedStatement psDelete = con.prepareStatement(sqlBorrarLp)) {
-        
-        // Intentamos borrar la línea
-        psDelete.setShort(1, idPedido);
-        psDelete.setShort(2, idProducto);
-        int filasBorradas = psDelete.executeUpdate();
+        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement psDelete = con.prepareStatement(sqlBorrarLp)) {
 
-        if (filasBorradas > 0) {
-            // Comprobamos cuántas líneas le quedan al pedido
-            try (PreparedStatement psCount = con.prepareStatement(sqlCountLineas)) {
-                psCount.setShort(1, idPedido);
-                try (ResultSet rs = psCount.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) == 0) {
-                        // Si no quedan líneas, borramos el pedido (la cabecera)
-                        try (PreparedStatement psDelPed = con.prepareStatement(sqlBorrarP)) {
-                            psDelPed.setShort(1, idPedido);
-                            psDelPed.executeUpdate();       
+            // Intentamos borrar la línea
+            psDelete.setShort(1, idPedido);
+            psDelete.setShort(2, idProducto);
+            int filasBorradas = psDelete.executeUpdate();
+
+            if (filasBorradas > 0) {
+                // Comprobamos cuántas líneas le quedan al pedido
+                try (PreparedStatement psCount = con.prepareStatement(sqlCountLineas)) {
+                    psCount.setShort(1, idPedido);
+                    try (ResultSet rs = psCount.executeQuery()) {
+                        if (rs.next() && rs.getInt(1) == 0) {
+                            // Si no quedan líneas, borramos el pedido (la cabecera)
+                            try (PreparedStatement psDelPed = con.prepareStatement(sqlBorrarP)) {
+                                psDelPed.setShort(1, idPedido);
+                                psDelPed.executeUpdate();
+                            }
                         }
                     }
                 }
             }
-        }
-        return filasBorradas > 0;
+            return filasBorradas > 0;
 
-    } catch (SQLException e) {
-        Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al eliminar línea o pedido vacío", e);
-        return false;
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al eliminar línea o pedido vacío", e);
+            return false;
+        }
     }
-}
 
     @Override
     public boolean updateTotalesPedido(Pedido p) {
         String sql = "UPDATE pedidos SET importe = ?, iva = ? WHERE idpedido = ?";
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            
+        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setFloat(1, p.getImporte());
             ps.setFloat(2, p.getIva());
             ps.setShort(3, p.getIdPedido());
-            
+
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al actualizar totales del pedido", e);
             return false;
         }
     }
-    
-    
 
     @Override
     public boolean borrarPedido(short idPedido) {
@@ -241,6 +235,38 @@ public boolean deleteLineaIndividual(short idPedido, short idProducto) {
     }
 
     @Override
+    public boolean finalizarPedido(Pedido pedido) {
+        boolean exito = false;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        // Actualizamos fecha y cambiamos estado de 'c' (carrito) a 'f' (finalizado)
+        String sql = "UPDATE pedidos SET fecha = ?, estado = 'f' WHERE idpedido = ? AND estado = 'c'";
+
+        try {
+            connection = ConnectionFactory.getConnection();
+            ps = connection.prepareStatement(sql);
+
+            ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()));
+            ps.setShort(2, pedido.getIdPedido());
+
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                // Actualizamos el objeto en memoria para el JSP de resumen
+                pedido.setFecha(new java.util.Date());
+                pedido.setEstado('f');
+                exito = true;
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al finalizar pedido: " + pedido.getIdPedido(), e);
+        } finally {
+            this.closeConnection();
+        }
+        return exito;
+    }
+
+    @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
     }
@@ -256,7 +282,7 @@ public boolean deleteLineaIndividual(short idPedido, short idProducto) {
         // El usuario se asigna con el parámetro de entrada del método padre.
         return pedido;
     }
-    
+
     // Método auxiliar privado para no repetir código
     private List<LineaPedido> getLineasPedido(short idPedido, Connection connection) throws SQLException {
         // Hereda la conexión de la consulta de la cesta por id, para reutilizar el hilo

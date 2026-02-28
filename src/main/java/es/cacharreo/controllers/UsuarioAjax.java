@@ -189,19 +189,19 @@ public class UsuarioAjax extends HttpServlet {
                                     session.setAttribute("cesta", cesta);
                                 }
                             }
-                        }else {
-        // CASO C: Usuario que ya ha accedido antes pero no tiene cesta en BD
-        // Sobreescribimos la cesta de la sesión con una totalmente nueva y vacía
-        Pedido nuevaCesta = new Pedido(); 
-        nuevaCesta.setUsuario(usuarioValidado); // Vinculamos el usuario a este nuevo objeto
-        
-        // Actualizamos la sesión con el objeto limpio
-        session.setAttribute("cesta", nuevaCesta);
-        
-        // Nota: Al ser una cesta vacía, no llamamos a pDAO.insertarCesta aún.
-        // Se insertará automáticamente en la BD cuando añada el primer producto 
-        // gracias a la lógica de tu CestaService.
-    }
+                        } else {
+                            // CASO C: Usuario que ya ha accedido antes pero no tiene cesta en BD
+                            // Sobreescribimos la cesta de la sesión con una totalmente nueva y vacía
+                            Pedido nuevaCesta = new Pedido();
+                            nuevaCesta.setUsuario(usuarioValidado); // Vinculamos el usuario a este nuevo objeto
+
+                            // Actualizamos la sesión con el objeto limpio
+                            session.setAttribute("cesta", nuevaCesta);
+
+                            // Nota: Al ser una cesta vacía, no llamamos a pDAO.insertarCesta aún.
+                            // Se insertará automáticamente en la BD cuando añada el primer producto 
+                            // gracias a la lógica de CestaService.gestionarAddProducto.
+                        }
                         // En todos los login exitosos, la cookie muere
                         response.addCookie(Cookies.generarCookie("cestaCookie", "", 0, request));
                         session.setAttribute("usuarioLogueado", usuarioValidado);
