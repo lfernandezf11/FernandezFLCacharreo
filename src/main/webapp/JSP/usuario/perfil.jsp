@@ -21,7 +21,7 @@
 
         <main class="page gap-4">
             <section id="profileSection">
-                <div class="signUpWrapper col-12 col-lg-10 mt-5">
+                <div class="signUpWrapper col-12 col-lg-10 mt-0">
                     <div class="section-header">
                         <h4>Mi Perfil</h4>
                         <p class="text-muted small">Puedes actualizar tus datos excepto el email y el NIF por motivos de seguridad.</p>

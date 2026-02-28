@@ -121,9 +121,9 @@
                                     </span>
                                 </div>
 
-                                <div class="summary-row total-final-row">
+                                <div class="summary-row total-final-row" style="font-family: 'FigTree';">
                                     <span class="total-label">TOTAL PEDIDO</span>
-                                    <span class="total-value" id="total-final">
+                                    <span class="total-value fw-bold" id="total-final">
                                         <fmt:formatNumber value="${cesta.importe + cesta.iva}" type="currency" currencySymbol="€"/>
                                     </span>
                                 </div>

@@ -26,5 +26,6 @@ es\cacharreo\DAO\LineaPedidoDAO.class
 es\cacharreo\models\CestaService.class
 es\cacharreo\beans\Categoria.class
 es\cacharreo\models\Cookies.class
+es\cacharreo\controllers\UsuarioController.class
 es\cacharreo\DAO\ConnectionFactory.class
 es\cacharreo\models\Utilities.class

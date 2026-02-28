@@ -681,7 +681,7 @@ body:not(.modal-open) {
 
 .price-tag {
     font-weight: 900;
-    color: var(--color-lilac);
+    color: var(--color-dark-lilac);
     margin: 0;
 }
 
@@ -788,8 +788,6 @@ body:not(.modal-open) {
 
 .total-value {
     font-size: 1.25rem;
-    font-weight: 800;
-    color: #ff6600;
 }
 
 .btn-clear-link {
@@ -822,6 +820,10 @@ body:not(.modal-open) {
 
 .summary-btns button, .summary-btns form {
     width: 100%;
+}
+
+#total-final {
+    color: var(--color-dark-lilac);
 }
 
 /* Responsivo: En móviles se pone uno debajo de otro */
@@ -908,6 +910,8 @@ body:not(.modal-open) {
 
 .toast-warning {
     background-color: #ffca28 !important; /* Un amarillo vibrante */
+    border: 2px solid #e55d00 !important;
+    box-shadow: 3px 3px 0px #e55d00  !important;
     color: #000 !important;
 }
 
