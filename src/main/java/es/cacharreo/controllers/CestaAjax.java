@@ -95,22 +95,20 @@ public class CestaAjax extends HttpServlet {
             objeto.put("subtotalCesta", String.format("%.2f", cesta.getImporte()).replace(",", "."));
             objeto.put("ivaCesta", String.format("%.2f", cesta.getIva()).replace(",", "."));
             objeto.put("totalCesta", String.format("%.2f", totalCesta).replace(",", "."));
-
+            
+            if(cesta.getUsuario() == null){ //Persistencia en cookie sólo en cesta anónima
             String cestaStr = CestaUtils.parserPedidoAString(cesta);
             Cookie c = Cookies.generarCookie(COOKIE_NAME, cestaStr, COOKIE_DURATION, request);
             response.addCookie(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            objeto.put("success", false);
+            objeto.put("message", "Error procesando la operación.");
+        } finally {
+            response.getWriter().print(objeto);
+        }
 
-
-            } catch (Exception e) {
-    
-    e.printStackTrace(); 
-
-    objeto.put("success", false);
-    objeto.put("message", "Error procesando la operación: " + e.getMessage());
-} finally {
-    response.getWriter().print(objeto);
-}
-        
     }
 
     /* Returns a short description of the servlet.

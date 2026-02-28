@@ -100,7 +100,7 @@ public class CestaController extends HttpServlet {
                         request.setAttribute("exito", "La cesta se ha vaciado correctamente.");
                     }
                 } else {
-                    request.setAttribute("aviso", "La cesta ya estaba vacía.");
+                    request.setAttribute("warning", "La cesta ya estaba vacía.");
                 }
                 break;
 
@@ -130,7 +130,7 @@ public class CestaController extends HttpServlet {
 
             case "tramitarPedido":
                 if (usuario == null) {
-                    request.setAttribute("aviso", "Tienes que iniciar sesión para completar tu pedido.");
+                    request.setAttribute("warning", "Tienes que iniciar sesión para completar tu pedido.");
                     url = "/JSP/usuario/login.jsp";
                 } else {
                     // Verificamos que exista el objeto cesta en sesión y tenga líneas

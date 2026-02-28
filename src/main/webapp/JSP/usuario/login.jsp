@@ -61,7 +61,7 @@
             window.addEventListener('DOMContentLoaded', (event) => {
                 const mensajeExito = "${exito}";
                 const mensajeError = "${error}";
-                const mensajeAviso = "${aviso}";
+                const mensajeAviso = "${warning}";
 
                 if (mensajeExito) {
                     lanzarToast(mensajeExito, "exito");
@@ -70,7 +70,7 @@
                     lanzarToast(mensajeError, "error");
                 }
                 if (mensajeAviso) {
-                    lanzarToast(mensajeAviso, "aviso");
+                    lanzarToast(mensajeAviso, "warning");
                 }
             });
         </script>
