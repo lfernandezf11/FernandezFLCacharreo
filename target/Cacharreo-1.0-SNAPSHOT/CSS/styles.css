@@ -13,7 +13,8 @@
     --color-details: #EDDD53; /* en focus */
 
     /*--bg-card: linear-gradient(37deg, rgba(255, 255, 255, 1) 0%, rgba(142, 100, 180, 0.14) 22%, rgba(142, 100, 180, 1) 90%);*/
-    --bg-body: linear-gradient(0deg,rgba(142, 100, 180, 1) 0%, rgba(219, 156, 1, 1) 95%);
+    --bg-body: linear-gradient(0deg,rgba(142, 100, 180, 0.7) 0%, #f1f1f1 80%);
+
 
     /* Font Families */
     --font-display: "Figtree", sans-serif;
@@ -88,7 +89,7 @@ main {
     flex-direction: column;
     gap: 2rem;
     padding: 2rem 4rem;
-    background: var(--color-white);
+    background: var(--bg-body);
 }
 
 section {
@@ -582,6 +583,7 @@ button.btn-link:hover::before {
 /* REGISTRO */
 main.page {
     background: var(--bg-body);
+
     align-content: center;
     justify-content:center;
     margin-top: 4rem; 
@@ -1000,7 +1002,7 @@ body:not(.modal-open) {
 
 /* Control de scroll para los desplegables de filtros */
 .scrollable-menu {
-    max-height: 250px;    /* Ajusta esta altura a tu gusto */
-    overflow-y: auto;     /* Activa el scroll vertical */
+    max-height: 250px;    
+    overflow-y: auto;     
     overflow-x: hidden;   /* Evita el scroll horizontal */
 }

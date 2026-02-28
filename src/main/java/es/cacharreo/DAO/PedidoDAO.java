@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -267,6 +269,38 @@ public class PedidoDAO implements IPedidoDAO {
     }
 
     @Override
+    public List<Pedido> getHistorialPedidos(short idUsuario) {
+        List<Pedido> historial = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement preparada = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT * FROM pedidos WHERE idusuario = ? AND estado = 'f' ORDER BY fecha DESC";
+
+        try {
+            connection = ConnectionFactory.getConnection();
+            preparada = connection.prepareStatement(sql);
+            preparada.setShort(1, idUsuario);
+            rs = preparada.executeQuery();
+
+            while (rs.next()) {
+                Pedido p = mapearPedido(rs);
+                p.setEstado('f');
+                List<LineaPedido> lineas = getLineasPedido(p.getIdPedido(), connection);
+                p.setLineas(lineas);
+
+                historial.add(p);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(PedidoDAO.class.getName()).log(Level.SEVERE, "Error al recuperar historial para: " + idUsuario, e);
+        } finally {
+            this.closeConnection();
+        }
+        return historial;
+    }
+
+    @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
     }
@@ -278,7 +312,7 @@ public class PedidoDAO implements IPedidoDAO {
         pedido.setFecha(rs.getDate("fecha"));
         pedido.setImporte(rs.getFloat("importe"));
         pedido.setIva(rs.getFloat("iva"));
-        // El estado ya sabemos que es 'c'
+        // El estado ya sabemos que es 'c' o 'f' cuando llamamos a este método.
         // El usuario se asigna con el parámetro de entrada del método padre.
         return pedido;
     }

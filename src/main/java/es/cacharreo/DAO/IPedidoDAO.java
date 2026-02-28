@@ -3,6 +3,7 @@ package es.cacharreo.DAO;
 import es.cacharreo.beans.LineaPedido;
 import es.cacharreo.beans.Pedido;
 import es.cacharreo.beans.Usuario;
+import java.util.List;
 
 /**
  * Definición de las operaciones de persistencia para Pedidos y sus Líneas.
@@ -67,6 +68,10 @@ public interface IPedidoDAO {
     
     
     public boolean finalizarPedido(Pedido pedido);
+    
+    
+public List<Pedido> getHistorialPedidos(short idUsuario); 
+
     
      /**
      * Abandona el hilo del pool de conexiones
