@@ -156,7 +156,7 @@ public class CestaController extends HttpServlet {
                             url = "/JSP/pedido/cesta.jsp";
                         }
                     } else {
-                        request.setAttribute("aviso", "Tu cesta está vacía.");
+                        request.setAttribute("warning", "Tu cesta está vacía.");
                         url = "/JSP/pedido/cesta.jsp";
                     }
                 }

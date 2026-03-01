@@ -23,20 +23,21 @@
 
         <main>
             <section class="cart-section">
-                <div class="section-header mt-4">
-                    <h3 class="">Tu cesta</h3>
-                </div>
+                <c:if test="${not empty cesta.lineas}">
+                    <div class="section-header mt-4">
+                        <h3 class="">Tu cesta</h3>
+                    </div>
+                </c:if>
 
-                <div class="cart-layout mt-1">
+                <div class="cart-layout mt-5">
                     <!-- Lado izquierdo: tarjetas con scroll o tarjeta de cesta vacía -->
                     <div class="cart-items-container">
                         <c:choose>
                             <c:when test="${empty cesta.lineas}">
-                                <article class="empty-cart-card d-flex justify-content-center align-items-center">
-                                    <div class="empty-cart-content d-flex flex-column align-items-center text-center">
+                                <article class="empty-cart-card d-flex justify-content-center align-items-center pt-5">
+                                    <div class="empty-cart-content d-flex flex-column align-items-center text-center pt-5">
                                         <img src="${context}/IMG/empty-cart.png" alt="Cesta vacía" class="img-empty-cart mb-3"
                                              height="200" width="200">
-
                                         <h4>Tu cesta está vacía</h4>
                                         <p>Parece que aún no has añadido nada al carrito.</p>
 
@@ -131,12 +132,12 @@
 
                             <div class="summary-btns mt-3">
                                 <form action="${context}/CestaController" method="post">
-                                <button type="submit" name="accion" value="tramitarPedido" 
-                                        class="btn btn-primary w-100 ${empty cesta.lineas ? 'disabled' : ''}" 
-                                        id="btn-buy" ${empty cesta.lineas ? 'disabled' : ''}>
-                                    Tramitar pedido
-                                </button>
-                                    </form>
+                                    <button type="submit" name="accion" value="tramitarPedido" 
+                                            class="btn btn-primary w-100 ${empty cesta.lineas ? 'disabled' : ''}" 
+                                            id="btn-buy" ${empty cesta.lineas ? 'disabled' : ''}>
+                                        Tramitar pedido
+                                    </button>
+                                </form>
 
                                 <c:if test="${not empty cesta.lineas}">
                                     <button type="button" 
