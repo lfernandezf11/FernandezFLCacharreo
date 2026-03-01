@@ -102,7 +102,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                 + "WHERE email = ? "
                 + "AND password = ?";
 
-        String sqlUpdate = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE idUsuario = ?"; // Para actualizar el último acceso en cada logueo.
+        //String sqlUpdate = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE idUsuario = ?"; // Para actualizar el último acceso en cada logueo.
 
         try {
             connection = ConnectionFactory.getConnection();
@@ -114,10 +114,10 @@ public class UsuarioDAO implements IUsuarioDAO {
             if (rs.next()) {
                 usuario = mapearUsuario(rs);
                 // Una vez lleno el bean de sesión, actualizamos el último acceso en BD 
-                try (PreparedStatement psUpdate = connection.prepareStatement(sqlUpdate)) {
+                /*try (PreparedStatement psUpdate = connection.prepareStatement(sqlUpdate)) {
                     psUpdate.setShort(1, usuario.getIdUsuario());
                     psUpdate.executeUpdate();
-                }
+                }*/
             }
         } catch (SQLException e) {
             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -153,6 +153,32 @@ public class UsuarioDAO implements IUsuarioDAO {
         return existe;
     }
 
+    @Override
+    public Boolean getDuplicateNif(String nifString) {
+        Boolean existe = false;
+        Connection connection = null;
+        ResultSet rs = null;
+        PreparedStatement preparada = null;
+
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE nif = ?"; // Para saber si existe el email, es más eficiente simplemente contar.
+
+        try {
+            connection = ConnectionFactory.getConnection();
+            preparada = connection.prepareStatement(sql);
+            preparada.setString(1, nifString);
+            rs = preparada.executeQuery();
+
+            if (rs.next()) {
+                existe = rs.getInt(1) > 0; // La tupla devuelve un número mayor que cero, existe el nif
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, "Error comprobando duplicidad de nif", e);
+        } finally {
+            this.closeConnection();
+        }
+        return existe;
+    }
+    
     @Override
     public Boolean updateUsuario(Usuario usuario) {
         boolean actualizado = false;

@@ -42,11 +42,14 @@ form.addEventListener('submit', async (e) => {
 
         if (variable.ok) {
             let resultado = await variable.json();
-
-            if (resultado.success) {
-                window.location.href = "/Cacharreo/JSP/usuario/perfil.jsp"; // Si el login es correcto, redirigimos al perfil
+             if (resultado.success) {
+                lanzarToast((resultado.message || "¡HOLA! Nos encanta tenerte de vuelta."), "exito");
+                // Esperamos antes de redirigir para que el toast pueda lanzarse
+                    setTimeout(() => {
+                        window.location.href = "/Cacharreo/JSP/usuario/perfil.jsp"; // Si el login es correcto, redirigimos al perfil para no perder las validaciones 
+                    }, 1500);
             } else {
-                error.textContent = "Usuario o contraseña incorrectos.";
+                error.textContent = resultado.message || "Usuario o contraseña incorrectos.";
                 emailEl.classList.add('is-invalid');
                 passEl.classList.add('is-invalid');
             }

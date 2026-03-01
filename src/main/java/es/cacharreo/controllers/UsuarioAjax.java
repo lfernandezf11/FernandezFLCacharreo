@@ -82,11 +82,17 @@ public class UsuarioAjax extends HttpServlet {
                 break;
 
             case "asignarLetraNIF":
-                Character letra = Utilities.asignarLetraNif(request.getParameter("nif"));
+                String numNif = request.getParameter("nif");
+                Character letra = Utilities.asignarLetraNif(numNif);
                 objeto = new JSONObject();
 
                 if (letra != null) {
-                    objeto.put("letra", String.valueOf(letra));
+                    boolean noRepetido = !uDAO.getDuplicateNif(numNif + letra);
+                    if (noRepetido) {
+                        objeto.put("letra", String.valueOf(letra));
+                    } else {
+                        objeto.put("error", "Este NIF ya está registrado.");
+                    }
                 } else {
                     objeto.put("error", "DNI no válido");
                 }
@@ -145,7 +151,7 @@ public class UsuarioAjax extends HttpServlet {
                         }
                         session.setAttribute("usuarioLogueado", usuario);
                         objeto.put("success", true);
-                        objeto.put("message", "¡Bienvenido a Cacharreo, " + usuario.getNombre() + "!");
+                        objeto.put("message", "¡BIENVENIDA/O A CACHARREO, " + usuario.getNombre().toUpperCase() + "! Registro completado.");
 
                     } else {
                         objeto.put("success", false);
@@ -206,10 +212,12 @@ public class UsuarioAjax extends HttpServlet {
                         response.addCookie(Cookies.generarCookie("cestaCookie", "", 0, request));
                         session.setAttribute("usuarioLogueado", usuarioValidado);
                         objeto.put("success", true);
+                        objeto.put("message", "¡HOLA, " + usuarioValidado.getNombre().toUpperCase() + "! Nos encanta tenerte de vuelta.");
 
                     } else {
-                        // Credenciales incorrectas. El JS maneja el mensaje de error: "email o contraseña incorrectos".
+                        // Credenciales incorrectas. 
                         objeto.put("success", false);
+                        objeto.put("message", "Email o contraseña incorrectos");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

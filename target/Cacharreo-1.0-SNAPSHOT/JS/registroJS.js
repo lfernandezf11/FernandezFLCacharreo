@@ -311,7 +311,7 @@ if (validaciones.every(valido => valido) && asyncOk) { // Validación exitosa
                 let resultado = await variable.json();
 
                 if (resultado.success) {
-                    lanzarToast((resultado.message || "¡Bienvenido a Cacharreo! Registro completado."), "exito");
+                    lanzarToast((resultado.message || "¡BIENVENIDA/O A CACHARREO! Registro completado."), "exito");
                     // Esperamos antes de redirigir para que el toast pueda lanzarse
                     setTimeout(() => {
                         window.location.href = "/Cacharreo/CestaController";
