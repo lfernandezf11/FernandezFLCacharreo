@@ -51,6 +51,10 @@ public class UsuarioController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
+        DAOFactory daof = DAOFactory.getDAOFactory();
+        IPedidoDAO pDAO = daof.getPedidoDAO();
+
+        Usuario usuario = null;
         String accion = request.getParameter("accion");
         String url = "/JSP/pedido/cesta.jsp";
 
@@ -60,18 +64,28 @@ public class UsuarioController extends HttpServlet {
             return;
         }
 
-        Pedido cesta = (Pedido) session.getAttribute("cesta");
-        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-
         switch (accion) {
-            case "inicio": 
-                url= "/index.jsp";
-                break; 
-                
-                
+            case "inicio":
+                url = "/index.jsp";
+                break;
+
             case "historial":
-               url= "/JSP/usuario/historial.jsp";
-                break; 
+                usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+                if (usuario != null) {
+                    List<Pedido> misPedidos = pDAO.getHistorialPedidos(usuario.getIdUsuario());
+
+                    request.setAttribute("historialPedidos", misPedidos);
+                    url = "/JSP/usuario/historial.jsp";
+                } else {
+                    request.setAttribute("error", "Debes estar identificado para ver tu historial.");
+                    url = "/JSP/usuario/login.jsp";
+                }
+                break;
+
+            default:
+                url = "/index.jsp";
+                break;
         }
         request.getRequestDispatcher(url).forward(request, response);
     }
