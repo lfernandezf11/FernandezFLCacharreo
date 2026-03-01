@@ -65,14 +65,15 @@ if (p1 === p2) {
 
 // Gestiona la vista previa de la imagen de avatar
 function readURL(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader(); // Objeto JS lector de archivos del host
-        reader.onload = function (e) {
-            imagenInput = e.target.result; 
-            if (previaEl) previaEl.src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]); // Convierte la foto en una cadena de texto Base64
-    }
+if (input.files && input.files[0]) {
+    var reader = new FileReader(); // Objeto JS lector de archivos del host
+    reader.onload = function (e) {
+        imagenInput = e.target.result;
+        if (previaEl)
+            previaEl.src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]); // Convierte la foto en una cadena de texto Base64
+}
 }
 
 ///////////////////////// VALIDACIONES ASÍNCRONAS: email y nif
@@ -127,6 +128,7 @@ let valorActual = nifEl.value.trim();
 
 if (valorActual === "") { // Campo vacío
     showError(nifEl, "El NIF es obligatorio.");
+    s
     return;
 }
 /* 
@@ -187,28 +189,30 @@ pass2El.addEventListener('blur', validatePasswordsIguales);
 emailEl.addEventListener('blur', validateEmail);
 nifEl.addEventListener('blur', validateNif);
 
-avatarEl.addEventListener('change', function() {
-    const file = this.files[0];
-    if (file) {
-        // Validación de formato
-        if (!file.type.startsWith('image/')) {
-            showError(this, "El archivo seleccionado no es una imagen válida.");
-            this.value = ''; 
-            if (previaEl) previaEl.src = "/Cacharreo/IMG/avatares/default.png"; 
-            return;
-        }
-
-        // Validación de tamaño(100KB)
-        if (file.size > 102400) { 
-            
-            showError(this, "La imagen es demasiado grande (Máx. 100KB).");
-            this.value = '';
-            if (previaEl) previaEl.src = "/Cacharreo/IMG/avatares/default.png";
-        } else {
-            showError(this, "");
-            readURL(this); // Mostramos la previa
-        }
+avatarEl.addEventListener('change', function () {
+const file = this.files[0];
+if (file) {
+    // Validación de formato
+    if (!file.type.startsWith('image/')) {
+        showError(this, "El archivo seleccionado no es una imagen válida.");
+        this.value = '';
+        if (previaEl)
+            previaEl.src = "/Cacharreo/IMG/avatares/default.png";
+        return;
     }
+
+    // Validación de tamaño(100KB)
+    if (file.size > 102400) {
+
+        showError(this, "La imagen es demasiado grande (Máx. 100KB).");
+        this.value = '';
+        if (previaEl)
+            previaEl.src = "/Cacharreo/IMG/avatares/default.png";
+    } else {
+        showError(this, "");
+        readURL(this); // Mostramos la previa
+    }
+}
 });
 
 // EVENTO SUBMIT DEL FORMULARIO
@@ -231,7 +235,7 @@ const validaciones = [
     validateTexto(nombreEl),
     validateTexto(apellidosEl),
     validateTexto(localidadEl),
-    validateDireccion(direccionEl),
+    validateTexto(direccionEl),
     validateProvincia(),
     validateNumber(cpEl, REGEX_CP, "C&oacute;digo Postal"),
     validateNumber(telefonoEl, REGEX_TLF, "Tel&eacute;fono"),
@@ -246,17 +250,22 @@ const asyncOk = !emailEl.classList.contains('is-invalid') &&
         !nifEl.classList.contains('is-invalid') &&
         emailEl.value !== "" && nifEl.value !== "";
 
+if (emailEl.value === "")
+    showError(emailEl, "El campo es obligatorio ");
+if (nifEl.value === "")
+    showError(nifEl, "El campo es obligatorio");
 
-if (validaciones.every(valido => valido === true) && asyncOk) { // Validación exitosa
-    
+
+if (validaciones.every(valido => valido) && asyncOk) { // Validación exitosa
+
     // Necesario formdata en lugar de URLParams para poder transferir la imagen al controller (formData maneja archivos binarios)
-    const formData = new FormData(); 
+    const formData = new FormData();
     formData.append('accion', 'registrarUsuario');
-    
+
     // Añadimos el archivo físico (clave para el @MultipartConfig del Servlet)
-        if (avatarEl.files[0]) {
-            formData.append('avatar', avatarEl.files[0]);
-        }
+    if (avatarEl.files[0]) {
+        formData.append('avatar', avatarEl.files[0]);
+    }
 
     // Construimos el objeto con todos los campos y lo añadimos como datosRegistro
     formData.append('datosRegistro', JSON.stringify({
@@ -277,15 +286,18 @@ if (validaciones.every(valido => valido === true) && asyncOk) { // Validación e
             // Con FormData, no es necesario poner headers de 'Content-Type'. El navegador lo configura solo.
             let variable = await fetch(URL_USUARIO, {
                 method: 'POST',
-                body: formData 
+                body: formData
             });
 
             if (variable.ok) {
                 let resultado = await variable.json();
 
                 if (resultado.success) {
-                    lanzarToast((resultado.message ||"¡Bienvenido a Cacharreo! Registro completado."), "exito");
-                    window.location.href = "/Cacharreo/JSP/usuario/perfil.jsp"; // Redirige el JS para no perder las validaciones asíncronas, una vez ha dado el ok el controller.
+                    lanzarToast((resultado.message || "¡Bienvenido a Cacharreo! Registro completado."), "exito");
+                    // Esperamos antes de redirigir para que el toast pueda lanzarse
+                    setTimeout(() => {
+                        window.location.href = "/Cacharreo/JSP/usuario/perfil.jsp";
+                    }, 2000);
                 } else {
                     lanzarToast(("Error: " + (resultado.message || "No se pudo registrar.")), "error");
                 }

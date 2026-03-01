@@ -154,6 +154,32 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
+    public Boolean getDuplicateNif(String nifString) {
+        Boolean existe = false;
+        Connection connection = null;
+        ResultSet rs = null;
+        PreparedStatement preparada = null;
+
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE nif = ?"; // Para saber si existe el email, es más eficiente simplemente contar.
+
+        try {
+            connection = ConnectionFactory.getConnection();
+            preparada = connection.prepareStatement(sql);
+            preparada.setString(1, nifString);
+            rs = preparada.executeQuery();
+
+            if (rs.next()) {
+                existe = rs.getInt(1) > 0; // La tupla devuelve un número mayor que cero, existe el nif
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, "Error comprobando duplicidad de nif", e);
+        } finally {
+            this.closeConnection();
+        }
+        return existe;
+    }
+    
+    @Override
     public Boolean updateUsuario(Usuario usuario) {
         boolean actualizado = false;
         Connection connection = null;

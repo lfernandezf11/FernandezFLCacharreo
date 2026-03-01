@@ -683,7 +683,7 @@ body:not(.modal-open) {
 
 .price-tag {
     font-weight: 900;
-    color: var(--color-dark-lilac);
+    color: var(--color-lilac);
     margin: 0;
 }
 

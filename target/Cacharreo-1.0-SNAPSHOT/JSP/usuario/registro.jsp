@@ -15,6 +15,8 @@
     </head>
     <body> 
         <c:import url="/INC/header.jsp"/>
+        <c:import url="/INC/toast.jsp"/>
+        
         <main class="page">
             <section id="signUpSection">
                 <div class="signUpWrapper col-12 col-lg-10">
@@ -36,7 +38,7 @@
                                 </div>
                                 <div class="col-12 field">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email">
+                                    <input type="text" class="form-control" id="email" name="email">
                                     <small class="invalid"></small>
                                 </div>
                                 <div class="col-12 field">

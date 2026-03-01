@@ -27,7 +27,7 @@
 
                         <div class="col-12 field">
                             <label for="emailLogin" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="emailLogin" name="email">
+                            <input type="text" class="form-control" id="emailLogin" name="email">
 
                         </div>
                         <div class="col-12 field">

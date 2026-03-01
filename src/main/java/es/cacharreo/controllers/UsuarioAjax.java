@@ -82,11 +82,17 @@ public class UsuarioAjax extends HttpServlet {
                 break;
 
             case "asignarLetraNIF":
-                Character letra = Utilities.asignarLetraNif(request.getParameter("nif"));
+                String numNif = request.getParameter("nif");
+                Character letra = Utilities.asignarLetraNif(numNif);
                 objeto = new JSONObject();
 
                 if (letra != null) {
-                    objeto.put("letra", String.valueOf(letra));
+                    boolean noRepetido = !uDAO.getDuplicateNif(numNif + letra);
+                    if (noRepetido){
+                        objeto.put("letra", String.valueOf(letra));
+                    } else {
+                        objeto.put("error", "Este NIF ya está registrado.");
+                    }
                 } else {
                     objeto.put("error", "DNI no válido");
                 }

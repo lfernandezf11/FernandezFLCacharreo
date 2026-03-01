@@ -10,6 +10,8 @@ import es.cacharreo.beans.Usuario;
 public interface IUsuarioDAO {
 
     public Boolean getDuplicateEmail(String email);
+    
+    public Boolean getDuplicateNif(String nifString);
 
     public String addUsuario(Usuario usuario);
 
