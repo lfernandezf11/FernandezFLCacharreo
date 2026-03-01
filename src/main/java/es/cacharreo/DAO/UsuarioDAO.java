@@ -102,7 +102,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                 + "WHERE email = ? "
                 + "AND password = ?";
 
-        String sqlUpdate = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE idUsuario = ?"; // Para actualizar el último acceso en cada logueo.
+        //String sqlUpdate = "UPDATE usuarios SET ultimo_acceso = NOW() WHERE idUsuario = ?"; // Para actualizar el último acceso en cada logueo.
 
         try {
             connection = ConnectionFactory.getConnection();
@@ -114,10 +114,10 @@ public class UsuarioDAO implements IUsuarioDAO {
             if (rs.next()) {
                 usuario = mapearUsuario(rs);
                 // Una vez lleno el bean de sesión, actualizamos el último acceso en BD 
-                try (PreparedStatement psUpdate = connection.prepareStatement(sqlUpdate)) {
+                /*try (PreparedStatement psUpdate = connection.prepareStatement(sqlUpdate)) {
                     psUpdate.setShort(1, usuario.getIdUsuario());
                     psUpdate.executeUpdate();
-                }
+                }*/
             }
         } catch (SQLException e) {
             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, e);

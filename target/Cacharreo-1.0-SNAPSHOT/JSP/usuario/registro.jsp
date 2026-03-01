@@ -152,11 +152,13 @@
 
                         <!-- Campo imagen -->
                         <div class="col-md-4 d-flex flex-column align-items-center justify-content-start pt-4">
-                            <div class="sticky-md-top" style="top: 20px; z-index: 1; justify-items:center; ">
+                            <div style="top: 20px; z-index: 1; justify-items:center; ">
                                 <div class="mb-3 text-center align-center">
-                                    <img id="previa" src="${context}/IMG/avatares/default.png" 
+                                    <img id="previa" 
+                                         src="${context}/IMG/avatares/${not empty u.avatar ? u.avatar : 'default.png'}" 
                                          class="rounded-circle border shadow-sm" 
-                                         width="180" height="180" style="object-fit: cover;">
+                                         style="width: 200px; height: 200px; object-fit: cover; flex-shrink: 0;"
+                                         onerror="this.onerror=null;this.src='${context}/IMG/avatares/default.png';">
                                 </div>
                                 <div class="text-center field">
                                     <label for="avatar" class="form-label">Foto de perfil</label>
@@ -165,7 +167,8 @@
                                         <small class="text-muted d-block">JPG, PNG (Máx. 100KB)</small>
                                         <small class="invalid" id="avatarError"></small>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-danger mt-3" type="button" id="btnEliminarFoto">
+                                    <br>
+                                    <button type="button" class="btn btn-secondary" id="btn-delete-avatarR">
                                         <i class="bi bi-trash"></i> Eliminar foto
                                     </button>
                                 </div>

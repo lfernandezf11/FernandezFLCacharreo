@@ -22,6 +22,7 @@ const checkEl = document.getElementById('gridCheck'); // Términos y condiciones
 
 const avatarEl = document.getElementById('avatar'); // Campos de imagen
 const previaEl = document.getElementById('previa');
+const btnBorrar = document.getElementById('btn-delete-avatarR');
 
 
 ////////////////// VALIDACIONES
@@ -76,6 +77,25 @@ if (input.files && input.files[0]) {
 }
 }
 
+// Listener para el botón de eliminar foto en el registro
+const btnDeleteAvatar = document.getElementById('btn-delete-avatarR');
+
+if (btnDeleteAvatar) {
+    btnDeleteAvatar.addEventListener('click', () => {
+        avatarEl.value = ""; // Limpiamos el input file para que no se envíe ningún archivo
+        
+        if (previaEl) {// imagen por defecto en la previsualización
+            previaEl.src = `/Cacharreo/IMG/avatares/default.png`; 
+        }
+
+        //Limpiamos posibles mensajes de error 
+        const errorAvatar = document.getElementById('avatarError');
+        if (errorAvatar) errorAvatar.innerHTML = "";
+        avatarEl.classList.remove('is-invalid');
+    });
+}
+
+
 ///////////////////////// VALIDACIONES ASÍNCRONAS: email y nif
 
 /* EMAIL: formato correcto, y en caso de serlo, comprobación de duplicidad en bd.*/
@@ -128,7 +148,6 @@ let valorActual = nifEl.value.trim();
 
 if (valorActual === "") { // Campo vacío
     showError(nifEl, "El NIF es obligatorio.");
-    s
     return;
 }
 /* 
@@ -296,8 +315,8 @@ if (validaciones.every(valido => valido) && asyncOk) { // Validación exitosa
                     lanzarToast((resultado.message || "¡Bienvenido a Cacharreo! Registro completado."), "exito");
                     // Esperamos antes de redirigir para que el toast pueda lanzarse
                     setTimeout(() => {
-                        window.location.href = "/Cacharreo/JSP/usuario/perfil.jsp";
-                    }, 2000);
+                        window.location.href = "/Cacharreo/FrontController";
+                    }, 1500);
                 } else {
                     lanzarToast(("Error: " + (resultado.message || "No se pudo registrar.")), "error");
                 }

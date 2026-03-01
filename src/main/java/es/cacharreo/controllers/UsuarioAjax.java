@@ -151,7 +151,7 @@ public class UsuarioAjax extends HttpServlet {
                         }
                         session.setAttribute("usuarioLogueado", usuario);
                         objeto.put("success", true);
-                        objeto.put("message", "¡Bienvenido a Cacharreo, " + usuario.getNombre() + "!");
+                        objeto.put("message", "¡BIENVENIDA/O A CACHARREO, " + usuario.getNombre().toUpperCase() + "! Registro completado.");
 
                     } else {
                         objeto.put("success", false);
@@ -171,7 +171,7 @@ public class UsuarioAjax extends HttpServlet {
 
                     usuario = g.fromJson(datosLogin, Usuario.class);
                     Usuario usuarioValidado = uDAO.login(usuario.getEmail(), Utilities.md5(usuario.getPassword()));
-
+                    
                     if (usuarioValidado != null) { //Login exitoso
                         // En primer lugar, recuperamos su cesta de BD si existiera (el método ya devuelve el usuario asignado)
                         Pedido cestaBD = pDAO.getCestaByUsuario(usuarioValidado);
@@ -212,10 +212,12 @@ public class UsuarioAjax extends HttpServlet {
                         response.addCookie(Cookies.generarCookie("cestaCookie", "", 0, request));
                         session.setAttribute("usuarioLogueado", usuarioValidado);
                         objeto.put("success", true);
+                        objeto.put("message", "¡HOLA, " + usuarioValidado.getNombre().toUpperCase() + "! Nos encanta tenerte de vuelta.");
 
                     } else {
-                        // Credenciales incorrectas. El JS maneja el mensaje de error: "email o contraseña incorrectos".
+                        // Credenciales incorrectas. E
                         objeto.put("success", false);
+                        objeto.put("message", "Email o contraseña incorrectos");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
