@@ -62,7 +62,10 @@ if (changeAvatarForm) {
         formData.append('avatar', avatarInput.files[0]);
 
         try {
-            let response = await fetch(URL, {method: 'POST', body: formData});
+            let response = await fetch(URL_USUARIO, {
+                method: 'POST', 
+                body: formData
+            });
             let resultado = await response.json();
 
             if (resultado.success) {
@@ -98,7 +101,8 @@ if (btnDelete) {
         data.append('accion', 'eliminarAvatar');
 
         try {
-            let response = await fetch(URL, {
+            let response = await fetch(URL_USUARIO, 
+            {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: data.toString()
