@@ -315,7 +315,7 @@ if (validaciones.every(valido => valido) && asyncOk) { // Validación exitosa
                     lanzarToast((resultado.message || "¡Bienvenido a Cacharreo! Registro completado."), "exito");
                     // Esperamos antes de redirigir para que el toast pueda lanzarse
                     setTimeout(() => {
-                        window.location.href = "/Cacharreo/FrontController";
+                        window.location.href = "/Cacharreo/CestaController";
                     }, 1500);
                 } else {
                     lanzarToast(("Error: " + (resultado.message || "No se pudo registrar.")), "error");

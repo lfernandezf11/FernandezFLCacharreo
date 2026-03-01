@@ -15,6 +15,8 @@
     </head>
     <body>
         <c:import url="/INC/header.jsp"/>
+        <c:import url="/INC/toast.jsp"/>
+        <c:import url="/INC/scrollToTopButton.jsp"/>
 
         <main class="py-5">
             <div class="row justify-content-center">

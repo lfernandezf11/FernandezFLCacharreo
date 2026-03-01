@@ -260,3 +260,25 @@ document.addEventListener('hidden.bs.modal', function (event) {
 });
 
 
+// Manejo del botón de subida en la página
+const backToTopBtn = document.getElementById("btn-back-to-top");
+
+// Solo ejecutamos la lógica si el botón existe en la página actual
+if (backToTopBtn) {
+    
+    window.onscroll = function () {
+        // Comprobamos scroll en body (Safari) y documentElement (Chrome, Firefox, IE)
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            backToTopBtn.style.display = "block";
+        } else {
+            backToTopBtn.style.display = "none";
+        }
+    };
+
+    backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth" 
+        });
+    });
+}
