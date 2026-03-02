@@ -109,10 +109,13 @@
                             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
                                 <i class="fa fa-key" aria-hidden="true"></i> Cambiar contrase&ntilde;a
                             </button>
-
-                        </div>
                     </form>
-
+                    <form method="post" action="${context}/UsuarioController">
+                        <button type="submit" class="btn btn-secondary" name="accion" value="historial">
+                            <i class="bi bi-clock-history"></i> Ver historial
+                        </button>
+                    </form>
+                </div>
                 </div>
                 <br>
 
