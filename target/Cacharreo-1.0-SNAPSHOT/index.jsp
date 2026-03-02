@@ -17,6 +17,7 @@
         <link rel="stylesheet" type="text/css" href="${style}" /> 
     </head>
     <body>
+        
         <c:import url="/INC/header.jsp"/>
         <c:import url="/INC/toast.jsp"/>
         <c:import url="/INC/scrollToTopButton.jsp"/>
@@ -26,7 +27,6 @@
         </section>
 
         <main>
-            
             <section class="products" id="Productos">
                 <div class="section-header">
                     <h3>Nuestros Productos</h3>
