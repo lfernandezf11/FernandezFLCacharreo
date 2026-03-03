@@ -216,7 +216,7 @@
 
                             <div class="col-12 mt-4 d-flex align-items-center gap-3 mt-2">
                                 <button type="submit" class="btn btn-primary" id="btn-save-avatar">Guardar cambios</button>
-                                <!-- No tiene sentido aquí, para borrar la foto es suficiente con no guardar los cambios -->
+                                
                                 <button type="button" class="btn btn-secondary" id="btn-delete-avatar">
                                     <i class="bi bi-trash"></i>Borrar
                                 </button> 

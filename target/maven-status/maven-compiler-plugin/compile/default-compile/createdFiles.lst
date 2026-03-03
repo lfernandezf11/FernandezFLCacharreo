@@ -1,7 +1,6 @@
 es\cacharreo\controllers\FrontController.class
 es\cacharreo\DAO\IPedidoDAO.class
 es\cacharreo\DAO\UsuarioDAO.class
-es\cacharreo\models\EnumConverter.class
 es\cacharreo\DAO\IProductoDAO.class
 es\cacharreo\DAOFactory\MySQLDAOFactory.class
 es\cacharreo\models\ProductoUtils.class

@@ -94,9 +94,6 @@ if (changeAvatarForm) {
 // MANEJO DEL BORRADO (Evento click del botón)
 if (btnDelete) {
     btnDelete.addEventListener('click', async () => {
-        if (!confirm("¿Estás seguro de que quieres eliminar tu foto?"))
-            return;
-
         const data = new URLSearchParams();
         data.append('accion', 'eliminarAvatar');
 
