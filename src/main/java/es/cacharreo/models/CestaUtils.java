@@ -11,11 +11,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Clase de utilidad para la gestión de la cesta de la compra persistida en cookies.
+ * Proporciona métodos estáticos para la conversión entre el formato de texto plano 
+ * de la cookie y los objetos de negocio (Pedido, LineaPedido, Producto).
+ * 
  * @author fdezf
+ * @version 1.0
  */
 public class CestaUtils {
 
+    /**
+     * Reconstruye un objeto {@link Pedido} a partir de una cadena de texto serializada 
+     * proveniente de una cookie.
+     * 
+     * <p>El método realiza las siguientes operaciones:</p>
+     * <ul>
+     * <li>Parsea el string con formato {@code id1:cant1,id2:cant2}.</li>
+     * <li>Consulta la base de datos para obtener la información actualizada de los productos.</li>
+     * <li>Crea las líneas de pedido vinculando productos y cantidades.</li>
+     * <li>Sincroniza los totales económicos del pedido.</li>
+     * </ul>
+     * 
+     * @param cestaStr Cadena recuperada de la cookie (ej: "12:2,5:1").
+     * @return Un objeto {@link Pedido} inicializado. Si la cadena es nula o vacía, 
+     * devuelve un pedido sin líneas pero no nulo.
+     */
     public static Pedido cargarPedidoDesdeCookieStr(String cestaStr) {
         Pedido pedido = new Pedido();
         pedido.setLineas(new ArrayList<LineaPedido>()); // Inicializamos la lista de líneas dentro del pedido para evitar nulos
@@ -58,12 +78,16 @@ public class CestaUtils {
     }
 
     
-    /**
-     * Convierte las líneas del pedido en un String para almacenar en la cookie.
-     * Formato resultante: "id1:cant1,id2:cant2,id3:cant3"
-     *
-     * @param pedido El objeto pedido que contiene las líneas
-     * @return String formateado para la cookie
+   /**
+     * Serializa un objeto {@link Pedido} en una cadena de texto apta para ser 
+     * almacenada en una cookie de navegador.
+     * 
+     * <p>El formato resultante es una lista separada por comas donde cada elemento 
+     * representa un producto y su cantidad separados por dos puntos ({@code ID:CANTIDAD}).</p>
+     * 
+     * @param pedido El objeto pedido que contiene la lista de {@link LineaPedido}.
+     * @return Una cadena formateada (ej: "1:2,4:5"). Si el pedido es nulo o no tiene líneas, 
+     * devuelve una cadena vacía.
      */
     public static String parserPedidoAString(Pedido pedido) {
         StringBuilder sb = new StringBuilder();
@@ -82,19 +106,6 @@ public class CestaUtils {
                         .append(lp.getCantidad());
             }
         }
-
         return sb.toString();
     }
-
-
-    /*public static Producto buscarEnCesta(List<Producto> cesta, Short idProducto) {
-        if (cesta != null) {
-            for (Producto p : cesta) {
-                if (Objects.equals(p.getIdProducto(), idProducto)) {
-                    return p;
-                }
-            }
-        }
-        return null;
-    }*/
 }

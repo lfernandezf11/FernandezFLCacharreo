@@ -10,26 +10,41 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Servicio encargado de la lógica de negocio de la cesta de la compra. Gestiona
- * tanto la manipulación de objetos en memoria (sesión) como la persistencia en
- * base de datos en tiempo real si el usuario está logueado.
+ * Servicio de lógica de negocio para la gestión de la cesta de la compra.
+ * <p>
+ * Esta clase actúa como orquestador entre el estado de la cesta en memoria y su
+ * persistencia física. Gestiona la coherencia de datos permitiendo que usuarios
+ * anónimos mantengan su cesta en sesión y usuarios autenticados sincronicen
+ * cada cambio en tiempo real con la base de datos.</p>
  *
  * @author fdezf
+ * @version 1.0
  */
 public class CestaService {
 
     /**
-     * Gestiona la lógica de añadir un producto al pedido. Si ya existe en las
-     * líneas, incrementa su cantidad. Si no, crea una nueva línea. Si el pedido
-     * es persistente (usuario logueado), impacta los cambios en BD.
+     * Gestiona la adición de un producto al pedido actual.
+     * <p>
+     * Algoritmo de ejecución:</p>
+     * <ol>
+     * <li>Verifica la existencia del producto en el catálogo.</li>
+     * <li>Si el producto ya existe en la cesta, incrementa la cantidad.</li>
+     * <li>Si es un producto nuevo, crea una instancia de
+     * {@link LineaPedido}.</li>
+     * <li>Si el usuario está logueado ({@code pedido.getUsuario() != null}):
+     * <ul>
+     * <li>Si es el primer producto, inserta la cabecera del pedido.</li>
+     * <li>Si el pedido ya existe, inserta la nueva línea o actualiza la
+     * cantidad de la existente.</li>
+     * <li>Refresca los totales económicos en la base de datos.</li>
+     * </ul>
+     * </li>
+     * </ol>
      *
-     * En el caso de usuarios logueados sin pedido previo en BD, se encarga de
-     * realizar la inserción inicial de la cesta completa.
-     *
-     * @param pedido El objeto pedido (la cesta)
-     * @param idProd ID del producto a añadir
-     * @return Nombre del producto añadido para feedback al usuario, o cadena
-     * vacía si falla.
+     * @param pedido El objeto {@link Pedido} que representa la cesta actual.
+     * @param idProd Identificador único del producto a añadir.
+     * @return El nombre del producto añadido para feedback visual, o una cadena
+     * vacía si el ID no es válido.
      */
     public static String gestionarAddProducto(Pedido pedido, Short idProd) {
         DAOFactory daof = DAOFactory.getDAOFactory();

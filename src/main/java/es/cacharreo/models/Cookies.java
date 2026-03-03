@@ -7,24 +7,44 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Clase de utilidades para la gestión segura de cookies HTTP en aplicaciones web.
- * Proporciona métodos estáticos para crear cookies codificadas y recuperar
- * su contenido decodificado, garantizando compatibilidad UTF-8 y manejo robusto de errores.
- * 
- * Útil para implementar "Recordar usuario".
- * 
+ * Clase de utilidades para la gestión segura y estandarizada de cookies HTTP.
+ *
+ * <p>
+ * Esta clase centraliza la lógica de manipulación de cookies, forzando el uso
+ * de codificación UTF-8 para evitar errores de sintaxis en el protocolo HTTP
+ * cuando el contenido incluye caracteres especiales (espacios, eñes, símbolos,
+ * etc.).</p>
+ *
+ * <p>
+ * Implementa funcionalidades clave para:</p>
+ * <ul>
+ * <li>Persistencia de sesiones de usuario ("Recordar usuario").</li>
+ * <li>Serialización de estados temporales (Cesta de la compra).</li>
+ * <li>Configuración de rutas de contexto automáticas para evitar colisiones
+ * entre apps.</li>
+ * </ul>
+ *
  * @author fdezf
+ * @version 1.0
  */
 public class Cookies {
-    
+
     /**
-     * Genera una cookie HTTP codificada y configurada para la aplicación.
-     * 
-     * @param nombre nombre único de la cookie
-     * @param contenido valor a almacenar (codificado automáticamente)
-     * @param duracionSegundos tiempo de vida en segundos (ej: 7*24*60*60 = 7 días)
-     * @param request request HTTP para obtener el contexto de la aplicación
-     * @return Cookie configurada
+     * Genera una nueva instancia de {@link Cookie} configurada y codificada.
+     *
+     * <p>
+     * El contenido se somete a {@link URLEncoder} para asegurar que sea
+     * compatible con los estándares de cabeceras HTTP, eliminando conflictos
+     * con caracteres reservados.</p>
+     *
+     * @param nombre El identificador único de la cookie.
+     * @param contenido El valor textual a almacenar. Se codificará en UTF-8.
+     * @param duracionSegundos Tiempo de vida útil de la cookie. (Ejemplo:
+     * {@code 60*60*24} para un día).
+     * @param request La petición actual, utilizada para definir el {@code path}
+     * basado en el contexto de la aplicación.
+     * @return Una {@link Cookie} lista para ser añadida a la respuesta
+     * (Response).
      */
     public static Cookie generarCookie(String nombre, String contenido, int duracionSegundos, HttpServletRequest request) {
         String valorCodificado;
@@ -40,15 +60,23 @@ public class Cookies {
         cookie.setMaxAge(duracionSegundos);
         return cookie;
     }
-    
+
     /**
-     * Recupera el valor decodificado de una cookie específica por su nombre.
-     * 
-     * @param request request HTTP con las cookies del cliente
-     * @param nombreCookie nombre de la cookie a recuperar
-     * @return valor decodificado de la cookie o null si no existe
+     * Busca y recupera el valor decodificado de una cookie presente en la
+     * petición.
+     *
+     * <p>
+     * Este método itera sobre el array de cookies del cliente, localiza la
+     * coincidencia por nombre y revierte la codificación URL aplicada durante
+     * la creación.</p>
+     *
+     * @param request El objeto {@link HttpServletRequest} que contiene las
+     * cookies enviadas por el navegador.
+     * @param nombreCookie El nombre de la cookie que se desea leer.
+     * @return El valor original decodificado, o {@code null} si la cookie no
+     * existe en la petición.
      */
-    public static String recuperarCookieValue(HttpServletRequest request, String nombreCookie){     
+    public static String recuperarCookieValue(HttpServletRequest request, String nombreCookie) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie c : cookies) {
