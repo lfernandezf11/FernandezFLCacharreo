@@ -28,10 +28,13 @@
                     TU TIENDA DE<br>
                     INGENIERIA Y COMPONENTES.
                 </h1>
+                <button type="button" class="btn btn-primaryAlt mt-3">
+                    <a href="#Productos">Empieza a explorar<i class="bi bi-arrow-right ms-2"></i></a>
+                </button>
             </div>
             <div class="hero-divider-image">
-        <img src="${pageContext.request.contextPath}/IMG/hero.jpg" alt="Detalle de componentes">
-    </div>
+                <img src="${pageContext.request.contextPath}/IMG/hero.jpg" alt="Detalle de componentes">
+            </div>
         </section>
 
         <main>
