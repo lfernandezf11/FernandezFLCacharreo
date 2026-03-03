@@ -5,29 +5,94 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * Clase bean que representa un usuario del sistema de registro.
+ * Clase JavaBean que representa a un usuario dentro del sistema.
+ * <p>
+ * Encapsula la información personal, de contacto y de autenticación, aplicando
+ * reglas de normalización automática mediante la clase {@link Utilities} al
+ * establecer campos de texto como nombre, apellidos o localidad.</p>
  *
+ * 
  * @author fdezf
+ * @version 1.0
  */
 public class Usuario implements Serializable {
-    private Short idUsuario;
-    private String email; //unique
-    private String password;
-    private String nombre;
-    private String apellidos;
-    private String nif; //unique
-    private String telefono; //nullable. Tipo String porque es un char con longitud fija en bd (char(9)), para que no haya problemas de conversión.
-    private String direccion;
-    private String codigoPostal; // char(5) en bd.
-    private String localidad;
-    private String provincia;
-    private Timestamp ultimoAcceso;
-    private String avatar; //nullable
-    
 
-    public Usuario(){
+    /**
+     * Identificador único del usuario (Primary Key en BD)
+     */
+    private Short idUsuario;
+
+    /**
+     * Correo electrónico único para inicio de sesión
+     */
+    private String email;
+
+    /**
+     * Contraseña del usuario (almacenada generalmente como hash MD5)
+     */
+    private String password;
+
+    /**
+     * Nombre de pila del usuario
+     */
+    private String nombre;
+
+    /**
+     * Apellidos del usuario
+     */
+    private String apellidos;
+
+    /**
+     * Número de Identificación Fiscal único
+     */
+    private String nif;
+
+    /**
+     * * Teléfono de contacto. Se usa {@code String} para coincidir con el tipo
+     * {@code CHAR(9)} de la BD y preservar ceros a la izquierda o formatos
+     * fijos.
+     */
+    private String telefono;
+
+    /**
+     * Dirección física (calle, número, etc.)
+     */
+    private String direccion;
+
+    /**
+     * Código postal (coincidente con {@code CHAR(5)} en BD)
+     */
+    private String codigoPostal;
+
+    /**
+     * Ciudad o población de residencia
+     */
+    private String localidad;
+
+    /**
+     * Provincia de residencia
+     */
+    private String provincia;
+
+    /**
+     * Marca de tiempo del último inicio de sesión exitoso
+     */
+    private Timestamp ultimoAcceso;
+
+    /**
+     * Nombre del fichero de imagen para el perfil (nullable)
+     */
+    private String avatar;
+
+    /**
+     * Constructor por defecto requerido para la especificación JavaBeans.
+     */
+    public Usuario() {
     }
 
+    /**
+     * @return El ID único del usuario
+     */
     public Short getIdUsuario() {
         return idUsuario;
     }
@@ -36,14 +101,26 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
+    /**
+     * @return Email del usuario
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Establece el email convirtiéndolo automáticamente a minúsculas para
+     * garantizar la consistencia en las búsquedas y login.
+     *
+     * @param email Dirección de correo electrónico.
+     */
     public void setEmail(String email) {
         this.email = email.toLowerCase();
     }
 
+    /**
+     * @return Contraseña (hash)
+     */
     public String getPassword() {
         return password;
     }
@@ -52,22 +129,41 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
+    /**
+     * @return Nombre normalizado
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Establece el nombre aplicando capitalización automática.
+     *
+     * @param nombre Nombre de pila.
+     */
     public void setNombre(String nombre) {
         this.nombre = Utilities.capitalizar(nombre);
     }
 
+    /**
+     * @return Apellidos normalizados
+     */
     public String getApellidos() {
         return apellidos;
     }
 
+    /**
+     * Establece los apellidos aplicando capitalización automática.
+     *
+     * @param apellidos Apellidos del usuario.
+     */
     public void setApellidos(String apellidos) {
         this.apellidos = Utilities.capitalizar(apellidos);
     }
 
+    /**
+     * @return NIF con letra de control
+     */
     public String getNif() {
         return nif;
     }
@@ -100,22 +196,41 @@ public class Usuario implements Serializable {
         this.codigoPostal = codigoPostal;
     }
 
+    /**
+     * @return Localidad normalizada
+     */
     public String getLocalidad() {
         return localidad;
     }
 
+    /**
+     * Establece la localidad aplicando capitalización automática.
+     *
+     * @param localidad Nombre de la ciudad o pueblo.
+     */
     public void setLocalidad(String localidad) {
         this.localidad = Utilities.capitalizar(localidad);
     }
 
+    /**
+     * @return Provincia normalizada
+     */
     public String getProvincia() {
         return provincia;
     }
 
+    /**
+     * Establece la provincia aplicando capitalización automática.
+     *
+     * @param provincia Nombre de la provincia.
+     */
     public void setProvincia(String provincia) {
         this.provincia = Utilities.capitalizar(provincia);
     }
 
+    /**
+     * @return Instancia {@link Timestamp} del último acceso
+     */
     public Timestamp getUltimoAcceso() {
         return ultimoAcceso;
     }
@@ -124,6 +239,9 @@ public class Usuario implements Serializable {
         this.ultimoAcceso = ultimoAcceso;
     }
 
+    /**
+     * @return Nombre del archivo de imagen de perfil
+     */
     public String getAvatar() {
         return avatar;
     }
@@ -131,7 +249,4 @@ public class Usuario implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
-
-    
 }

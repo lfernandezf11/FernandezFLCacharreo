@@ -8,17 +8,30 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- *
+ * Clase de utilidad para la gestión y preparación de datos del catálogo en la capa de vista.
+ * <p>Centraliza procesos de lógica de negocio que transforman las listas planas de la 
+ * base de datos en estructuras complejas requeridas por los componentes visuales de la interfaz.</p>
+ * 
  * @author fdezf
+ * @version 1.0
  */
 public class ProductoUtils {
 
-    /**
-     * Prepara los datos necesarios para la página de inicio. Carga 8 productos
-     * aleatorios en una lista PLANA para el carrusel infinito. Va en
-     * ProductoUtils porque no pertenece a la capa de acceso a datos
-     * (ProductoDAO), sino a la lógica de negocio. Es dependiente de una request
-     * (si fuera en el DAO, lo haría dependiente del navegador).
+   /**
+     * Prepara y estructura el subcatálogo de productos para la página de inicio (Home).
+     * 
+     * <p>Este método realiza las siguientes acciones:</p>
+     * <ol>
+     * <li>Recupera una selección aleatoria de 8 productos desde la base de datos.</li>
+     * <li>Organiza los productos en una estructura de lista de listas (grupos de 4), 
+     * optimizada para carruseles de Bootstrap u otros componentes de rejilla.</li>
+     * <li>Inyecta los datos en el scope de la {@code request} para su consumo en las JSPs.</li>
+     * </ol>
+     * 
+     * 
+     * 
+     * @param request El objeto {@link HttpServletRequest} donde se almacenarán los atributos 
+     * "subCatalogo" (lista de grupos) y "productosFiltrados" (lista plana).
      */
     public static void prepararSubcatalogo(HttpServletRequest request) {
         IProductoDAO pDAO = DAOFactory.getDAOFactory().getProductoDAO();
@@ -50,23 +63,5 @@ public class ProductoUtils {
         } else {
             request.setAttribute("mensaje", "No hay productos para mostrar");
         }
-    }
-
-    /**
-     * Crea una copia de un producto del catálogo para usarlo en la cesta.
-     *
-     * @param base Producto original del catálogo
-     * @param cantidad Cantidad que se desea asignar
-     * @return Nueva instancia de Producto
-     */
-    public static Producto clonarProducto(Producto base, int cantidad) {
-        Producto nuevo = new Producto();
-        nuevo.setIdProducto(base.getIdProducto());
-        nuevo.setNombre(base.getNombre());
-        nuevo.setPrecio(base.getPrecio());
-        nuevo.setImagen(base.getImagen());
-        nuevo.setMarca(base.getMarca());
-        nuevo.setCantidad(cantidad);
-        return nuevo;
     }
 }
