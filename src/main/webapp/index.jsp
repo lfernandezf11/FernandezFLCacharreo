@@ -23,7 +23,7 @@
         <c:import url="/INC/scrollToTopButton.jsp"/>
 
         <section class="hero" id="hero">
-            <img src="${context}/IMG/logoHero.png" alt="Logo Cacharreo">
+            <img src="${context}/IMG/logo.png" alt="Logo Cacharreo">
         </section>
 
         <main>

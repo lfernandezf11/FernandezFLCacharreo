@@ -236,7 +236,7 @@ header.css-navbar {
 }
 
 img.logo {
-    height: 55px;
+    height: 36px;
     width: auto;
     object-fit: contain; /* Asegura que la imagen no se deforme */
 }
