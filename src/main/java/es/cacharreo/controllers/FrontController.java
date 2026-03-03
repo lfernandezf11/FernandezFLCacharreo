@@ -22,25 +22,47 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Controlador principal. Constituye el punto de entrada a la aplicación y
- * redirige el flujo de la misma.
+ * Controlador Principal (Front Controller) de la aplicación.
+ * <p>
+ * Actúa como el punto de entrada unificado para todas las peticiones,
+ * gestionando el flujo de navegación, la inicialización de recursos críticos y
+ * el mantenimiento del estado de la sesión (como la cesta de la compra).</p>
  *
- * Cuando se inicia la aplicación, carga la vista inicial (index.jsp), o el menú
- * correspondiente al usuario (menuNormal o menuAdmin) si éste seleccionó
- * 'Recordar usuario' y existe una cookie con su username.
+ * <p>
+ * <strong>Responsabilidades clave:</strong></p>
+ * <ul>
+ * <li>Carga del catálogo inicial y datos de filtrado en el contexto de
+ * aplicación.</li>
+ * <li>Recuperación de la cesta persistida mediante cookies para usuarios
+ * anónimos.</li>
+ * <li>Gestión del ciclo de vida del usuario (navegación a registro, login y
+ * logout).</li>
+ * </ul>
+ *
+ *
  *
  * @author fdezf
+ * @version 1.0
  */
 @WebServlet(name = "FrontController", urlPatterns = {"", "/FrontController"})
 public class FrontController extends HttpServlet {
 
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Procesa las peticiones iniciales (GET) al acceder a la aplicación.
+     * <p>
+     * Realiza la hidratación de datos necesaria para la Home:</p>
+     * <ol>
+     * <li>Carga una subselección aleatoria de productos.</li>
+     * <li>Sincroniza la cesta de la compra con la cookie del cliente.</li>
+     * <li>Carga en el {@link ServletContext} los metadatos de filtrado
+     * (categorías, marcas y rangos de precio) solo si no están presentes,
+     * optimizando el acceso a la base de datos.</li>
+     * </ol>
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request Petición HTTP.
+     * @param response Respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el despacho del Servlet.
+     * @throws IOException Si ocurre un error de entrada/salida.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -98,12 +120,16 @@ public class FrontController extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Gestiona las peticiones de navegación y acciones de usuario (POST).
+     * <p>
+     * Utiliza un sistema de encaminamiento basado en el parámetro
+     * {@code accion} para redirigir al usuario a las vistas de registro, login,
+     * perfil o para gestionar el cierre de sesión.</p>
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request Petición HTTP con el parámetro 'accion'.
+     * @param response Respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el flujo de control.
+     * @throws IOException Si ocurre un error de escritura.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -128,7 +154,7 @@ public class FrontController extends HttpServlet {
                 ProductoUtils.prepararSubcatalogo(request); // Maneja la recarga de 8 productos aleatorios.
                 url = "/index.jsp";
                 break;
-                
+
             case "registro":
                 url = "/JSP/usuario/registro.jsp";
                 break;
@@ -136,12 +162,10 @@ public class FrontController extends HttpServlet {
             case "login":
                 url = "/JSP/usuario/login.jsp";
                 break;
-                
-                case "perfil":
+
+            case "perfil":
                 url = "/JSP/usuario/perfil.jsp";
                 break;
-                
-
 
             case "logout":
                 usuario = (Usuario) session.getAttribute("usuarioLogueado");
@@ -172,9 +196,9 @@ public class FrontController extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Retorna una breve descripción del propósito de este Front Controller.
      *
-     * @return a String containing servlet description
+     * @return String descriptivo del Servlet.
      */
     @Override
     public String getServletInfo() {

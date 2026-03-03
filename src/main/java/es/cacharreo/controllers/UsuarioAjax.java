@@ -21,20 +21,30 @@ import javax.servlet.http.Part;
 import org.json.JSONObject;
 
 /**
+ * Controlador AJAX para la gestión integral de usuarios.
+ * <p>
+ * Este Servlet actúa como un API Endpoint que procesa de forma asíncrona el
+ * registro, la autenticación, la validación de credenciales y la edición del
+ * perfil de usuario, incluyendo la carga y gestión de imágenes de avatar.</p>
+ *
+ * <p>
+ * Al estar anotado con {@code @MultipartConfig}, permite la recepción de
+ * archivos binarios mediante peticiones {@code multipart/form-data}.</p>
  *
  * @author fdezf
+ * @version 1.0
  */
 @MultipartConfig // Obligatorio para recibir archivos
 @WebServlet(name = "UsuarioAjax", urlPatterns = {"/UsuarioAjax"})
 public class UsuarioAjax extends HttpServlet {
 
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Procesa las peticiones GET (Sin implementación actual).
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request petición servlet
+     * @param response respuesta servlet
+     * @throws ServletException si ocurre un error específico del servlet
+     * @throws IOException si ocurre un error de E/S
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,12 +52,32 @@ public class UsuarioAjax extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Orquestador de acciones asíncronas relacionadas con el usuario.
+     * <p>
+     * Gestiona los siguientes casos de uso:</p>
+     * <ul>
+     * <li><b>validateEmail:</b> Comprobación de disponibilidad de correo en
+     * BD.</li>
+     * <li><b>asignarLetraNIF:</b> Cálculo de letra de DNI y comprobación de
+     * duplicidad.</li>
+     * <li><b>registrarUsuario:</b> Alta de usuario, subida de avatar y
+     * migración de cesta.</li>
+     * <li><b>loginUsuario:</b> Autenticación y sincronización de cesta
+     * (Persistencia híbrida).</li>
+     * <li><b>actualizarUsuario:</b> Edición de datos personales del
+     * perfil.</li>
+     * <li><b>actualizarPassword:</b> Cambio seguro de contraseña con validación
+     * previa.</li>
+     * <li><b>actualizarAvatar / eliminarAvatar:</b> Gestión del archivo de
+     * imagen de perfil.</li>
+     * </ul>
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     *
+     *
+     * @param request objeto con parámetros de acción y datos JSON/Multipart
+     * @param response objeto con respuesta en formato JSON
+     * @throws ServletException si ocurre un error de servidor
+     * @throws IOException si ocurre un error de flujo de datos
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -138,8 +168,8 @@ public class UsuarioAjax extends HttpServlet {
 
                         // Migración de cesta en el primer logueo (desde la sesión)
                         Pedido cesta = (Pedido) session.getAttribute("cesta");
-                        
-                        if (cesta.getLineas().isEmpty()) { 
+
+                        if (cesta.getLineas().isEmpty()) {
                             cesta = new Pedido();
                         }
                         cesta.setUsuario(usuario); // 'usuario' ya tiene el ID asignado por addUsuario
@@ -371,13 +401,13 @@ public class UsuarioAjax extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Retorna una breve descripción del propósito del servlet.
      *
-     * @return a String containing servlet description
+     * @return String con la descripción técnica.
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Controlador asíncrono para la gestión de usuarios, perfiles y autenticación.";
     }
 
 }

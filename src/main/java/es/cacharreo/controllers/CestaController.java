@@ -19,19 +19,27 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Controlador principal para la gestión síncrona de la cesta de la compra y el
+ * catálogo.
+ * <p>
+ * Este Servlet centraliza las operaciones de alto nivel que requieren
+ * navegación entre páginas, como el vaciado total del carrito, el filtrado
+ * avanzado de productos y la finalización del proceso de compra (tramitación
+ * del pedido).</p>
  *
  * @author fdezf
+ * @version 1.0
  */
 @WebServlet(name = "CestaController", urlPatterns = {"/CestaController"})
 public class CestaController extends HttpServlet {
 
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Gestiona las peticiones GET redirigiendo a la vista de la cesta.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request La petición HTTP.
+     * @param response La respuesta HTTP.
+     * @throws ServletException Si ocurre un error en el despacho de la vista.
+     * @throws IOException Si ocurre un error de entrada/salida.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,12 +49,24 @@ public class CestaController extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Orquestador de acciones de post-formulario.
+     * <p>
+     * Implementa un switch para manejar tres casos de uso:</p>
+     * <ul>
+     * <li><strong>eliminarCarrito</strong>: Limpia sesión, cookies y base de
+     * datos (si procede).</li>
+     * <li><strong>filtrarProductos</strong>: Procesa filtros de búsqueda y
+     * devuelve el catálogo actualizado.</li>
+     * <li><strong>tramitarPedido</strong>: Convierte la cesta temporal en un
+     * pedido finalizado en el sistema.</li>
+     * </ul>
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     *
+     *
+     * @param request La petición HTTP con los parámetros de acción y datos.
+     * @param response La respuesta HTTP para redirecciones o forwards.
+     * @throws ServletException Si ocurre un error en el flujo del servlet.
+     * @throws IOException Si ocurre un error de escritura.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -188,9 +208,9 @@ public class CestaController extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Retorna una breve descripción del propósito de este Servlet.
      *
-     * @return a String containing servlet description
+     * @return String descriptivo del controlador de flujo de cesta.
      */
     @Override
     public String getServletInfo() {
