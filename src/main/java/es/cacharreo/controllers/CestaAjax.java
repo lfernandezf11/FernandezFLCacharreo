@@ -95,6 +95,7 @@ public class CestaAjax extends HttpServlet {
             objeto.put("subtotalCesta", String.format("%.2f", cesta.getImporte()).replace(",", "."));
             objeto.put("ivaCesta", String.format("%.2f", cesta.getIva()).replace(",", "."));
             objeto.put("totalCesta", String.format("%.2f", totalCesta).replace(",", "."));
+            objeto.put("totalUnidadesCesta", cesta.getCantidadTotal());
             
             if(cesta.getUsuario() == null){ //Persistencia en cookie sólo en cesta anónima
             String cestaStr = CestaUtils.parserPedidoAString(cesta);

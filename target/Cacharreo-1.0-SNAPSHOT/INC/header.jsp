@@ -29,9 +29,22 @@
                     <button type="submit" name="accion" value="logout" class="text-danger fw-semibold p-0 btn-logout-navbar"><small class="mt-0 pt-0">Cerrar sesi&oacute;n</small></button>
                 </div>
 
-                <button type="submit" name="accion" value="verCesta" class="btn btn-primaryAlt mb-3 mt-3">
-                    <i class="fa-duotone fa-solid fa-cart-shopping"></i>
-                </button>
+                <button type="submit" name="accion" value="verCesta" class="btn btn-primaryAlt position-relative my-3">
+    <i class="fa-duotone fa-solid fa-cart-shopping"></i>
+    <span>Carrito</span>
+    
+    <c:set var="totalArticulos" value="0" />
+    <c:forEach var="linea" items="${sessionScope.cesta.lineas}">
+        <c:set var="totalArticulos" value="${totalArticulos + linea.cantidad}" />
+    </c:forEach>
+
+    <%-- El badge siempre existe en el DOM para el JS. Usamos una clase para ocultarlo si es 0 --%>
+    <span id="cart-badge" 
+          class="position-absolute top mt-1 start-100 translate-middle badge rounded-pill bg-danger ${totalArticulos == 0 ? 'd-none' : ''}" 
+          style="font-size: 0.7rem; padding: 0.35em 0.6em; border: 2px solid white; z-index: 10;">
+        ${totalArticulos}
+    </span>
+</button>
             </div>
         </c:if>
 
@@ -40,21 +53,22 @@
                 <!--<button type="submit" name="accion" value="registro" class="btn btn-primaryAlt">Registrarse</button>-->
                 <button type="submit" name="accion" value="login" class="btn btn-primaryAlt">Acceder</button>
 
-                <button type="submit" name="accion" value="verCesta" class="btn btn-primaryAlt">
-                    <i class="fa-duotone fa-solid fa-cart-shopping"></i>
-                    <span>Carrito</span>
-                    <c:set var="totalArticulos" value="0" />
-                    <c:forEach var="linea" items="${sessionScope.cesta.lineas}">
-                        <c:set var="totalArticulos" value="${totalArticulos + linea.cantidad}" />
-                    </c:forEach>
+                <button type="submit" name="accion" value="verCesta" class="btn btn-primaryAlt position-relative">
+    <i class="fa-duotone fa-solid fa-cart-shopping"></i>
+    <span>Carrito</span>
+    
+    <c:set var="totalArticulos" value="0" />
+    <c:forEach var="linea" items="${sessionScope.cesta.lineas}">
+        <c:set var="totalArticulos" value="${totalArticulos + linea.cantidad}" />
+    </c:forEach>
 
-                    <c:if test="${totalArticulos > 0}">
-                        <span id="cart-badge" class="position-absolute top mt-1 start-100 translate-middle badge rounded-pill bg-danger" 
-                              style="font-size: 0.7rem; padding: 0.35em 0.6em; border: 2px solid white;">
-                            ${totalArticulos}
-                        </span>
-                    </c:if>
-                </button>
+    <%-- El badge siempre existe en el DOM para el JS. Usamos una clase para ocultarlo si es 0 --%>
+    <span id="cart-badge" 
+          class="position-absolute top mt-1 start-100 translate-middle badge rounded-pill bg-danger ${totalArticulos == 0 ? 'd-none' : ''}" 
+          style="font-size: 0.7rem; padding: 0.35em 0.6em; border: 2px solid white; z-index: 10;">
+        ${totalArticulos}
+    </span>
+</button>
             </div>
         </c:if>
     </form>

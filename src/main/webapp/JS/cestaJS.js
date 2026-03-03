@@ -3,6 +3,22 @@ const totalIva = document.getElementById('iva-amount');
 const totalPedido = document.getElementById('total-final');
 
 /**
+ * Actualiza el badge del carrito de forma segura
+ */
+function actualizarBadge(cantidad) {
+    const badge = document.getElementById('cart-badge');
+    if (badge) {
+        badge.textContent = cantidad;
+        // Si la cantidad es mayor a 0, lo mostramos; si no, lo ocultamos
+        if (parseInt(cantidad) > 0) {
+            badge.classList.remove('d-none');
+        } else {
+            badge.classList.add('d-none');
+        }
+    }
+}
+
+/**
  * Función para actualizar las unidades de la cesta de forma asíncrona
  * @param {string} idProducto 
  * @param {string} accion (sumar o restar)
@@ -26,6 +42,7 @@ async function actualizarUnidades(idProducto, accion, form) {
             if (resultado.success) {
                 // 1. Actualizar cantidad en la tarjeta, controlando que el botón - esté deshabilitado si hay una unidad del producto
                 form.querySelector('.qty-val').textContent = resultado.nuevaCantidad;
+                actualizarBadge(resultado.totalUnidadesCesta);
 
                 const btnRestar = form.querySelector('button[value="restar"]');
                 if (btnRestar) {
@@ -91,6 +108,7 @@ async function eliminarFila(idProducto, form) {
                     // Esperamos a que la animación termine antes de quitar el elemento del DOM
                     setTimeout(() => {
                         itemCard.remove();
+                        actualizarBadge(resultado.totalUnidadesCesta);
 
                         // Actualizamos totales CON PROTECCIÓN (si fallan, no rompen el script)
                         try {
@@ -189,7 +207,7 @@ document.addEventListener('submit', async (e) => {
                     if (modalInstance) {
                         modalInstance.hide(); //dispara los listeners de cierre de modal
                     }
-
+                    actualizarBadge(resultado.totalUnidadesCesta);
                     lanzarToast(resultado.message, "exito");
                 } else {
                     lanzarToast("Error: " + (resultado.message || "No se pudo registrar."), "error");
