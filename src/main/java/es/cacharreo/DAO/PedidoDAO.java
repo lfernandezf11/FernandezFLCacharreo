@@ -209,7 +209,7 @@ public class PedidoDAO implements IPedidoDAO {
     }
 
     @Override
-    public boolean borrarPedido(short idPedido) {
+    public boolean borrarPedido(Short idPedido) {
         boolean exito = false;
         Connection connection = null;
         PreparedStatement preparada = null;
@@ -239,9 +239,9 @@ public class PedidoDAO implements IPedidoDAO {
     @Override
     public boolean finalizarPedido(Pedido pedido) {
         if (pedido == null || pedido.getIdPedido() == null) {
-            return false; // Evitamos el NullPointerException
-        }
-
+        return false; // Evitamos el NullPointerException
+    }
+        
         boolean exito = false;
         Connection connection = null;
         PreparedStatement ps = null;

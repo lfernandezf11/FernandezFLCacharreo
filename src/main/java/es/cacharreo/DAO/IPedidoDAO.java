@@ -24,7 +24,7 @@ public interface IPedidoDAO {
      * @return {@code true} si el pedido fue eliminado con éxito (se afectó al
      * menos una fila), false en caso contrario.
      */
-    public boolean borrarPedido(short idPedido);
+    public boolean borrarPedido(Short idPedido);
     
     public boolean insertarCesta(Pedido pedido);
     

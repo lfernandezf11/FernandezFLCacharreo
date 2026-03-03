@@ -73,22 +73,27 @@ public class CestaController extends HttpServlet {
 
                     /* Manejo de USUARIO LOGUEADO */
                     if (usuario != null) {
-                        try {
-                            DAOFactory daof = DAOFactory.getDAOFactory();
-                            IPedidoDAO pDAO = daof.getPedidoDAO();
+                        // Si no hay ID, el pedido solo está en sesión, no hay nada que borrar en BD
 
-                            // Solo limpiamos la sesión si el borrado en BD fue efectivo (es decir, el pedido existía y estaba en estado 'c')
-                            limpiarSesion = pDAO.borrarPedido(cesta.getIdPedido());
+                        if (cesta.getIdPedido() == null) {
+                            limpiarSesion = true;
+                        } else {
+                            try {
+                                DAOFactory daof = DAOFactory.getDAOFactory();
+                                IPedidoDAO pDAO = daof.getPedidoDAO();
 
-                            if (!limpiarSesion) {
-                                request.setAttribute("error", "No se pudo vaciar la base de datos: el pedido ya no es un carrito activo.");
+                                // Solo limpiamos la sesión si el borrado en BD fue efectivo (es decir, el pedido existía y estaba en estado 'c')
+                                limpiarSesion = pDAO.borrarPedido(cesta.getIdPedido());
+
+                                if (!limpiarSesion) {
+                                    request.setAttribute("error", "No se pudo vaciar la base de datos: el pedido ya no es un carrito activo.");
+                                }
+                            } catch (Exception e) {
+                                limpiarSesion = false;
+                                request.setAttribute("error", "Error técnico al intentar limpiar la base de datos.");
                             }
-                        } catch (Exception e) {
-                            limpiarSesion = false;
-                            request.setAttribute("error", "Error técnico al intentar limpiar la base de datos.");
                         }
                     }
-
                     /* LIMPIEZA DE CESTA (sesión y cookies) */
                     if (limpiarSesion) {
                         // Eliminamos la cookie independientemente de si hay usuario o no (limpieza total)
