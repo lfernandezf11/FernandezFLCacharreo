@@ -22,8 +22,16 @@
         <c:import url="/INC/toast.jsp"/>
         <c:import url="/INC/scrollToTopButton.jsp"/>
 
-        <section class="hero" id="hero">
-            <img src="${context}/IMG/logo.png" alt="Logo Cacharreo">
+        <section class="hero-minimalist mb-0">
+            <div class="hero-container">
+                <h1 class="hero-title-main">
+                    TU TIENDA DE<br>
+                    INGENIERIA Y COMPONENTES.
+                </h1>
+            </div>
+            <div class="hero-divider-image">
+        <img src="${pageContext.request.contextPath}/IMG/hero.jpg" alt="Detalle de componentes">
+    </div>
         </section>
 
         <main>

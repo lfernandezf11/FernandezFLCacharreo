@@ -350,7 +350,7 @@ button.btn-link:hover::before {
 
 
 /* HERO: MARCA Y GRADIENTE DE FONDO --------------------------------- */
-.hero {
+/*.hero {
     min-height: 70vh;
     display: flex;
     flex-direction: column;
@@ -365,8 +365,68 @@ button.btn-link:hover::before {
 
 .hero img {
     /* Empuja el elemento al fondo de su contenedor */
-    padding-top: 3rem;
+    /*padding-top: 3rem;
     width: 45%;
+}*/
+/* Sobreescritura y estilos nuevos para el Hero */
+.hero-minimalist {
+    min-height: 100vh; /* */
+    display: flex;
+    flex-direction: column;
+    /* */
+    justify-content: space-between; 
+    align-items: start;
+    padding-top: 4.5rem; /* */
+    padding-bottom: 0; /* */
+    background-color: var(--color-white);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0; 
+}
+
+.hero-title-main {
+    font: var(--text-h2); 
+    font-size: 6rem;
+    color: var(--color-black);
+    text-transform: uppercase;
+    padding-left: 4rem;
+    line-height: 0.8;  
+    letter-spacing: -2px; 
+    max-width: 100vw;
+}
+
+.hero-divider-image {
+    width: 100%;
+    margin-top: auto; /* */
+    line-height: 0;  
+    max-height: 40%/* */
+}
+
+.hero-divider-image img {
+    width: 100%;
+   
+    object-fit: cover; /* */
+    display: block;
+}
+
+/* Ajuste para dispositivos móviles */
+@media (max-width: 768px) {
+    .hero-title-main {
+        font-size: 3rem;
+        line-height: 1.1;
+        padding-left: 2rem;
+    }
+    .hero-minimalist {
+        min-height: 60vh;
+    }
+    .hero-divider-image img {
+        height: 200px; /* */
+    }
 }
 
 /* PRODUCTOS */
