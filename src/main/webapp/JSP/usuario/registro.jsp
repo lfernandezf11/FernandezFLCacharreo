@@ -23,7 +23,8 @@
                     <div class="section-header">
                         <h4>Date de alta</h4>
                     </div>  
-                    <form class="row g-3 signUpForm" enctype="multipart/form-data">
+                    <form class="row g-3 signUpForm" enctype="multipart/form-data" 
+                          action="${context}/CestaController">
                         <div class="col-md-8">
                             <div class="row g-3">
                                 <div class="col-md-6 field">

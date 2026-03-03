@@ -138,18 +138,27 @@ public class UsuarioAjax extends HttpServlet {
 
                         // Migración de cesta en el primer logueo (desde la sesión)
                         Pedido cesta = (Pedido) session.getAttribute("cesta");
-
+                        
+                        if (cesta.getLineas().isEmpty()) { 
+                            cesta = new Pedido();
+                        }
+                        cesta.setUsuario(usuario); // 'usuario' ya tiene el ID asignado por addUsuario
                         // Si hay cesta y tiene líneas, la guardamos. El estado por defecto será 'c'
                         if (cesta != null && cesta.getLineas() != null && !cesta.getLineas().isEmpty()) {
-                            cesta.setUsuario(usuario);
                             cesta.setFecha(new Date());
 
                             boolean guardado = pDAO.insertarCesta(cesta); // Este método inserta el pedido y sus líneas en bd, y también actualiza el id del pedido en cesta
                             if (guardado) { // Éxito: pasamos a operar únicamente con sesión y bd   
                                 response.addCookie(Cookies.generarCookie("cestaCookie", "", 0, request));
+
                             }
                         }
+
+                        // SIEMPRE actualizamos la cesta en sesión, tenga líneas o no.
+                        // Así, si añade un producto después, CestaService ya tendrá el usuario disponible.
+                        session.setAttribute("cesta", cesta);
                         session.setAttribute("usuarioLogueado", usuario);
+
                         objeto.put("success", true);
                         objeto.put("message", "¡BIENVENIDA/O A CACHARREO, " + usuario.getNombre().toUpperCase() + "! Registro completado.");
 

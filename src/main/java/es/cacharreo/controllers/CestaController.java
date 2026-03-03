@@ -36,6 +36,8 @@ public class CestaController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.getRequestDispatcher("/JSP/pedido/cesta.jsp").forward(request, response);
+
     }
 
     /**
@@ -113,12 +115,12 @@ public class CestaController extends HttpServlet {
                 try {
                     DAOFactory daof = DAOFactory.getDAOFactory();
                     IProductoDAO pDAO = daof.getProductoDAO();
-                    
+
                     // Refrescamos la página inicial antes de filtrar los productos. ¿Por qué? 
                     // Porque ProductoUtils.prepararSubcatalogo() establece un atributo de sesión "productosFiltrados"
                     // por defecto (con los 8 productos aleatorios), y tenemos que sobreescribirlo para devolver el 
                     // resultado real del filtrado.
-                    ProductoUtils.prepararSubcatalogo(request); 
+                    ProductoUtils.prepararSubcatalogo(request);
                     List<Producto> filtrados = pDAO.getProductosFiltrados(categorias, marcas, min, max);
 
                     request.setAttribute("productosFiltrados", filtrados);
@@ -136,24 +138,37 @@ public class CestaController extends HttpServlet {
                     // Verificamos que exista el objeto cesta en sesión y tenga líneas
                     if (cesta != null && !cesta.getLineas().isEmpty()) {
                         IPedidoDAO pDAO = DAOFactory.getDAOFactory().getPedidoDAO();
-                        // El método actualiza la fecha y estado en bbdd y sesión
-                        // Necesario actualizar en sesión para poder pasarlo a la request para el resumen en resumenPedido.jsp
-                        boolean compraExitosa = pDAO.finalizarPedido(cesta);
 
-                        if (compraExitosa) {
-                            // Pasamos el pedido a la request antes de limpiar la sesión
-                            request.setAttribute("pedidoFinalizado", cesta);
-                            session.removeAttribute("cesta");
+                        // Si el pedido no tiene ID pero el usuario está logueado,
+                        // significa que es una cesta de sesión que aún no se ha persistido.
+                        if (cesta.getIdPedido() == null) {
+                            cesta.setFecha(new java.util.Date());
+                            pDAO.insertarCesta(cesta); // Esto le asignará el ID generado por la BD
+                        }
 
-                            // Seteamos una nueva cesta vacía para futuras compras en la misma sesión
-                            Pedido nuevaCesta = new Pedido();
-                            nuevaCesta.setUsuario(usuario);
-                            session.setAttribute("cesta", nuevaCesta);
+                        // Ahora que estamos seguros de que tiene ID, finalizamos
+                        if (cesta.getIdPedido() != null) {
+                            // El método actualiza la fecha y estado en bbdd y sesión
+                            // Necesario actualizar en sesión para poder pasarlo a la request para el resumen en resumenPedido.jsp
+                            boolean compraExitosa = pDAO.finalizarPedido(cesta);
 
-                            url = "/JSP/pedido/resumenPedido.jsp";
+                            if (compraExitosa) {
+                                // Pasamos el pedido a la request antes de limpiar la sesión
+                                request.setAttribute("pedidoFinalizado", cesta);
+                                session.removeAttribute("cesta");
+
+                                // Seteamos una nueva cesta vacía para futuras compras en la misma sesión
+                                Pedido nuevaCesta = new Pedido();
+                                nuevaCesta.setUsuario(usuario);
+                                session.setAttribute("cesta", nuevaCesta);
+
+                                url = "/JSP/pedido/resumenPedido.jsp";
+                            } else {
+                                request.setAttribute("error", "No se pudo finalizar la compra en la base de datos.");
+                                url = "/JSP/pedido/cesta.jsp";
+                            }
                         } else {
-                            request.setAttribute("error", "No se pudo finalizar la compra en la base de datos.");
-                            url = "/JSP/pedido/cesta.jsp";
+                            request.setAttribute("error", "Error al registrar la cesta en el sistema.");
                         }
                     } else {
                         request.setAttribute("warning", "Tu cesta está vacía.");
