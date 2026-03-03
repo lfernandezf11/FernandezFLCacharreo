@@ -1,5 +1,8 @@
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
 <footer class="text-center text-lg-start text-white shadow-lg" style="background-color: var(--color-dark-lilac)">
-    
+
     <div class="p-1" style="background-color: var(--color-lilac)">
         <div class="container d-flex justify-content-end align-items-center mt-0">
             <section class="mt-0 mb-0">
@@ -27,7 +30,7 @@
 
     <div class="container text-center text-md-start mt-4 pb-2">
         <div class="row mt-3">
-            
+
             <div class="col-md-3 col-lg-4 col-xl-4 mx-auto mb-4">
                 <h6 class="text-uppercase fw-bold">CACHARREO</h6>
                 <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
@@ -41,9 +44,9 @@
             <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                 <h6 class="text-uppercase fw-bold">Enlaces</h6>
                 <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
-                <p><a href="#!" class="text-white text-decoration-none">Nuestros productos</a></p>
-                <p><a href="#!" class="text-white text-decoration-none">¿Quiénes somos?</a></p>
-                <p><a href="#!" class="text-white text-decoration-none">Política de privacidad</a></p>
+                <p><a href="#Productos" class="text-white text-decoration-none">Nuestros productos</a></p>
+                <p><a class="text-white text-decoration-none" disabled>¿Quiénes somos?</a></p>
+                <p><a class="text-white text-decoration-none" disabled>Política de privacidad</a></p>
             </div>
 
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
@@ -56,14 +59,20 @@
         </div>
     </div>
 
-    <div class="container-fluid py-3" style="border-top: 1px solid rgba(255,255,255,0.1);">
-        <div class="d-flex justify-content-center align-items-center">
-            <span class="me-3">¡Regístrate gratis!</span>
-            <button type="button" class="btn btn-outline-light rounded-pill px-4">
-                REGISTRARSE
-            </button>
-        </div>
-    </div>
+    <c:if test="${empty usuarioLogueado}">
+        <form method="post" action="${context}/FrontController">
+            <div class="container-fluid py-3" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                <div class="d-flex justify-content-center align-items-center">
+                    <span class="me-3">¡Regístrate gratis!</span>
+                    <button type="submit" class="btn btn-outline-light rounded-pill px-4"
+                            name="accion" value="registro">
+                        REGISTRARSE
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </c:if>
 
     <div class="text-center p-3 fw-light" style="background-color: var(--color-darkest-lilac); font-size: 0.9rem;">
         © 2026 Cacharreo. Todos los derechos reservados.

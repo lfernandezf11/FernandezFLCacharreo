@@ -148,7 +148,7 @@ public class FrontController extends HttpServlet {
                 if (usuario != null) {
                     uDAO.updateUltimoAcceso(usuario.getIdUsuario());
                 }
-                session.invalidate(); // imnpia todo, con lo que antes de redirigir hay que resetear la home
+                session.invalidate(); // limpia todo, con lo que antes de redirigir hay que resetear la home
 
                 // "Entorno de invitado"
                 HttpSession nuevaSesion = request.getSession(true);
