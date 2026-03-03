@@ -1,0 +1,151 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+hide empty members
+
+' --- CAPA DE ENTIDADES (BEANS) ---
+package "es.cacharreo.beans" {
+    class Categoria {
+        - idCategoria: byte
+        - nombre: String
+        - imagen: String
+        + getIdCategoria(): Byte
+        + setIdCategoria(Byte)
+        + getNombre(): String
+        + setNombre(String)
+    }
+
+    class LineaPedido {
+        - idLinea: Short
+        - idPedido: Short
+        - producto: Producto
+        - cantidad: Integer
+        - importe: Float
+        + getProducto(): Producto
+        + setProducto(Producto)
+    }
+
+    class Pedido {
+        - idPedido: Short
+        - fecha: Date
+        - estado: Character
+        - usuario: Usuario
+        - importe: Float
+        - iva: Float
+        - lineas: List<LineaPedido>
+        + calcularTotales()
+        + getCantidadTotal(): int
+    }
+
+    class Producto {
+        - idProducto: Short
+        - nombre: String
+        - precio: Float
+        - categoria: Categoria
+        + getPrecio(): Float
+    }
+
+    class Usuario {
+        - idUsuario: Short
+        - email: String
+        - password: String
+        - nombre: String
+        - apellidos: String
+        - nif: String
+        + setEmail(String)
+        + setNombre(String)
+        + setApellidos(String)
+    }
+}
+
+' --- CAPA DE PERSISTENCIA (DAO) ---
+package "es.cacharreo.DAO" {
+    interface ICategoriaDAO {
+        + getCategorias(): List<Categoria>
+        + closeConnection()
+    }
+    interface IPedidoDAO {
+        + borrarPedido(Short): boolean
+        + insertarCesta(Pedido): boolean
+        + getCestaByUsuario(Usuario): Pedido
+        + updateCantidadLinea(short, short, int): boolean
+        + insertarLineaIndividual(LineaPedido): boolean
+        + deleteLineaIndividual(short, short): boolean
+        + updateTotalesPedido(Pedido): boolean
+        + finalizarPedido(Pedido): boolean
+        + getHistorialPedidos(Short): List<Pedido>
+        + closeConnection()
+    }
+    interface IProductoDAO {
+        + getProductos(): List<Producto>
+        + getProductosRandom(int): List<Producto>
+        + getProductosByIds(List<Short>): List<Producto>
+        + getProductoUnicoById(Short): Producto
+        + getMarcas(): List<String>
+        + getPreciosLimite(): List<Float>
+        + getProductosFiltrados(String[], String[], float, float, String): List<Producto>
+        + closeConnection()
+    }
+    interface IUsuarioDAO {
+        + getDuplicateEmail(String): Boolean
+        + getDuplicateNif(String): Boolean
+        + addUsuario(Usuario): String
+        + login(String, String): Usuario
+        + updateUsuario(Usuario): Boolean
+        + updatePassword(String, String, String): boolean
+        + updateAvatar(Usuario): boolean
+        + updateUltimoAcceso(short): boolean
+        + deleteUsuario(Short): boolean
+        + closeConnection()
+    }
+
+    class ConnectionFactory {
+        {static} + getConnection(): Connection
+        {static} + closeConnection()
+    }
+
+    class CategoriaDAO implements ICategoriaDAO
+    class PedidoDAO implements IPedidoDAO
+    class ProductoDAO implements IProductoDAO
+    class UsuarioDAO implements IUsuarioDAO
+    class LineaPedidoDAO {
+        {static} + mapearLineaPedido(ResultSet): LineaPedido
+    }
+}
+
+' --- CAPA DE NEGOCIO Y UTILIDADES ---
+package "es.cacharreo.models" {
+    class CestaService {
+        {static} + gestionarAddProducto(Pedidvlet>>
+    class UsuarioAjax <<Servlet>>
+    class CestaAjax <<Servlet>>
+    class CestaController <<Servlet>>
+    class UsuarioController <<Servlet>>
+}
+
+' --- RELACIONES DE ESTRUCTURA Y DEPENDENCIA ---
+
+' Beans
+Pedido "1" *-- "0..*" LineaPedido : contiene
+Pedido "n" o-- "1" Usuario : pertenece a
+LineaPedido "n" o-- "1" Producto : referencia
+Producto "n" o-- "1" Categoria : clasificado en
+
+' DAOs y Mapeo
+es.cacharreo.DAO ..> ConnectionFactory : solicita conexión
+PedidoDAO ..> LineaPedidoDAO : usa mapearLineaPedido()
+LineaPedidoDAO ..> ProductoDAO : usa mapearProducto()
+
+' Lógica de Negocio
+CestaService ..> IPedidoDAO : sincroniza persistencia
+CestaUtils ..> IProductoDAO : hidrata productos
+Usuario ..> Utilities : normaliza con capitalizar()
+
+' Controladores
+FrontController ..> CestaUtils : reconstruye cookie
+FrontController ..> Cookies : lee cabeceras
+CestaAjax ..> CestaService : delega operaciones
+UsuarioAjax ..> Utilities : cifra MD5 y valida NIF
+
+@enduml
