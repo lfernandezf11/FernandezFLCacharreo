@@ -111,6 +111,7 @@ public class CestaController extends HttpServlet {
                 String[] marcas = request.getParameterValues("fMarca");
                 float min = Float.parseFloat(request.getParameter("fPrecioMin"));
                 float max = Float.parseFloat(request.getParameter("fPrecioMax"));
+                String texto = request.getParameter("fTexto");
 
                 try {
                     DAOFactory daof = DAOFactory.getDAOFactory();
@@ -121,7 +122,7 @@ public class CestaController extends HttpServlet {
                     // por defecto (con los 8 productos aleatorios), y tenemos que sobreescribirlo para devolver el 
                     // resultado real del filtrado.
                     ProductoUtils.prepararSubcatalogo(request);
-                    List<Producto> filtrados = pDAO.getProductosFiltrados(categorias, marcas, min, max);
+                    List<Producto> filtrados = pDAO.getProductosFiltrados(categorias, marcas, min, max, texto);
 
                     request.setAttribute("productosFiltrados", filtrados);
                     url = "/index.jsp";

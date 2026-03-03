@@ -15,7 +15,7 @@ public interface IProductoDAO {
     
     public List<String> getMarcas();
 public List<Float> getPreciosLimite();
-public List<Producto> getProductosFiltrados(String[] categorias, String[] marcas, float min, float max);
+public List<Producto> getProductosFiltrados(String[] categorias, String[] marcas, float min, float max, String texto);
     public void closeConnection();
 }
 

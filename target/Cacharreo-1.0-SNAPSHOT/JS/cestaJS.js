@@ -91,7 +91,7 @@ async function eliminarFila(idProducto, form) {
                     // Esperamos a que la animación termine antes de quitar el elemento del DOM
                     setTimeout(() => {
                         itemCard.remove();
-                        
+
                         // Actualizamos totales CON PROTECCIÓN (si fallan, no rompen el script)
                         try {
                             if (subtotalGlobal)
@@ -124,11 +124,11 @@ async function eliminarFila(idProducto, form) {
 document.addEventListener('click', (e) => {
     // Buscamos si el clic fue en el botón o dentro de él
     const btn = e.target.closest('.qty-selector button, button[value="eliminar"]');
-    
+
     if (btn) {
         e.preventDefault();
         const form = btn.closest('form');
-        
+
         // Verificación de seguridad
         if (!form) {
             console.error("No se encontró el formulario para este botón");
@@ -216,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formulario = document.getElementById('filterForm');
     const checks = document.querySelectorAll('#filterForm .form-check-input');
     const botonLimpiar = document.getElementById('limpiarFiltros');
+    const inputTexto = document.getElementById('buscarPalabra');
 
     const btnAplicar = document.getElementById('btn-apply-filters');
 
@@ -230,8 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const hayChecks = Array.from(checks).some(c => c.checked); // checks marcados
         const precioMovido = (minInput.value !== minOriginal) || (maxInput.value !== maxOriginal); //selectores de precio distintos a los originales
+        const hayTexto = inputTexto && inputTexto.value.trim().length > 0;
 
-        btnAplicar.disabled = !(hayChecks || precioMovido);
+        btnAplicar.disabled = !(hayChecks || precioMovido || hayTexto);
     };
 
     function setupPriceSlider() {
@@ -271,12 +273,16 @@ document.addEventListener('DOMContentLoaded', () => {
         check.addEventListener('change', validarFiltros);
     });
 
+    if (inputTexto) {
+        inputTexto.addEventListener('input', validarFiltros);
+    }
+
     // Gestión del botón de limpiar
     if (botonLimpiar) {
         botonLimpiar.addEventListener('click', () => {
             if (formulario) {
                 formulario.reset();
-                display.innerText = `${minInput.value.toFixed(2)}€ - ${maxInput.value.toFixed(2)}€`;
+                display.innerText = `${parseFloat(minInput.value).toFixed(2).replace(".", ",")} € - ${parseFloat(maxInput.value).toFixed(2).replace(".", ",")} €`;
                 // Al limpiar, el botón debe volver a desactivarse
                 validarFiltros();
             }

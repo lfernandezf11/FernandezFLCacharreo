@@ -216,7 +216,7 @@ public class ProductoDAO implements IProductoDAO {
     }
 
     @Override
-    public List<Producto> getProductosFiltrados(String[] categorias, String[] marcas, float min, float max) {
+    public List<Producto> getProductosFiltrados(String[] categorias, String[] marcas, float min, float max, String texto) {
         Connection conexion = null;
         List<Producto> productos = new ArrayList<>();
 
@@ -230,6 +230,14 @@ public class ProductoDAO implements IProductoDAO {
 
         StringBuilder where = new StringBuilder();
         boolean esPrimero = true;
+
+        // --- FILTRO TEXTO (DESCRIPCIÓN) ---
+        if (texto != null && !texto.trim().isEmpty()) {
+            where.append(esPrimero ? " WHERE " : " AND ");
+            // Filtramos coincidencias parciales en la descripción
+            where.append("p.descripcion LIKE '%").append(texto.trim()).append("%'");
+            esPrimero = false;
+        }
 
         // --- FILTRO CATEGORÍAS ---
         if (categorias != null && categorias.length > 0) {

@@ -17,7 +17,7 @@
         <link rel="stylesheet" type="text/css" href="${style}" /> 
     </head>
     <body>
-        
+
         <c:import url="/INC/header.jsp"/>
         <c:import url="/INC/toast.jsp"/>
         <c:import url="/INC/scrollToTopButton.jsp"/>
@@ -41,6 +41,13 @@
                                     <form action="${context}/CestaController" method="post" id="filterForm">
 
                                         <div class="filter-group mb-4">
+                                            <div class="filter-group mb-4">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="buscarPalabra" name="fTexto" 
+                                                           placeholder="Escribe palabras clave...">
+                                                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                                </div>
+                                            </div>
                                             <label class="form-label concept-text">Categor&iacute;as</label>
                                             <div class="dropdown">
                                                 <button class="btn btn-white border w-100 text-start dropdown-toggle d-flex justify-content-between align-items-center" 
@@ -205,7 +212,7 @@
                     </div>
                 </div>
             </section>
-                                            <section id="trending">
+            <section id="trending">
                 <div class="section-header">
                     <h3>Los más populares</h3>
                 </div>  
