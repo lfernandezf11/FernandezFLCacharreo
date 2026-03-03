@@ -10,7 +10,7 @@ import java.util.List;
  * recuperación de muestras aleatorias para la Home y la ejecución de búsquedas
  * avanzadas con múltiples criterios de filtrado.</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public interface IProductoDAO {

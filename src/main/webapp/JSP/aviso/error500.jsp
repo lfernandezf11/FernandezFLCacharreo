@@ -1,6 +1,5 @@
 <%-- 
-    Author     : fdezf
-    Document   : error500
+    Author     : Lucía Fernández Florencio
 --%>
 
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>

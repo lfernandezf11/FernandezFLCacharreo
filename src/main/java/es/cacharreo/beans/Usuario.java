@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * establecer campos de texto como nombre, apellidos o localidad.</p>
  *
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class Usuario implements Serializable {

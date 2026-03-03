@@ -15,7 +15,7 @@ import java.util.List;
  *
  *
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class Pedido implements Serializable {

@@ -145,7 +145,7 @@ public class FrontController extends HttpServlet {
 
         if (accion == null) {
             request.setAttribute("error", "Acción no válida o sesión expirada.");
-            request.getRequestDispatcher("/JSP/aviso/aviso.jsp").forward(request, response);
+            request.getRequestDispatcher("/JSP/aviso/error404.jsp").forward(request, response);
             return;
         }
 

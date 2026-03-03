@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
  * avanzado de productos y la finalización del proceso de compra (tramitación
  * del pedido).</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 @WebServlet(name = "CestaController", urlPatterns = {"/CestaController"})
@@ -44,7 +44,7 @@ public class CestaController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/JSP/pedido/cesta.jsp").forward(request, response);
+        request.getRequestDispatcher("/JSP/pedido/error404.jsp").forward(request, response);
 
     }
 

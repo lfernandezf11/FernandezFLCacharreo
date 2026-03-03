@@ -28,7 +28,7 @@ import org.json.JSONObject;
  * base de datos a través de {@link CestaService}.</li>
  * </ul>
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 @WebServlet(name = "CestaAjax", urlPatterns = {"/CestaAjax"})

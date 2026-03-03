@@ -2,7 +2,7 @@ package es.cacharreo.filters;
 
 /**
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  */
 import java.io.IOException;
 import javax.servlet.Filter;

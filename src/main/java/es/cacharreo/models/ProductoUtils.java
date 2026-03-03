@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p>Centraliza procesos de lógica de negocio que transforman las listas planas de la 
  * base de datos en estructuras complejas requeridas por los componentes visuales de la interfaz.</p>
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class ProductoUtils {

@@ -21,7 +21,7 @@
         <welcome-file>FrontController</welcome-file>
     </welcome-file-list>
     
-    <!--<error-page>
+    <error-page>
         <error-code>404</error-code>
         <location>/JSP/aviso/error404.jsp</location>
     </error-page>
@@ -34,6 +34,6 @@
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/JSP/aviso/error500.jsp</location>
-    </error-page>-->
+    </error-page>
 
 </web-app>

@@ -1,18 +1,13 @@
 package es.cacharreo.controllers;
 
 import es.cacharreo.DAO.IPedidoDAO;
-import es.cacharreo.DAO.IProductoDAO;
 import es.cacharreo.DAOFactory.DAOFactory;
 import es.cacharreo.beans.Pedido;
-import es.cacharreo.beans.Producto;
 import es.cacharreo.beans.Usuario;
-import es.cacharreo.models.Cookies;
-import es.cacharreo.models.ProductoUtils;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  */
 @WebServlet(name = "UsuarioController", urlPatterns = {"/UsuarioController"})
 public class UsuarioController extends HttpServlet {
@@ -91,9 +86,9 @@ public class UsuarioController extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Retorna una breve descripción del propósito de este Servlet.
      *
-     * @return a String containing servlet description
+     * @return String descriptivo del controlador del historial de usuario.
      */
     @Override
     public String getServletInfo() {

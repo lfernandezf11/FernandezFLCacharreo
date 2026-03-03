@@ -10,7 +10,7 @@ import es.cacharreo.beans.Usuario;
  * usuarios, incluyendo el registro, la autenticación segura, la gestión del
  * perfil y la validación de integridad de datos (emails y NIFs únicos).</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public interface IUsuarioDAO {

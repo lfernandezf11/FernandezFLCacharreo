@@ -31,7 +31,7 @@ import org.json.JSONObject;
  * Al estar anotado con {@code @MultipartConfig}, permite la recepción de
  * archivos binarios mediante peticiones {@code multipart/form-data}.</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 @MultipartConfig // Obligatorio para recibir archivos

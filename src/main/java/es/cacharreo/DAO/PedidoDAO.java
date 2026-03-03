@@ -8,15 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  */
 public class PedidoDAO implements IPedidoDAO {
 

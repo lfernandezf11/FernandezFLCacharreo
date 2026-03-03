@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  */
 public class CategoriaDAO implements ICategoriaDAO {
 

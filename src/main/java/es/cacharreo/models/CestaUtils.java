@@ -15,7 +15,7 @@ import java.util.Map;
  * Proporciona métodos estáticos para la conversión entre el formato de texto plano 
  * de la cookie y los objetos de negocio (Pedido, LineaPedido, Producto).
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class CestaUtils {

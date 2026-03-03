@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * métodos necesarios para transformar los registros de la base de datos en
  * objetos {@link LineaPedido}.</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class LineaPedidoDAO implements ILineaPedidoDAO {

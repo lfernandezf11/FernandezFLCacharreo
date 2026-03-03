@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
  * <p>Proporciona métodos de soporte para la validación de formularios,
  * seguridad de contraseñas, formateo de cadenas y lógica de identificación oficial.</p>
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class Utilities {

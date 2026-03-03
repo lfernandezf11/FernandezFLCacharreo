@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * entre apps.</li>
  * </ul>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class Cookies {

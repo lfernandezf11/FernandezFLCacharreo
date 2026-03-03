@@ -21,7 +21,7 @@ import es.cacharreo.DAO.ProductoDAO;
  * etc., se permite que el resto de la aplicación trabaje únicamente con interfaces, 
  * siguiendo el principio de inversión de dependencia.</p>
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class MySQLDAOFactory extends DAOFactory {

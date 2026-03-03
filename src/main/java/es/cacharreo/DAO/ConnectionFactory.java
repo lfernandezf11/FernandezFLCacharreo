@@ -5,7 +5,7 @@ package es.cacharreo.DAO;
  * dos pools de conexiones: uno para usuarios normales y otro para
  * administradores.
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  */
 import java.sql.Connection;
 

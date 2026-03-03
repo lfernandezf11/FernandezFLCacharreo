@@ -17,7 +17,7 @@ import java.util.Objects;
  * anónimos mantengan su cesta en sesión y usuarios autenticados sincronicen
  * cada cambio en tiempo real con la base de datos.</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class CestaService {

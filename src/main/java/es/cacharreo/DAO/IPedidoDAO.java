@@ -13,7 +13,7 @@ import java.util.List;
  * permitiendo la sincronización en tiempo real entre el estado en memoria y la
  * base de datos MySQL.</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public interface IPedidoDAO {

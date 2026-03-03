@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  *
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class Categoria implements Serializable {

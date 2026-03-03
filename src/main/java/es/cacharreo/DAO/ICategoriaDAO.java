@@ -9,7 +9,7 @@ import java.util.List;
  * del catálogo, permitiendo que la aplicación obtenga las categorías disponibles 
  * independientemente del motor de base de datos utilizado.</p>
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public interface ICategoriaDAO {

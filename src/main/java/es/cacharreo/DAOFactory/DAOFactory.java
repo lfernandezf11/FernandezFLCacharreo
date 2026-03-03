@@ -16,7 +16,7 @@ import es.cacharreo.DAO.IUsuarioDAO;
  *
  *
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public abstract class DAOFactory {

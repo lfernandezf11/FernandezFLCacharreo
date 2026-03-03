@@ -9,7 +9,7 @@ import java.io.Serializable;
  * incorpora un campo de cantidad para facilitar la transferencia de datos entre 
  * la base de datos y la cesta de la compra.</p>
  * 
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  */
 public class Producto implements Serializable {

@@ -15,7 +15,7 @@ package es.cacharreo.DAO;
  * para sistemas de inventario avanzado, devoluciones parciales o auditorías de
  * cambios línea a línea).</p>
  *
- * @author fdezf
+ * @author Lucía Fernández Florencio
  * @version 1.0
  * @see IPedidoDAO
  */
