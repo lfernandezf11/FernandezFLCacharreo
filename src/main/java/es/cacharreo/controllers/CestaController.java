@@ -102,6 +102,7 @@ public class CestaController extends HttpServlet {
 
                         // Reseteamos el objeto en sesión como cesta vacía pero inicializada
                         cesta.getLineas().clear();
+                        cesta.setIdPedido(null);
                         cesta.calcularTotales(); // importes a cero
 
                         request.setAttribute("exito", "La cesta se ha vaciado correctamente.");

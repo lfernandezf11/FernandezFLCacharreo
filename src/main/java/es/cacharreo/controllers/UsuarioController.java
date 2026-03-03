@@ -66,7 +66,7 @@ public class UsuarioController extends HttpServlet {
 
         switch (accion) {
             case "inicio":
-                url = "/index.jsp";
+                url = "/FrontController";
                 break;
 
             case "historial":
