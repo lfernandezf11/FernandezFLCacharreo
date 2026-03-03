@@ -1,3 +1,7 @@
+/** 
+ * Variable global para almacenar la cadena Base64 de la imagen seleccionada.
+ * @type {string|null} 
+ */
 let imagenInput; // Variable para almacenar la imagen previa del avatar
 
 
@@ -25,6 +29,11 @@ const previaEl = document.getElementById('previa');
 
 
 ////////////////// VALIDACIONES
+/**
+ * Valida la complejidad de la contraseña principal.
+ * Si el campo de confirmación ya tiene contenido, dispara su validación de coincidencia.
+ * @returns {boolean} True si cumple con la expresión regular REGEX_PASSWORD.
+ */
 function validatePassword() {
 const password = pass1El.value;
 
@@ -43,6 +52,10 @@ if (pass2El.value !== "")
 }
 ;
 
+/**
+ * Comprueba que la segunda contraseña coincida exactamente con la primera.
+ * @returns {boolean} True si ambas coinciden o si el campo de confirmación está vacío (temporalmente).
+ */
 function validatePasswordsIguales() {
 const p1 = pass1El.value;
 const p2 = pass2El.value;
@@ -63,7 +76,11 @@ if (p1 === p2) {
 }
 }
 
-// Gestiona la vista previa de la imagen de avatar
+/**
+ * Lee el archivo seleccionado por el usuario y lo convierte a DataURL para previsualización.
+ * @param {HTMLInputElement} input - El elemento input de tipo file que contiene la imagen.
+ * @returns {void}
+ */
 function readURL(input) {
 if (input.files && input.files[0]) {
     var reader = new FileReader(); // Objeto JS lector de archivos del host
@@ -76,7 +93,9 @@ if (input.files && input.files[0]) {
 }
 }
 
-// Listener para el botón de eliminar foto en el registro
+/** 
+ * Listener para resetear el avatar seleccionado a la imagen por defecto.
+ */
 const btnDeleteAvatar = document.getElementById('btn-delete-avatarR');
 
 if (btnDeleteAvatar) {
@@ -98,6 +117,11 @@ if (btnDeleteAvatar) {
 ///////////////////////// VALIDACIONES ASÍNCRONAS: email y nif
 
 /* EMAIL: formato correcto, y en caso de serlo, comprobación de duplicidad en bd.*/
+/**
+ * Valida el formato del email y comprueba su disponibilidad en la base de datos.
+ * @async
+ * @returns {Promise<boolean>} Promesa con el resultado de la validación.
+ */
 async function validateEmail() {
 const email = emailEl.value.trim();
 
@@ -142,6 +166,12 @@ try {
 }
 ;
 
+/**
+ * Procesa el NIF del usuario, valida que tenga 8 dígitos y solicita al servidor 
+ * la asignación de la letra correspondiente (Algoritmo oficial).
+ * @async
+ * @returns {Promise<void>}
+ */
 async function validateNif() {
 let valorActual = nifEl.value.trim();
 
@@ -236,6 +266,11 @@ if (file) {
 // EVENTO SUBMIT DEL FORMULARIO
 const form = document.querySelector('.signUpForm');
 
+/**
+ * Orquestador del envío del formulario de registro.
+ * Valida todos los campos, construye un FormData (incluyendo binarios) y 
+ * envía la petición al Servlet de usuario.
+ */
 form.addEventListener('submit', async (e) => {
 e.preventDefault(); // Evita que la página se recargue
 

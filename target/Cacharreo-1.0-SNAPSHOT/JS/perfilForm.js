@@ -1,3 +1,4 @@
+/* Selectores */
 const nombreEl = document.getElementById('nombrePerfil');
 const apellidosEl = document.getElementById('apellidosPerfil');
 const localidadEl = document.getElementById('localidadPerfil');
@@ -20,7 +21,12 @@ validarFormularioPerfil();
 btnSaveProfile.disabled = true;
 btnSavePass.disabled = true;
 
-// Función para almacenar los valores de los campos editables (no actualizamos si no hay datos nuevos)
+/**
+ * Captura y serializa los valores actuales de los campos editables del perfil.
+ * Se utiliza para comparar cambios y evitar peticiones innecesarias al servidor.
+ * 
+ * @returns {string} Representación JSON de los datos del formulario de perfil.
+ */
 function almacenarDatosEditables() {
     return JSON.stringify({
         'nombre': nombreEl.value.trim(),
@@ -33,21 +39,13 @@ function almacenarDatosEditables() {
     });
 }
 
-/*function validarFormularioPerfil() {
-    const isNombreOk = REGEX_LETRAS.test(nombreEl.value.trim());
-    const isApellidosOk = REGEX_LETRAS.test(apellidosEl.value.trim());
-    const isLocalidadOk = REGEX_LETRAS.test(localidadEl.value.trim());
-    const isDireccionOk = REGEX_DIRECCION.test(direccionEl.value.trim());
-    const isCPOk = REGEX_CP.test(cpEl.value.trim()) && parseInt(cpEl.value.trim(), 10) <= 52080;
-    const isProvinciaOk = provinciaEl.value !== "";
-
-    // Teléfono: opcional (vacío ok) o debe cumplir regex
-    const tlfValor = telefonoEl.value.trim();
-    const isTelefonoOk = tlfValor === "" || REGEX_TLF.test(tlfValor);
-
-    btnSaveProfile.disabled = !(isNombreOk && isApellidosOk && isLocalidadOk && isDireccionOk && isCPOk && isProvinciaOk && isTelefonoOk);
-}*/
-
+/**
+ * Valida el estado global del formulario de perfil.
+ * Habilita el botón de guardado solo si no hay errores visuales (clases is-invalid)
+ * y los campos obligatorios no están vacíos.
+ * 
+ * @returns {void}
+ */
 function validarFormularioPerfil() {
     const tieneErroresVisuales = editProfileForm.querySelectorAll('.is-invalid').length > 0;
 
@@ -57,6 +55,13 @@ function validarFormularioPerfil() {
     btnSaveProfile.disabled = tieneErroresVisuales || camposVacios;
 }
 
+/**
+ * Valida el estado global del formulario de cambio de contraseña.
+ * Verifica la existencia de la clave actual, el cumplimiento de la política de seguridad
+ * de la nueva clave y la coincidencia exacta de la confirmación.
+ * 
+ * @returns {void}
+ */
 function validarFormularioPassword() {
     const isPassActualOk = passActual.value.trim() !== "";
     const isPassNuevaOk = REGEX_PASSWORD.test(passNueva.value);
@@ -66,7 +71,12 @@ function validarFormularioPassword() {
 }
 
 
-
+/**
+ * Valida la complejidad de la nueva contraseña según la expresión regular global.
+ * Si es válida, desencadena la validación de coincidencia con el campo de confirmación.
+ * 
+ * @returns {boolean} True si la contraseña cumple con los requisitos mínimos.
+ */
 function validatePassword() {
     const password = passNueva.value;
 
@@ -85,6 +95,12 @@ function validatePassword() {
 }
 ;
 
+/**
+ * Comprueba que la contraseña nueva y su confirmación sean idénticas.
+ * Gestiona los mensajes de error según si el campo está vacío o si los valores difieren.
+ * 
+ * @returns {boolean} True si ambas contraseñas coinciden y cumplen la política.
+ */
 function validatePasswordsIguales() {
     const p1 = passNueva.value;
     const p2 = confirmPassNueva.value;

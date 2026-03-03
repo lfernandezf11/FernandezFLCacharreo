@@ -127,12 +127,25 @@ if (btnDelete) {
 }
 
 // Funciones auxiliares
+/**
+ * Muestra u oculta un mensaje de error relativo a la carga del avatar.
+ * Aplica la clase 'is-invalid' de Bootstrap al input correspondiente.
+ * 
+ * @param {string} texto - El mensaje de error a mostrar. Si está vacío, limpia el error.
+ * @returns {void}
+ */
 function marcarErrorAvatar(texto) {
     if (avatarError)
         avatarError.textContent = texto;
     avatarInput.classList.toggle('is-invalid', texto !== "");
 }
 
+/**
+ * Cierra el modal de cambio de avatar de Bootstrap de forma segura.
+ * Elimina manualmente el backdrop y las clases de body para evitar bloqueos en la UI.
+ * 
+ * @returns {void}
+ */
 function cerrarModalAvatar() {
     const modalEl = document.getElementById('changeAvatarModal');
     const modalInstance = bootstrap.Modal.getInstance(modalEl);

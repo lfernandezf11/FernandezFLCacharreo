@@ -8,6 +8,14 @@ error.textContent = "";
 // EVENTO SUBMIT DEL FORMULARIO
 const form = document.querySelector('.signInForm');
 
+/**
+ * Gestiona el envío asíncrono del formulario de inicio de sesión.
+ * Realiza validaciones previas en el cliente, envía las credenciales mediante Fetch API
+ * y gestiona la respuesta del servidor (redirección o mensajes de error).
+ *  
+ * @param {SubmitEvent} e - El evento de envío del formulario.
+ * @returns {Promise<void>}
+ */
 form.addEventListener('submit', async (e) => {
     e.preventDefault(); // Evita que la página se recargue
 
@@ -18,11 +26,16 @@ form.addEventListener('submit', async (e) => {
         error.textContent = "Todos los datos son obligatorios";
         return;
     }
-
+    
+    // Limpieza de estados visuales previos
     emailEl.classList.remove('is-invalid');
     passEl.classList.remove('is-invalid');
     error.textContent = "";
-
+    
+    /** 
+     * Preparación de los datos para el envío 
+     * Se utiliza URLSearchParams para compatibilidad con el backend Java/JSP (form-urlencoded)
+     */
     const data = new URLSearchParams();
     data.append('accion', 'loginUsuario');
 

@@ -10,9 +10,12 @@ const REGEX_NUMDNI = /^\d{8}$/;
 //const REGEX_DIRECCION = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s,\/\-º°ª.]+$/;
 
 /**
- * Lanza una notificación Toast de Bootstrap
- * @param {string} mensaje - Texto a mostrar
- * @param {string} tipo - exito para verde, error para rojo, warning para naranja
+ * Lanza una notificación Toast de Bootstrap con estilos personalizados según el tipo.
+ * Gestiona automáticamente la limpieza de clases y el cierre al hacer clic fuera.
+ * 
+ * @param {string} mensaje - El texto descriptivo que se mostrará en el cuerpo del toast.
+ * @param {('exito'|'error'|'warning')} tipo - Determina el color y estilo visual de la notificación.
+ * @returns {void}
  */
 function lanzarToast(mensaje, tipo) {
     const toastEl = document.getElementById('liveToast');
@@ -57,9 +60,12 @@ function lanzarToast(mensaje, tipo) {
 
 
 /**
- * Alterna la visibilidad del campo de contraseña y cambia el icono.
- * @param {HTMLInputElement} inputEl - El elemento de entrada de texto.
- * @param {HTMLElement} iconEl - El elemento del icono (<i>).
+ * Alterna la visibilidad de un campo de contraseña (input type password/text) 
+ * y actualiza dinámicamente el icono de visualización.
+ * 
+ * @param {HTMLInputElement} inputEl - El elemento de entrada que contiene la contraseña.
+ * @param {HTMLElement} iconEl - El elemento (normalmente un <i>) que muestra el icono del ojo.
+ * @returns {void}
  */
 function togglePassword(inputEl, iconEl) {
     const show = inputEl.type === 'password';
@@ -90,9 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Muestra u oculta errores en cualquier tipo de campo.
+ * Gestiona la visualización de mensajes de error de validación en la interfaz.
+ * Aplica las clases de Bootstrap 'is-invalid' o 'is-valid' según corresponda.
+ * 
  * @param {HTMLElement} element - El input, select o checkbox a validar.
- * @param {string} text - El mensaje de error (vacío para limpiar).
+ * @param {string} text - El mensaje de error. Si está vacío, se marca como válido.
+ * @returns {void}
  */
 function showError(element, text) {
     const container = element.closest('.field');
@@ -117,8 +126,11 @@ function showError(element, text) {
 }
 
 /**
- * Resetea completamente un formulario: valores, clases de validación y mensajes de error.
- * @param {HTMLFormElement} formEl - El elemento del formulario a resetear.
+ * Restablece un formulario a su estado inicial, eliminando valores, 
+ * clases de validación de Bootstrap y mensajes de error.
+ * 
+ * @param {HTMLFormElement} formEl - El formulario que se desea resetear.
+ * @returns {void}
  */
 function resetForm(formEl) {
     if (!formEl)
@@ -139,7 +151,12 @@ function resetForm(formEl) {
 }
 
 ///////////////// VALIDACIONES
-// Validación genérica para campos de texto (Nombre, Apellidos, Localidad)
+/**
+ * Valida que un campo de texto no esté vacío.
+ * 
+ * @param {HTMLInputElement} element - El elemento a validar.
+ * @returns {boolean} True si es válido, False si está vacío.
+ */
 function validateTexto(element) {
     if (element.value.trim() === "") {
         showError(element, `El campo es obligatorio.`);
@@ -149,7 +166,14 @@ function validateTexto(element) {
     return true;
 }
 
-// Validación para campos numéricos (cp, tlf)
+/**
+ * Valida campos numéricos mediante expresiones regulares y lógica de negocio (CP/Teléfono).
+ * 
+ * @param {HTMLInputElement} element - El elemento input.
+ * @param {RegExp} regex - Expresión regular para validar el formato.
+ * @param {string} fieldName - Nombre del campo para personalizar el mensaje de error.
+ * @returns {boolean} True si cumple el formato y lógica, False en caso contrario.
+ */
 function validateNumber(element, regex, fieldName) {
     const valor = element.value.trim();
 
@@ -199,6 +223,11 @@ function validateNumber(element, regex, fieldName) {
  }
  ;*/
 
+/**
+ * Valida que se haya seleccionado una opción en el selector de provincias.
+ * 
+ * @returns {boolean} True si hay una provincia seleccionada.
+ */
 function validateProvincia() {
     const provincia = provinciaEl.value; //Viene de un select, no hace falta trim()
     if (provincia === "") {
@@ -216,7 +245,10 @@ function validateProvincia() {
 // con las respuestas de ajax, es necesario controlar manualmente la desaparición de estilos residuales
 // y el elemento enfocado.
 
-// 1. Cuando el modal empieza a cerrarse
+/**
+ * Listener global: Se dispara cuando un modal inicia su proceso de ocultación.
+ * Gestiona el bloqueo de accesibilidad (inert) y el retorno del foco al botón disparador.
+ */
 document.addEventListener('hide.bs.modal', function (event) {
     const modalEl = event.target; // El modal que se está cerrando
 
@@ -236,7 +268,10 @@ document.addEventListener('hide.bs.modal', function (event) {
 });
 
 
-// 2. Cuando el modal se ha cerrado
+/**
+ * Listener global: Se dispara cuando un modal ha terminado de ocultarse.
+ * Realiza limpieza forzada del DOM y resetea los formularios internos.
+ */
 document.addEventListener('hidden.bs.modal', function (event) {
     const modalEl = event.target;
 

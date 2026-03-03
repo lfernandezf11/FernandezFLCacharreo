@@ -1,4 +1,8 @@
-(function() {
+(function () {
+    /**
+     * Inicializa los carruseles de testimonios encontrados en el DOM.
+     * Soporta múltiples instancias en una misma página.
+     */
     const init = () => {
         const sections = document.querySelectorAll('.testimonial-carousel-section');
 
@@ -10,8 +14,12 @@
             let interval;
             const autoPlayDelay = 5000;
 
+            /**
+             * Actualiza el estado visual del carrusel (puntos, imágenes y textos).
+             * @param {number} index - El índice del slide al que se desea cambiar.
+             */
             const updateCarousel = (index) => {
-                // Update dots
+                
                 dots.forEach((dot, i) => {
                     if (i === index) {
                         dot.classList.remove('btn-light', 'bg-secondary-subtle');
@@ -22,24 +30,29 @@
                     }
                 });
 
-                // Helper to switch visibility
+                /**
+                 * Cambia la visibilidad de un grupo de elementos (imágenes o contenidos).
+                 * Gestiona las clases de Bootstrap para transiciones de opacidad y visualización.
+                 * @param {NodeListOf<HTMLElement>} elements - Colección de elementos a procesar.
+                 * @param {number} targetIndex - Índice del elemento que debe mostrarse.
+                 */
                 const switchActive = (elements, targetIndex) => {
                     elements.forEach(el => {
                         const elIndex = parseInt(el.getAttribute('data-slide-index'));
                         if (elIndex === targetIndex) {
                             el.classList.remove('d-none');
-                            // Small timeout to allow d-block to apply before adding opacity class for transition
+                            
                             setTimeout(() => {
                                 el.classList.add('show');
                             }, 10);
                         } else {
                             el.classList.remove('show');
-                            // Wait for transition to finish before hiding
+                            
                             setTimeout(() => {
                                 if (!el.classList.contains('show')) {
                                     el.classList.add('d-none');
                                 }
-                            }, 150); // Matches standard bootstrap fade duration roughly
+                            }, 150);
                         }
                     });
                 };
@@ -49,21 +62,30 @@
 
                 currentIndex = index;
             };
-
+            
+            /**
+             * Calcula el siguiente índice de forma circular y actualiza el carrusel.
+             */
             const nextSlide = () => {
                 const nextIndex = (currentIndex + 1) % dots.length;
                 updateCarousel(nextIndex);
             };
-
+            
+            /**
+             * Inicia el temporizador de reproducción automática.
+             */
             const startAutoPlay = () => {
                 interval = setInterval(nextSlide, autoPlayDelay);
             };
-
+            
+            /**
+             * Detiene el temporizador de reproducción automática.
+             */
             const stopAutoPlay = () => {
                 clearInterval(interval);
             };
 
-            // Event Listeners for Dots
+            
             dots.forEach(dot => {
                 dot.addEventListener('click', (e) => {
                     const targetIndex = parseInt(e.target.getAttribute('data-target'));
@@ -72,11 +94,9 @@
                     startAutoPlay();
                 });
             });
-
-            // Start loop
             startAutoPlay();
 
-            // Optional: Pause on hover
+            // Pausa on hover
             section.addEventListener('mouseenter', stopAutoPlay);
             section.addEventListener('mouseleave', startAutoPlay);
         });

@@ -1,9 +1,15 @@
+/** * Elementos globales para la actualización del resumen de compra 
+ */
 const subtotalGlobal = document.getElementById('cart-amount');
 const totalIva = document.getElementById('iva-amount');
 const totalPedido = document.getElementById('total-final');
 
 /**
- * Actualiza el badge del carrito de forma segura
+ * Actualiza el indicador numérico (badge) del carrito en la interfaz.
+ * Controla la visibilidad del elemento basándose en si la cantidad es mayor a cero.
+ * 
+ * @param {number|string} cantidad - El número total de productos en la cesta.
+ * @returns {void}
  */
 function actualizarBadge(cantidad) {
     const badge = document.getElementById('cart-badge');
@@ -19,10 +25,13 @@ function actualizarBadge(cantidad) {
 }
 
 /**
- * Función para actualizar las unidades de la cesta de forma asíncrona
- * @param {string} idProducto 
- * @param {string} accion (sumar o restar)
- * @param {HTMLElement} form contenedor del producto
+ * Actualiza las unidades de un producto en la cesta mediante una petición asíncrona.
+ * Gestiona la actualización de totales de línea, totales globales y el estado de los botones.
+ * 
+ * @param {string} idProducto - ID único del producto a modificar.
+ * @param {string} accion - Tipo de operación: 'sumar' o 'restar'.
+ * @param {HTMLElement} form - Contenedor HTML (formulario) que origina la acción.
+ * @returns {Promise<void>}
  */
 async function actualizarUnidades(idProducto, accion, form) {
     const data = new URLSearchParams();
@@ -74,12 +83,12 @@ async function actualizarUnidades(idProducto, accion, form) {
 }
 
 /**
- * Elimina un producto de la cesta de forma asíncrona enviando una petición al servidor.
- * Si la eliminación es exitosa en el backend, se aplica un efecto visual de 
- * desvanecimiento a la tarjeta del producto y se elimina del DOM.
- * @param {string} idProducto - El identificador único del producto a eliminar.
- * @param {HTMLElement} form - El elemento <form> que contiene el botón de eliminar.
- * @returns {Promise<void>} - Promesa que se resuelve una vez completada la operación y actualización visual.
+ * Elimina un producto de la cesta y del DOM con un efecto visual de desvanecimiento.
+ * Si la cesta queda vacía tras la eliminación, recarga la página.
+ * 
+ * @param {string} idProducto - Identificador del producto a eliminar.
+ * @param {HTMLElement} form - Elemento que contiene la referencia al producto.
+ * @returns {Promise<void>}
  */
 async function eliminarFila(idProducto, form) {
     const data = new URLSearchParams();
@@ -242,7 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const minOriginal = minInput ? minInput.value : null;
     const maxOriginal = maxInput ? maxInput.value : null;
 
-    // Función para activar/desactivar el botón de filtrar según haya filtros seleccionados o no
+    /**
+     * Valida el estado de los filtros para habilitar o deshabilitar el botón de aplicar.
+     * @returns {void}
+     */
     const validarFiltros = () => {
         if (!btnAplicar)
             return;
@@ -254,6 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAplicar.disabled = !(hayChecks || precioMovido || hayTexto);
     };
 
+    /**
+     * Configura el comportamiento de los deslizadores (sliders) de precio.
+     * Asegura que el valor mínimo no supere al máximo y viceversa.
+     * @returns {void}
+     */
     function setupPriceSlider() {
         if (!minInput || !maxInput || !display)
             return;
