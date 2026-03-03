@@ -309,7 +309,12 @@ button.btn-link:hover::before {
     align-items: center;
     margin-left: 1.5rem;
     white-space: nowrap;
-    overflow-x: auto;
+}
+
+/* Asegura que los botones permitan ver el badge que sobresale */
+.btn-primaryAlt.position-relative {
+    overflow: visible !important; 
+    margin-right: 16px; /* Espacio extra para que el badge no choque con el borde de la pantalla */
 }
 
 .btn-logout-navbar {

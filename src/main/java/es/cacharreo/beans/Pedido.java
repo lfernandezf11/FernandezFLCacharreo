@@ -106,5 +106,13 @@ public class Pedido implements Serializable {
         this.importe = acumuladoBase; // Base Imponible
         this.iva = acumuladoBase * 0.21f; // IVA calculado al 21%
     }
-
+public int getCantidadTotal() {
+    int total = 0;
+    if (this.lineas != null) {
+        for (LineaPedido lp : this.lineas) {
+            total += lp.getCantidad(); // Sumamos las unidades de cada producto 
+        }
+    }
+    return total;
+}
 }

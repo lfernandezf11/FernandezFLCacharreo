@@ -304,7 +304,9 @@
 
                     </div>
             </section>
-            <c:import url="/INC/reviews.jsp"/>
+            <section class="position-relative overflow-hidden testimonial-carousel-section py-5" id="Opiniones">
+                <c:import url="/INC/reviews.jsp"/>
+            </section>
         </main>
 
         <c:import url="/INC/footer.jsp"/>

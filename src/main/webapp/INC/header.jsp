@@ -8,8 +8,9 @@
         </button>
         <nav class="nav-links">
             <button type="submit" name="accion" value="inicio" class="btn-link">Inicio</button>
-            <button type="submit" name="accion" value="quienesSomos" class="btn-link">¿Quiénes somos?</button>
-            <button type="submit" name="accion" value="productos" class="btn-link">Productos</button>
+            <button  class="btn-link"><a href="#Opiniones">Opiniones</a></button>
+            <button  class="btn-link"><a href="#Productos">Productos</a></button>
+
             <!--<button type="submit" name="accion" value="contacto" class="btn-link">Contacto</button>-->
         </nav>
 
@@ -41,9 +42,21 @@
 
                 <button type="submit" name="accion" value="verCesta" class="btn btn-primaryAlt">
                     <i class="fa-duotone fa-solid fa-cart-shopping"></i>
+                    <span>Carrito</span>
+                    <c:set var="totalArticulos" value="0" />
+                    <c:forEach var="linea" items="${sessionScope.cesta.lineas}">
+                        <c:set var="totalArticulos" value="${totalArticulos + linea.cantidad}" />
+                    </c:forEach>
+
+                    <c:if test="${totalArticulos > 0}">
+                        <span id="cart-badge" class="position-absolute top mt-1 start-100 translate-middle badge rounded-pill bg-danger" 
+                              style="font-size: 0.7rem; padding: 0.35em 0.6em; border: 2px solid white;">
+                            ${totalArticulos}
+                        </span>
+                    </c:if>
                 </button>
-            </c:if>
-        </div>
+            </div>
+        </c:if>
     </form>
 </header>
 
