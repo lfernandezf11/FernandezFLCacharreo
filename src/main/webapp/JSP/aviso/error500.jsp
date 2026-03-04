@@ -14,7 +14,7 @@
         <style>
             .error-wrapper {
                 text-align: center;
-                max-width: 700px;
+                max-width: 600px;
                 margin: 0 auto;
                 padding: 3rem 1.5rem;
             }

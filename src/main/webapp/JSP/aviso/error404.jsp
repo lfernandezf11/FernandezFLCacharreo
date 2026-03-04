@@ -28,7 +28,6 @@
             .error-subtitle {
                 font: var(--font-text-xl);
                 color: var(--color-lilac);
-                margin-bottom: 2rem;
             }
 
             .error-img-container {
@@ -39,7 +38,7 @@
             }
 
             .error-image {
-                max-width: 600px;
+                max-width: 550px;
                 width: 100%;
                 height: auto;
                 transition: transform 0.3s ease;
@@ -62,7 +61,7 @@
         <main class="main-error">
             <section class="error-wrapper">
 
-                <h1 class="error-title">¡Ups! Parece que el becario perdi&oacute; lo que buscabas</h1>
+                <h1 class="error-title">ERROR 404 <br>¡Ups! Parece que el becario perdi&oacute; lo que buscabas</h1>
                 <p class="error-subtitle">Vuelve m&aacute;s tarde</p>
 
                 <div class="error-img-container">
@@ -71,7 +70,7 @@
                          class="error-image">
                 </div>
 
-                <div class="mt-4">
+                <div>
                     <a href="${context}/FrontController">
                         <button type="button" class="btn btn-primary px-3">
                             <i class="fa fa-shopping-cart me-2" aria-hidden="true"></i>

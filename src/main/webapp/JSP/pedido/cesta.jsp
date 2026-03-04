@@ -7,7 +7,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <c:url var="style" value="/CSS/styles.css" scope="application" />
-<c:set var="context" value="${pageContext.request.contextPath}" scope="application" />
 
 <!DOCTYPE html>
 <html lang="es">

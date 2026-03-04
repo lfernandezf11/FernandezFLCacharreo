@@ -21,6 +21,7 @@
         <c:import url="/INC/header.jsp"/>
         <c:import url="/INC/toast.jsp"/>
         <c:import url="/INC/scrollToTopButton.jsp"/>
+        
 
         <section class="hero-minimalist mb-0">
             <div class="hero-container">
